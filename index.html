@@ -236,6 +236,7 @@
 
         .nav-badge.danger { background: var(--danger-bg); color: var(--danger-text); }
         .nav-badge.warning { background: var(--warning-bg); color: var(--warning-text); }
+        .nav-badge.info { background: var(--info-bg); color: var(--info-text); }
 
         /* App Container */
         .app-main {
@@ -396,6 +397,7 @@
         .badge-red { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
         .badge-amber { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
         .badge-blue { background: var(--info-bg); color: var(--info-text); border: 1px solid var(--info-border); }
+        .badge-purple { background: var(--purple-bg); color: var(--purple-text); }
         .badge-gray { background: #F1F5F9; color: #475569; border: 1px solid var(--border); }
 
         /* Tables */
@@ -436,6 +438,63 @@
         }
         .form-control:focus { background: #FFFFFF; border-color: var(--input-focus-border); box-shadow: 0 0 0 2px rgba(27, 54, 93, 0.1); }
         .form-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.82rem; background: #FFFFFF; color: var(--text-main); outline: none; cursor: pointer; }
+
+        /* Initial Requisition Layout */
+        .requisition-sidebar {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .req-section-item {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .req-section-item:hover {
+            background: #F8FAFC;
+        }
+
+        .req-section-item.active {
+            background: #EFF6FF;
+            border-left: 4px solid var(--primary);
+            font-weight: 700;
+        }
+
+        .req-section-item.active h4 {
+            color: var(--primary);
+        }
+
+        .req-detail-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .req-box-info {
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .req-box-info h4 {
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
         /* Enterprise Secure Login Gate */
         .secure-auth-overlay {
@@ -519,7 +578,6 @@
             display: flex; justify-content: flex-end; gap: 0.75rem;
         }
 
-        /* OneDrive Upload Dropzone */
         .onedrive-box {
             border: 2px dashed #0078D4;
             background: #F0F8FF;
@@ -640,6 +698,10 @@
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
                 Overview
             </button>
+            <button class="nav-item-btn" onclick="switchNav('view-initialreq', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                Initial Requisition <span class="nav-badge info">Section-Wise Hub</span>
+            </button>
             <button class="nav-item-btn" onclick="switchNav('view-requests', this)">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                 My Requests <span class="nav-badge danger" id="badgePendingRequests">10 Fresh</span>
@@ -650,7 +712,7 @@
             </button>
             <button class="nav-item-btn" onclick="switchNav('view-workings', this)">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"/></svg>
-                Guided Workings (Clean Entry)
+                Guided Workings
             </button>
             <button class="nav-item-btn" onclick="switchNav('view-icds', this)">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -706,7 +768,10 @@
                                 <h3>⚡ Statutory Tax Audit Modules (Clean Data Slate)</h3>
                                 <p>Enter data into the respective working papers. Disallowances and tax adjustments calculate automatically.</p>
                             </div>
-                            <button class="btn btn-outline btn-sm" onclick="clearCurrentClientData()">🔄 Reset Current Data</button>
+                            <div style="display: flex; gap: 6px;">
+                                <button class="btn btn-primary btn-sm" onclick="switchNav('view-initialreq')">📋 Section-Wise Requisitions →</button>
+                                <button class="btn btn-outline btn-sm" onclick="clearCurrentClientData()">🔄 Reset Current Data</button>
+                            </div>
                         </div>
                         <div class="table-responsive">
                             <table>
@@ -792,15 +857,47 @@
                             <strong>Siddhant Surana, FCA</strong><br>
                             <span style="color: var(--text-muted); font-size: 0.76rem;">Lead Direct Tax & Audit Automation Lead</span>
                         </div>
-                        <div style="background: var(--info-bg); border: 1px solid var(--info-border); padding: 10px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--info-text); margin-top: 12px;">
-                            💬 Questions on data preparation? Contact your assigned BRC team.
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== VIEW 2: MY REQUESTS (SMART PBC) ==================== -->
+        <!-- ==================== VIEW 2: INITIAL REQUISITION (SECTION-WISE HUB) ==================== -->
+        <div id="view-initialreq" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📋 Section-Wise Statutory Requisition & Income Tax Guidance Hub</h2>
+                    <p>Click any Income Tax Section or Form 3CD Clause Group to view relevant documents, statutory provisions, and ICAI Guidance Note standards.</p>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-outline btn-sm" onclick="downloadTemplate('full_requisition')">📥 Download Requisition Master (.xlsx)</button>
+                    <button class="btn btn-primary btn-sm" onclick="switchNav('view-requests')">📤 Upload Files to Requests →</button>
+                </div>
+            </div>
+
+            <div class="grid-12">
+                <!-- Left 4 Columns: Section Categories List -->
+                <div class="col-4">
+                    <div class="requisition-sidebar">
+                        <div style="padding: 10px 14px; background: #F8FAFC; border-bottom: 1px solid var(--border); font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">
+                            Select Statutory Section / Area:
+                        </div>
+                        <div id="reqSectionListContainer">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 8 Columns: Dynamic Detail Panel -->
+                <div class="col-8">
+                    <div class="req-detail-panel" id="reqDetailPanel">
+                        <!-- Populated on click -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 3: MY REQUESTS (SMART PBC) ==================== -->
         <div id="view-requests" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -814,7 +911,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 3: DATA PACKS ==================== -->
+        <!-- ==================== VIEW 4: DATA PACKS ==================== -->
         <div id="view-datapacks" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -850,7 +947,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 4: GUIDED WORKINGS ==================== -->
+        <!-- ==================== VIEW 5: GUIDED WORKINGS ==================== -->
         <div id="view-workings" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -870,7 +967,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 5: ICDS CENTRE ==================== -->
+        <!-- ==================== VIEW 6: ICDS CENTRE ==================== -->
         <div id="view-icds" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -899,7 +996,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 6: AUDITOR PORTFOLIO HUB (AUDITOR ONLY) ==================== -->
+        <!-- ==================== VIEW 7: AUDITOR PORTFOLIO HUB (AUDITOR ONLY) ==================== -->
         <div id="view-portfolio" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -928,7 +1025,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 7: MASTER CLAUSE HUB (AUDITOR ONLY) ==================== -->
+        <!-- ==================== VIEW 8: MASTER CLAUSE HUB (AUDITOR ONLY) ==================== -->
         <div id="view-masterclause" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -956,7 +1053,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 8: READINESS & REVIEW ==================== -->
+        <!-- ==================== VIEW 9: READINESS & REVIEW ==================== -->
         <div id="view-readiness" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -984,7 +1081,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 9: HELP CENTRE ==================== -->
+        <!-- ==================== VIEW 10: HELP CENTRE ==================== -->
         <div id="view-help" class="view-pane">
             <div class="card-header-flex">
                 <div>
@@ -1163,7 +1260,7 @@
                 fy: "2025-26",
                 section: "Third Proviso to Section 44AB",
                 passcode: "WF2026",
-                onedriveUrl: "https://onedrive.live.com/", // Replace with exact BRC OneDrive 'Request files' link
+                onedriveUrl: "https://onedrive.live.com/",
                 spoc: "Parul Gupta (CFO)",
                 email: "finance@wakefit.co",
                 data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
@@ -1188,7 +1285,187 @@
         let currentSessionRole = null;
         let currentUploadReqId = null;
 
-        // 10 Master Requisitions
+        // Comprehensive Section-Wise Initial Requisitions Catalog
+        const initialRequisitionCatalog = [
+            {
+                id: "sec_entity",
+                title: "1. Entity Profile & Section 44AB Applicability",
+                clauses: "Clauses 1 to 8, 8a, 10",
+                provisions: "Section 44AB (Third Proviso / 44AB(a)), Section 115BAA (22% Corporate Tax Regime), Section 139(1).",
+                dataRequired: [
+                    "Certificate of Incorporation, MOA & AOA.",
+                    "Active State GST Registration Certificates (REG-06) across all 20 States.",
+                    "Statutory Audit Report & Signed Financial Statements audited under Companies Act 2013.",
+                    "Form 10-IC evaluation and Board Resolution exercising Section 115BAA concessional tax.",
+                    "Business segment code mappings (Code 04019 - Mfg furniture & home goods)."
+                ],
+                guidanceNotes: "Verify turnover computation against ICAI Guidance Note Para 5.1-5.38; ensure non-operating incomes are segregated; test cash receipts & payments <= 5% threshold for enhanced limits.",
+                actionType: "Data Compilation & Threshold Review",
+                workingLink: "overview",
+                template: "financials"
+            },
+            {
+                id: "sec_books_icds",
+                title: "2. Books of Account & ICDS Compliance",
+                clauses: "Clauses 11, 13, 14, 15",
+                provisions: "Section 145 (Mercantile Method), Section 145A (Tax Inclusion in Stock), Section 145B, Notification 87/2016 (ICDS I to X).",
+                dataRequired: [
+                    "Cloud ERP (SAP) configuration dump and daily transactional audit trail logs.",
+                    "Inventory valuation policy sheets (Cost vs NRV under Ind AS 2 vs Section 145A).",
+                    "ICDS Standards I to X profit adjustment models and revenue recognition cut-off sheets.",
+                    "Slow-moving & obsolescence inventory provision calculation ledgers."
+                ],
+                guidanceNotes: "ICAI Guidance Note Para 17-21 mandates attaching explicit disclosure paragraphs for all 10 ICDS standards even if adjustment is Nil; gross up taxes u/s 145A.",
+                actionType: "Computation Check & Disclosure Review",
+                workingLink: "icds",
+                template: "tb"
+            },
+            {
+                id: "sec_depreciation",
+                title: "3. Depreciation & Capital Allowances",
+                clauses: "Clauses 18, 19, 24",
+                provisions: "Section 32(1) (Block Depreciation), Section 32(1)(iia) (20% Additional Dep), Section 35D (Preliminary Amortization), Section 43(1).",
+                dataRequired: [
+                    "Fixed Asset Register (FAR) mapped to Income Tax Asset Blocks.",
+                    "Capital addition invoices & installation certificates for additions > Rs 2.7 Crore.",
+                    "Factory put-to-use logs demonstrating >=180 days vs <180 days operation.",
+                    "Section 35D preliminary share issue expense ledger and 1/5th amortization schedule."
+                ],
+                guidanceNotes: "Verify that Additional Depreciation u/s 32(1)(iia) is claimed only on new factory plant & machinery; verify asset put-to-use cut-off (03-Oct-2025).",
+                actionType: "Document Verification & Schedule Audit",
+                workingLink: "depreciation",
+                template: "far"
+            },
+            {
+                id: "sec_pf_esi",
+                title: "4. Employee Welfare Fund Contributions",
+                clauses: "Clause 20(b)",
+                provisions: "Section 36(1)(va) r.w.s. 2(24)(x) (Employee PF/ESI Share), Section 43B(b) (Employer Share), EPF Act 1952, ESI Act 1948.",
+                dataRequired: [
+                    "12 Months Electronic Challan Receipts (ECR) for Provident Fund (EPF).",
+                    "12 Months Electronic Payment Confirmation Challans for ESIC.",
+                    "EPFO & ESIC payment timestamp receipts showing exact TRRN / Challan numbers.",
+                    "Month-wise salary register showing employee share deducted vs deposited."
+                ],
+                guidanceNotes: "Supreme Court in Checkmate Services strictly held that employee contributions deposited past the 15th of the next month are permanently disallowed u/s 36(1)(va).",
+                actionType: "Document Verification & Date Matching",
+                workingLink: "pfesi",
+                template: "pf"
+            },
+            {
+                id: "sec_inadmissible",
+                title: "5. Inadmissible Debits & Statutory Disallowances",
+                clauses: "Clauses 21(a), (c), (d)",
+                provisions: "Section 37(1) Explanations 1, 2 & 3 (Penalties, CSR, illegal payments), Section 40A(3) (Cash > Rs 10k), Section 40A(7) (Gratuity).",
+                dataRequired: [
+                    "GL ledgers for CSR Expenditure (Rs 1.85 Cr), Rates & Taxes, and Penal Interest.",
+                    "Scrutiny of legal & professional fees for compounding or penalty charges.",
+                    "Cash book registers and vouchers verifying no payment exceeds Rs 10,000 in cash.",
+                    "Actuarial valuation report for employee gratuity and leave encashment provisions."
+                ],
+                guidanceNotes: "CSR expenditure is strictly disallowed u/s 37(1) Explanation 2; compounding fees, GST late fees, and regulatory penalties must be reported under Clause 21(a).",
+                actionType: "GL Scrutiny & Vouching",
+                workingLink: "overview",
+                template: "financials"
+            },
+            {
+                id: "sec_tds_tcs",
+                title: "6. Withholding Taxes (TDS / TCS Compliance)",
+                clauses: "Clauses 21(b), 34",
+                provisions: "Section 40(a)(ia) (30% Resident Disallowance), Sections 194C, 194I, 194J, 194Q, 192, Section 206C, Section 201(1A).",
+                dataRequired: [
+                    "Quarterly TDS Returns filed (Form 24Q, 26Q, 27Q) with filing acknowledgement tokens.",
+                    "TRACES Justification Reports & Defaults Statements for Q1 to Q4.",
+                    "Expense-wise ledger reconciliation against TDS deduction base and deposit dates.",
+                    "TCS return acknowledgements (Form 27EQ) for Section 206C(1H)."
+                ],
+                guidanceNotes: "Ensure that TDS deducted during FY 2025-26 is deposited on or before the Section 139(1) ITR deadline (31-Oct-2026) to avoid 30% disallowance u/s 40(a)(ia).",
+                actionType: "Reconciliation & Returns Verification",
+                workingLink: "tds",
+                template: "tds"
+            },
+            {
+                id: "sec_msme_43b",
+                title: "7. MSME Section 43B(h) & Statutory Liabilities",
+                clauses: "Clauses 22, 26",
+                provisions: "Section 43B(h) (Overdue dues to Micro & Small Units), MSMED Act Sections 15, 16 & 23, Section 43B (Taxes, Duty, Cess, Bonus).",
+                dataRequired: [
+                    "Trade Payables Aging Schedule as on 31-March-2026 with payment dates.",
+                    "MSME Vendor Master with valid Udyam Registration Certificates & NIC codes.",
+                    "Written supplier agreements establishing agreed credit terms (up to 45 days).",
+                    "Paid challans for GST liabilities, Bonus, and Leave encashment cleared before 139(1)."
+                ],
+                guidanceNotes: "Exclude wholesale/retail TRADERS and Medium enterprises from 43B(h); compute 15-day/45-day due date from delivery; compute 3x RBI bank rate compound interest u/s 23 MSMED.",
+                actionType: "Aging Audit & Formula Verification",
+                workingLink: "msme",
+                template: "msme"
+            },
+            {
+                id: "sec_rpt_shares",
+                title: "8. Related Party Transactions & Share Allotments",
+                clauses: "Clauses 23, 28, 29",
+                provisions: "Section 40A(2)(b) (Payments to Specified Persons), Section 56(2)(viib) (FMV on Share Issue), Section 92E (Transfer Pricing Form 3CEB).",
+                dataRequired: [
+                    "Section 40A(2)(b) Related Party transaction register (Directors, KMP, Triad Mobility).",
+                    "Form 3CEB Transfer Pricing Study & Arm's-length benchmarking report.",
+                    "Merchant Banker DCF Valuation Report under Rule 11UA for fresh equity allotment.",
+                    "ROC PAS-3 Allotment return and bank credit statements."
+                ],
+                guidanceNotes: "Verify market reasonableness for related party expenditures; verify that DCF valuation report date precedes or matches share allotment date.",
+                actionType: "Valuation Check & Benchmarking",
+                workingLink: "overview",
+                template: "rpt"
+            },
+            {
+                id: "sec_loans_269",
+                title: "9. Loans, Deposits & Banking Compliance",
+                clauses: "Clauses 31(a), (b), (ba), (bb), (bc), (bd)",
+                provisions: "Section 269SS (Acceptance of Loan/Deposit > Rs 20k), Section 269T (Repayment), Section 269ST (Cash > Rs 2 Lakh), Sections 271D & 271E.",
+                dataRequired: [
+                    "Unsecured Loan & Inter-Corporate Deposit ledgers with opening & closing balances.",
+                    "Director Current Account transaction statements with bank proofs.",
+                    "Banking channel confirmation (Account Payee Cheque / RTGS / NEFT / ECS).",
+                    "Journal entry ledgers reflecting loan squaring-off or debt-equity conversions."
+                ],
+                guidanceNotes: "Report all loan settlements through Journal Entries under Code G in Clause 31 (*Triumph International*); verify maximum outstanding balances during the year.",
+                actionType: "Banking Channel Verification",
+                workingLink: "overview",
+                template: "financials"
+            },
+            {
+                id: "sec_losses_ratios",
+                title: "10. Brought Forward Losses & Financial Ratios",
+                clauses: "Clauses 32, 40",
+                provisions: "Section 72 (Business Loss 8-Year Limit), Section 32(2) (Unabsorbed Depreciation), Section 79 (Shareholding Continuity), Clause 40 Ratios.",
+                dataRequired: [
+                    "Historical ITR-6 acknowledgements and assessment orders (AY 18-19 to AY 25-26).",
+                    "Shareholding pattern certificate demonstrating 51% voting power continuity u/s 79.",
+                    "Computation of Gross Profit %, Net Profit %, Stock-to-Turnover %, and Material Consumed %.",
+                    "Comparative financial metrics with previous financial year (FY 2024-25)."
+                ],
+                guidanceNotes: "Verify 8-year expiry period for business loss carry forward; verify unabsorbed depreciation priority; explain significant ratio variances > 10%.",
+                actionType: "Assessment History & Ratio Analysis",
+                workingLink: "overview",
+                template: "financials"
+            },
+            {
+                id: "sec_clause_44",
+                title: "11. GST Expenditure Breakup (Clause 44)",
+                clauses: "Clause 44",
+                provisions: "Clause 44 of Form 3CD, Section 145A, GST Law (CGST/SGST/IGST Acts).",
+                dataRequired: [
+                    "Head-wise P&L expenditure GL dump mapped with supplier GSTINs.",
+                    "Breakup of expenses related to exempt goods/services, composition taxpayers, standard registered suppliers, and unregistered entities.",
+                    "Annual GSTR-9 and monthly GSTR-3B expenditure reconciliations."
+                ],
+                guidanceNotes: "Reconcile total P&L debits with Clause 44 total expenditure; ensure non-GST expenses like depreciation and salary are clearly identified and segregated.",
+                actionType: "P&L GST Reconciliation",
+                workingLink: "overview",
+                template: "gst"
+            }
+        ];
+
+        // 10 Master Requisitions for PBC
         const pbcMasterRequirements = [
             { req: 1, title: "Signed Audited Financial Statements with Notes", dept: "Finance & Accounts", clause: "All", template: "financials" },
             { req: 2, title: "Annual Trial Balance mapped with Financials", dept: "Finance & Accounts", clause: "All", template: "tb" },
@@ -1288,6 +1565,7 @@
             document.getElementById('ovClientHeading').innerText = `${client.name} — Tax Audit Workspace`;
             document.getElementById('ovClientMeta').innerText = `PAN: ${client.pan} | AY ${client.ay} (FY ${client.fy}) | ${client.section}`;
 
+            renderInitialRequisitionModule();
             renderPbcCards();
             renderIcdsTable();
             loadWorking('msme');
@@ -1324,6 +1602,7 @@
             document.getElementById('ovClientHeading').innerText = `${client.name} — Tax Audit Engagement`;
             document.getElementById('ovClientMeta').innerText = `PAN: ${client.pan} | AY ${client.ay} (FY ${client.fy}) | ${client.section}`;
             
+            renderInitialRequisitionModule();
             renderPbcCards();
             renderIcdsTable();
             loadWorking('msme');
@@ -1356,6 +1635,84 @@
                 if(navBtn) navBtn.classList.add('active');
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Section-Wise Initial Requisition Module
+        function renderInitialRequisitionModule() {
+            const listContainer = document.getElementById('reqSectionListContainer');
+            if(!listContainer) return;
+            listContainer.innerHTML = '';
+
+            initialRequisitionCatalog.forEach((sec, idx) => {
+                const item = document.createElement('div');
+                item.className = `req-section-item ${idx === 0 ? 'active' : ''}`;
+                item.id = `reqNav_${sec.id}`;
+                item.onclick = () => selectRequisitionSection(sec.id);
+
+                item.innerHTML = `
+                    <div>
+                        <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">${sec.title}</h4>
+                        <div style="font-size: 0.72rem; color: var(--text-muted);">${sec.clauses}</div>
+                    </div>
+                    <span class="badge badge-gray" style="font-size: 0.68rem;">Explore →</span>
+                `;
+                listContainer.appendChild(item);
+            });
+
+            selectRequisitionSection(initialRequisitionCatalog[0].id);
+        }
+
+        function selectRequisitionSection(secId) {
+            document.querySelectorAll('.req-section-item').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById(`reqNav_${secId}`);
+            if(activeNav) activeNav.classList.add('active');
+
+            const sec = initialRequisitionCatalog.find(s => s.id === secId);
+            if(!sec) return;
+
+            const detailPanel = document.getElementById('reqDetailPanel');
+            const dataReqList = sec.dataRequired.map(d => `<li style="padding: 3px 0; color: var(--text-main);">${d}</li>`).join('');
+
+            detailPanel.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+                    <div>
+                        <span class="badge badge-blue" style="margin-bottom: 4px;">${sec.clauses}</span>
+                        <h2 style="font-size: 1.2rem; color: var(--primary); font-weight: 800;">${sec.title}</h2>
+                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">Action Type: <strong>${sec.actionType}</strong></div>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="downloadTemplate('${sec.template}')">📥 Download Template (.xlsx)</button>
+                </div>
+
+                <!-- 1. Data Required -->
+                <div class="req-box-info" style="border-left: 4px solid var(--primary);">
+                    <h4>📑 1. Relevant Data & Documents Required from Client:</h4>
+                    <ul style="margin-left: 20px; font-size: 0.84rem; line-height: 1.6;">
+                        ${dataReqList}
+                    </ul>
+                </div>
+
+                <!-- 2. Income Tax Provisions -->
+                <div class="req-box-info" style="border-left: 4px solid var(--accent); background: #F0F7FF;">
+                    <h4 style="color: var(--accent);">⚖️ 2. Respective Income Tax Provisions & Law:</h4>
+                    <p style="font-size: 0.84rem; color: #1E3A8A; line-height: 1.5; font-weight: 500;">
+                        ${sec.provisions}
+                    </p>
+                </div>
+
+                <!-- 3. ICAI Guidance Notes Standard -->
+                <div class="req-box-info" style="border-left: 4px solid var(--purple); background: #FAF5FF;">
+                    <h4 style="color: var(--purple-text);">🛡️ 3. Mandatory ICAI Guidance Notes & Peer-Review Standards:</h4>
+                    <p style="font-size: 0.84rem; color: #581C87; line-height: 1.5;">
+                        ${sec.guidanceNotes}
+                    </p>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.5rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+                    <button class="btn btn-onedrive btn-sm" onclick="switchNav('view-requests')">📤 Upload Related Files →</button>
+                    ${sec.workingLink !== 'overview' && sec.workingLink !== 'icds' ? `<button class="btn btn-primary btn-sm" onclick="openWorking('${sec.workingLink}')">Go to Guided Working →</button>` : ''}
+                    ${sec.workingLink === 'icds' ? `<button class="btn btn-primary btn-sm" onclick="switchNav('view-icds')">Open ICDS Centre →</button>` : ''}
+                </div>
+            `;
         }
 
         // PBC Cards with Dynamic Excel Template & OneDrive Upload
@@ -1424,6 +1781,15 @@
                 data = [
                     ["Section", "Nature of Payment", "Total Expense in Books (Rs)", "Amount Subject to TDS (Rs)", "TDS Rate (%)", "TDS Deducted (Rs)", "TDS Deposited (Rs)", "Date of Deposit", "Challan BSR Code / CIN"],
                     ["194J", "Professional & Technical Fees", 0, 0, "10%", 0, 0, "", ""]
+                ];
+            } else if(type === 'full_requisition') {
+                filename = "BRC_Tax_Audit_Initial_Requisition_Master_AY_2026-27.xlsx";
+                data = [
+                    ["Section / Area", "Form 3CD Clauses", "Income Tax Provisions", "Documents & Data Required from Client", "ICAI Guidance Note Standards"],
+                    ["1. Entity Profile", "Clauses 1-8, 10", "Section 44AB, 115BAA", "COI, MOA, All State GST REG-06, Form 10-IC", "Verify turnover computation & 5% cash limits"],
+                    ["2. Depreciation", "Clause 18", "Section 32, 32(1)(iia)", "FAR schedule, Invoices > Rs 2.7 Cr, Put-to-use logs", "Verify 180-day cut-off & 20% Addl Dep"],
+                    ["3. PF/ESI Welfare", "Clause 20(b)", "Section 36(1)(va)", "12 months ECR & TRRN challans", "Checkmate Services disallowance for late deposit"],
+                    ["4. MSME 43B(h)", "Clause 22", "Section 43B(h), MSMED Act", "Trade payables aging, Udyam RCs", "Exclude traders; verify 15/45-day cycle"]
                 ];
             } else {
                 filename = "BRC_Audit_Requisition_Template.xlsx";
