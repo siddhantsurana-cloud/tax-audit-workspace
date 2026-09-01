@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRC Tax Audit Digital Workspace | Bihani Rashmi & Co.</title>
+    <!-- SheetJS for Client-Side Dynamic Excel (.xlsx) Generation -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #1B365D;
+            --primary-dark: #0F1F38;
+            --primary-light: #2E5B88;
+            --accent: #0D6EFD;
+            --accent-hover: #0B5ED7;
+            --bg-app: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --text-light: #94A3B8;
+            --border: #E2E8F0;
+            --border-subtle: #F1F5F9;
+            
+            --success: #10B981;
+            --success-bg: #ECFDF5;
+            --success-text: #065F46;
+            --success-border: #A7F3D0;
+            
+            --warning: #F59E0B;
+            --warning-bg: #FFFBEB;
+            --warning-text: #92400E;
+            --warning-border: #FDE68A;
+            
+            --danger: #EF4444;
+            --danger-bg: #FEF2F2;
+            --danger-text: #991B1B;
+            --danger-border: #FECACA;
+            
+            --info: #3B82F6;
+            --info-bg: #EFF6FF;
+            --info-text: #1E40AF;
+            --info-border: #BFDBFE;
+            
+            --purple: #8B5CF6;
+            --purple-bg: #F5F3FF;
+            --purple-text: #5B21B6;
+            
+            --input-bg: #FFFDF0;
+            --input-focus-border: #1B365D;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-size: 14px;
+        }
+
+        /* Top Navbar */
+        .top-navbar {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: #FFFFFF;
+            padding: 0.75rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(15, 31, 56, 0.15);
+        }
+
+        .top-nav-inner {
+            max-width: 1560px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo-badge {
+            background: rgba(255, 255, 255, 0.15);
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+        }
+
+        .brand-text h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: #FFFFFF;
+            line-height: 1.2;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: #94A3B8;
+        }
+
+        .client-header-pill {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 6px 14px;
+            border-radius: 8px;
+            text-align: right;
+        }
+
+        .client-header-pill strong {
+            color: #F8FAFC;
+            font-size: 0.9rem;
+            display: block;
+        }
+
+        .client-header-pill span {
+            color: #CBD5E1;
+            font-size: 0.75rem;
+        }
+
+        .auditor-switcher-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .auditor-select-dropdown {
+            background: transparent;
+            color: #FFFFFF;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .auditor-select-dropdown option {
+            background: #1E293B;
+            color: #FFFFFF;
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Sub Navigation / App Tabs */
+        .app-nav-bar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 61px;
+            z-index: 900;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .app-nav-inner {
+            max-width: 1560px;
+            margin: 0 auto;
+            display: flex;
+            padding: 0 2rem;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .nav-item-btn {
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .nav-item-btn:hover {
+            color: var(--primary);
+            background: #F8FAFC;
+        }
+
+        .nav-item-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: #F0F4F9;
+        }
+
+        .nav-badge {
+            background: var(--border);
+            color: var(--text-main);
+            font-size: 0.72rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .nav-badge.danger { background: var(--danger-bg); color: var(--danger-text); }
+        .nav-badge.warning { background: var(--warning-bg); color: var(--warning-text); }
+
+        /* App Container */
+        .app-main {
+            max-width: 1560px;
+            margin: 1.5rem auto;
+            padding: 0 2rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .view-pane { display: none; }
+        .view-pane.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid Layouts */
+        .grid-12 {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.25rem;
+        }
+
+        .col-12 { grid-column: span 12; }
+        .col-8 { grid-column: span 8; }
+        .col-6 { grid-column: span 6; }
+        .col-4 { grid-column: span 4; }
+        .col-3 { grid-column: span 3; }
+
+        @media (max-width: 1024px) {
+            .col-8, .col-6, .col-4, .col-3 { grid-column: span 12; }
+            .top-nav-inner { flex-direction: column; align-items: stretch; }
+        }
+
+        /* Cards */
+        .app-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+            transition: box-shadow 0.2s;
+        }
+
+        .app-card:hover { box-shadow: var(--shadow-md); }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .card-header-flex h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header-flex p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 7px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary { background: var(--primary); color: #FFFFFF; }
+        .btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow-sm); }
+        .btn-accent { background: var(--accent); color: #FFFFFF; }
+        .btn-accent:hover { background: var(--accent-hover); }
+        .btn-outline { background: #FFFFFF; border-color: var(--border); color: var(--text-main); }
+        .btn-outline:hover { background: #F8FAFC; border-color: var(--text-light); }
+        .btn-ghost { background: transparent; color: var(--primary); }
+        .btn-ghost:hover { background: #F1F5F9; }
+        .btn-onedrive { background: #0078D4; color: #FFFFFF; }
+        .btn-onedrive:hover { background: #005A9E; }
+        .btn-sm { padding: 4px 10px; font-size: 0.76rem; }
+
+        /* Progress Bar */
+        .progress-header-box {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .progress-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-title-text h2 { font-size: 1.25rem; font-weight: 800; color: var(--primary); }
+        .progress-title-text p { font-size: 0.82rem; color: var(--text-muted); }
+        .progress-percent-large { font-size: 2.2rem; font-weight: 900; color: var(--primary); line-height: 1; }
+
+        .progress-bar-track {
+            width: 100%;
+            height: 10px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+            border-radius: 10px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .badge-green { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+        .badge-red { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
+        .badge-amber { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
+        .badge-blue { background: var(--info-bg); color: var(--info-text); border: 1px solid var(--info-border); }
+        .badge-gray { background: #F1F5F9; color: #475569; border: 1px solid var(--border); }
+
+        /* Tables */
+        .table-responsive {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.84rem; text-align: left; }
+        th {
+            background: #F8FAFC;
+            color: var(--primary);
+            padding: 10px 14px;
+            font-weight: 700;
+            white-space: nowrap;
+            border-bottom: 2px solid var(--border);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text-main); }
+        tr:hover { background-color: #F8FAFC; }
+
+        /* Form Inputs */
+        .form-control {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.84rem;
+            background: var(--input-bg);
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s;
+        }
+        .form-control:focus { background: #FFFFFF; border-color: var(--input-focus-border); box-shadow: 0 0 0 2px rgba(27, 54, 93, 0.1); }
+        .form-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.82rem; background: #FFFFFF; color: var(--text-main); outline: none; cursor: pointer; }
+
+        /* Enterprise Secure Login Gate */
+        .secure-auth-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            max-width: 440px;
+            width: 100%;
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-logo {
+            width: 52px; height: 52px; border-radius: 12px; background: var(--primary);
+            color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 800; margin: 0 auto 1rem auto;
+        }
+
+        .auth-input {
+            width: 100%; padding: 11px 14px; font-size: 0.95rem; border: 1.5px solid var(--border);
+            border-radius: var(--radius-md); margin-top: 5px; outline: none; transition: all 0.2s;
+        }
+        .auth-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.12); }
+
+        .auth-tab-row { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+        .auth-tab-btn {
+            flex: 1; padding: 8px; background: transparent; border: none; font-size: 0.85rem; font-weight: 700;
+            color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
+        }
+        .auth-tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1.5rem;
+        }
+        .modal-overlay.active { display: flex; animation: modalFadeIn 0.2s ease-out; }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            max-width: 620px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; background: #F8FAFC;
+        }
+        .modal-header h3 { font-size: 1.1rem; color: var(--primary); font-weight: 700; }
+        .modal-close-btn { background: none; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer; }
+        .modal-body { padding: 1.5rem; }
+        .modal-footer {
+            padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: #F8FAFC;
+            display: flex; justify-content: flex-end; gap: 0.75rem;
+        }
+
+        /* OneDrive Upload Dropzone */
+        .onedrive-box {
+            border: 2px dashed #0078D4;
+            background: #F0F8FF;
+            padding: 1.75rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        footer {
+            background: #FFFFFF; border-top: 1px solid var(--border); padding: 1.25rem 2rem;
+            text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Strict Enterprise Login Gate (NO cross-client dropdown) -->
+    <div id="authGate" class="secure-auth-overlay" style="display: none;">
+        <div class="auth-card">
+            <div class="auth-logo">BRC</div>
+            <h2 style="font-size: 1.25rem; color: var(--primary); font-weight: 800; text-align: center;">Bihani Rashmi & Co.</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 2px; margin-bottom: 1.25rem;">
+                Tax Audit Digital Workspace | Secure Authentication
+            </p>
+
+            <div class="auth-tab-row">
+                <button id="tabBtnClientAuth" class="auth-tab-btn active" onclick="switchAuthTab('client')">🏢 Client Portal Access</button>
+                <button id="tabBtnAuditorAuth" class="auth-tab-btn" onclick="switchAuthTab('auditor')">🛡️ CA Staff Login</button>
+            </div>
+
+            <!-- Client Login Form (PAN + Company Passcode) -->
+            <div id="clientAuthForm">
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Company PAN:</label>
+                    <input type="text" id="clientLoginPan" class="auth-input" placeholder="e.g. AABCW7791A" style="text-transform: uppercase;">
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Company Access Passcode:</label>
+                    <input type="password" id="clientLoginPasscode" class="auth-input" placeholder="Enter assigned passcode" onkeyup="if(event.key==='Enter') verifyClientCredentials()">
+                </div>
+
+                <div id="clientAuthError" style="display: none; color: var(--danger); font-size: 0.8rem; font-weight: 600; text-align: center; margin-bottom: 10px;">
+                    ✕ Invalid PAN or Company Passcode. Please verify with your BRC Audit Team.
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 0.92rem;" onclick="verifyClientCredentials()">
+                    🔒 Unlock Company Workspace
+                </button>
+            </div>
+
+            <!-- Auditor Master Login Form -->
+            <div id="auditorAuthForm" style="display: none;">
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Auditor Username:</label>
+                    <input type="text" id="auditorUsername" class="auth-input" value="siddhant.surana@bihanirashmi.com" placeholder="Auditor Email / User ID">
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Auditor Master PIN:</label>
+                    <input type="password" id="auditorMasterPin" class="auth-input" placeholder="Enter CA Master PIN" onkeyup="if(event.key==='Enter') verifyAuditorCredentials()">
+                </div>
+
+                <div id="auditorAuthError" style="display: none; color: var(--danger); font-size: 0.8rem; font-weight: 600; text-align: center; margin-bottom: 10px;">
+                    ✕ Invalid Auditor Credentials.
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 0.92rem;" onclick="verifyAuditorCredentials()">
+                    🛡️ Authenticate Auditor Session
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+        <div class="top-nav-inner">
+            <div class="brand-section">
+                <div class="brand-logo-badge">BRC</div>
+                <div class="brand-text">
+                    <h1>Bihani Rashmi & Co.</h1>
+                    <p>Chartered Accountants | Tax Audit Digital Suite</p>
+                </div>
+            </div>
+
+            <!-- Client Mode Header (Static, Strictly Locked to Authenticated Company) -->
+            <div id="clientNavbarBanner" class="client-header-pill">
+                <strong id="clientHeaderName">Wakefit Innovations Limited</strong>
+                <span id="clientHeaderMeta">PAN: AABCW7791A | AY 2026-27 (FY 2025-26)</span>
+            </div>
+
+            <!-- Auditor Multi-Client Switcher (Only visible to verified CA staff) -->
+            <div id="auditorNavbarControls" class="auditor-switcher-box" style="display: none;">
+                <span style="font-size: 0.72rem; color: #CBD5E1; text-transform: uppercase; font-weight: 700;">Auditing Client:</span>
+                <select id="auditorClientSelect" class="auditor-select-dropdown" onchange="auditorSwitchClient(this.value)">
+                    <!-- Populated dynamically for auditor -->
+                </select>
+                <button class="btn btn-sm" style="background: rgba(255,255,255,0.2); color:#FFF; padding: 2px 8px;" onclick="openSendLinkModal()">🔗 Generate Invite</button>
+            </div>
+
+            <!-- User Session Controls -->
+            <div class="user-controls">
+                <button id="btnAddClientTopBtn" class="btn btn-outline btn-sm" style="display: none; background: rgba(255,255,255,0.15); color: #FFF; border-color: rgba(255,255,255,0.3);" onclick="openAddClientModal()">
+                    ➕ Onboard Client
+                </button>
+                <button class="btn btn-outline btn-sm" style="background: rgba(255,255,255,0.1); color: #FFF; border-color: rgba(255,255,255,0.25);" onclick="logoutSession()">
+                    🚪 Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- App Sub-Navigation Bar -->
+    <nav class="app-nav-bar">
+        <div class="app-nav-inner" id="navTabsContainer">
+            <button class="nav-item-btn active" onclick="switchNav('view-overview', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                Overview
+            </button>
+            <button class="nav-item-btn" onclick="switchNav('view-requests', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                My Requests <span class="nav-badge danger" id="badgePendingRequests">10 Fresh</span>
+            </button>
+            <button class="nav-item-btn" onclick="switchNav('view-datapacks', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                Data Packs
+            </button>
+            <button class="nav-item-btn" onclick="switchNav('view-workings', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"/></svg>
+                Guided Workings (Clean Entry)
+            </button>
+            <button class="nav-item-btn" onclick="switchNav('view-icds', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                ICDS Centre
+            </button>
+            <button class="nav-item-btn auditor-only" style="display: none;" onclick="switchNav('view-portfolio', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                Auditor Portfolio Hub
+            </button>
+            <button class="nav-item-btn auditor-only" style="display: none;" onclick="switchNav('view-masterclause', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+                Master Clause Matrix (Form 3CD)
+            </button>
+            <button class="nav-item-btn" onclick="switchNav('view-readiness', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Readiness & Review
+            </button>
+            <button class="nav-item-btn" onclick="switchNav('view-help', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                Help Centre
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Workspace Container -->
+    <main class="app-main">
+
+        <!-- ==================== VIEW 1: OVERVIEW ==================== -->
+        <div id="view-overview" class="view-pane active">
+            <div class="progress-header-box">
+                <div class="progress-meta-row">
+                    <div class="progress-title-text">
+                        <h2 id="ovClientHeading">Tax Audit Engagement Overview</h2>
+                        <p id="ovClientMeta">PAN: AABCW7791A | AY 2026-27 (FY 2025-26)</p>
+                    </div>
+                    <div class="progress-percent-large" id="progressPercentDisplay">0%</div>
+                </div>
+
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+                </div>
+
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                    🔒 All files and workings are transmitted directly to Bihani Rashmi & Co.'s secure OneDrive audit folder.
+                </p>
+            </div>
+
+            <div class="grid-12">
+                <div class="col-8">
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>⚡ Statutory Tax Audit Modules (Clean Data Slate)</h3>
+                                <p>Enter data into the respective working papers. Disallowances and tax adjustments calculate automatically.</p>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="clearCurrentClientData()">🔄 Reset Current Data</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Core Audit Area</th>
+                                        <th>Form 3CD Clause</th>
+                                        <th>Status</th>
+                                        <th>Calculated Tax Impact</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>MSME Section 43B(h)</strong></td>
+                                        <td>Clause 22</td>
+                                        <td><span class="badge badge-amber">Clean Input</span></td>
+                                        <td id="ovMsmeDis" style="font-weight: 700; color: var(--danger);">Rs 0</td>
+                                        <td><button class="btn btn-ghost btn-sm" onclick="openWorking('msme')">Enter Vendor Dues →</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Employee PF/ESI Share</strong></td>
+                                        <td>Clause 20(b)</td>
+                                        <td><span class="badge badge-amber">Clean Input</span></td>
+                                        <td id="ovPfDis" style="font-weight: 700; color: var(--danger);">Rs 0</td>
+                                        <td><button class="btn btn-ghost btn-sm" onclick="openWorking('pfesi')">Enter Monthly PF →</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Income-tax Depreciation (Sec 32)</strong></td>
+                                        <td>Clause 18</td>
+                                        <td><span class="badge badge-amber">Clean Input</span></td>
+                                        <td id="ovDepAllow" style="font-weight: 700; color: var(--success);">Rs 0 (Allowable)</td>
+                                        <td><button class="btn btn-ghost btn-sm" onclick="openWorking('depreciation')">Enter Asset Blocks →</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>TDS / TCS Compliance (Sec 40a)</strong></td>
+                                        <td>Clauses 21(b) & 34</td>
+                                        <td><span class="badge badge-amber">Clean Input</span></td>
+                                        <td id="ovTdsDis" style="font-weight: 700; color: var(--danger);">Rs 0</td>
+                                        <td><button class="btn btn-ghost btn-sm" onclick="openWorking('tds')">Enter TDS Ledgers →</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Section 43B Statutory Liabilities</strong></td>
+                                        <td>Clause 26</td>
+                                        <td><span class="badge badge-amber">Clean Input</span></td>
+                                        <td id="ov43bDis" style="font-weight: 700;">Rs 0</td>
+                                        <td><button class="btn btn-ghost btn-sm" onclick="openWorking('sec43b')">Enter Unpaid Dues →</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <h3>📅 Statutory Audit Deadlines</h3>
+                        </div>
+                        <div style="padding: 6px 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-size: 0.82rem;">
+                            <span>Target Tax Audit Filing:</span>
+                            <span class="badge badge-blue">30-Sep-2026</span>
+                        </div>
+                        <div style="padding: 6px 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-size: 0.82rem;">
+                            <span>Income Tax Return (ITR-6):</span>
+                            <span class="badge badge-gray">31-Oct-2026</span>
+                        </div>
+                        <div style="padding: 6px 0; display: flex; justify-content: space-between; font-size: 0.82rem;">
+                            <span>Audit Forms:</span>
+                            <strong>Form 3CA & 3CD</strong>
+                        </div>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <h3>👥 BRC Engagement Team</h3>
+                        </div>
+                        <div style="font-size: 0.82rem;">
+                            <strong>Rashmi Bihani, FCA</strong><br>
+                            <span style="color: var(--text-muted); font-size: 0.76rem;">Engagement Partner | Bihani Rashmi & Co.</span>
+                        </div>
+                        <div style="font-size: 0.82rem; margin-top: 10px;">
+                            <strong>Siddhant Surana, FCA</strong><br>
+                            <span style="color: var(--text-muted); font-size: 0.76rem;">Lead Direct Tax & Audit Automation Lead</span>
+                        </div>
+                        <div style="background: var(--info-bg); border: 1px solid var(--info-border); padding: 10px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--info-text); margin-top: 12px;">
+                            💬 Questions on data preparation? Contact your assigned BRC team.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 2: MY REQUESTS (SMART PBC) ==================== -->
+        <div id="view-requests" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📥 Smart PBC Document Requisition Centre</h2>
+                    <p>Clean checklist of statutory requirements. Download exact Excel templates (.xlsx) and upload files directly to BRC's OneDrive audit folder.</p>
+                </div>
+                <button class="btn btn-outline" onclick="switchNav('view-datapacks')">📦 View Data Packs</button>
+            </div>
+            <div id="pbcRequestCardsContainer" class="grid-12">
+                <!-- Dynamic PBC Cards -->
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 3: DATA PACKS ==================== -->
+        <div id="view-datapacks" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📦 Bulk Data Packs (Download .xlsx)</h2>
+                    <p>Download clean, formula-ready Excel templates to fill your data offline.</p>
+                </div>
+            </div>
+            <div class="grid-12">
+                <div class="col-4">
+                    <div class="app-card">
+                        <span class="badge badge-blue" style="margin-bottom: 6px;">Finance & Accounts</span>
+                        <h3>Finance Data Pack (.xlsx)</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">Trial balance, FAR additions schedule, and Section 43B statutory dues blank templates.</p>
+                        <button class="btn btn-primary btn-sm" onclick="downloadTemplate('finance_pack')">📥 Download Finance Pack (.xlsx)</button>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="app-card">
+                        <span class="badge badge-blue" style="margin-bottom: 6px;">Direct Tax</span>
+                        <h3>Tax Data Pack (.xlsx)</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">TDS 26Q ledger reconciliation, historical losses matrix, and 115BAA evaluation sheets.</p>
+                        <button class="btn btn-primary btn-sm" onclick="downloadTemplate('tax_pack')">📥 Download Tax Pack (.xlsx)</button>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="app-card">
+                        <span class="badge badge-blue" style="margin-bottom: 6px;">HR & Payroll</span>
+                        <h3>Payroll Data Pack (.xlsx)</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">12-month employee PF & ESI deposit schedule with TRRN challan reference format.</p>
+                        <button class="btn btn-primary btn-sm" onclick="downloadTemplate('pf_pack')">📥 Download Payroll Pack (.xlsx)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 4: GUIDED WORKINGS ==================== -->
+        <div id="view-workings" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>🛠️ Guided Tax Audit Workings (Clean Data Entry)</h2>
+                    <p>Enter data into the light yellow cells below. All calculations and disallowances execute automatically.</p>
+                </div>
+                <select id="workingSelectDropdown" class="form-select" onchange="switchWorkingTab(this.value)">
+                    <option value="msme">1. MSME Section 43B(h) Compliance Working</option>
+                    <option value="sec43b">2. Section 43B Statutory Liabilities Working</option>
+                    <option value="pfesi">3. Employee Contribution Compliance Working (PF/ESI)</option>
+                    <option value="depreciation">4. Income-tax Depreciation Working (Section 32)</option>
+                    <option value="tds">5. TDS Compliance & Reconciliation (Sec 40a/34)</option>
+                </select>
+            </div>
+            <div id="activeWorkingContainer">
+                <!-- Swapped dynamically -->
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 5: ICDS CENTRE ==================== -->
+        <div id="view-icds" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📊 ICDS Compliance & Standard Disclosures Centre</h2>
+                    <p>Assess and calculate adjustments for all 10 Income Computation & Disclosure Standards.</p>
+                </div>
+            </div>
+            <div class="app-card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ICDS Standard</th>
+                                <th>Subject Matter Area</th>
+                                <th>Applicable?</th>
+                                <th style="text-align: right;">Book Valuation (Rs)</th>
+                                <th style="text-align: right;">Tax Valuation (Rs)</th>
+                                <th style="text-align: right;">Net Adjustment (Rs)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="icdsSummaryTableBody">
+                            <!-- Populated with clean inputs -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 6: AUDITOR PORTFOLIO HUB (AUDITOR ONLY) ==================== -->
+        <div id="view-portfolio" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>👥 Auditor Client Portfolio & OneDrive Cloud Integration</h2>
+                    <p>Manage corporate clients, set custom passcodes manually, and configure direct OneDrive upload folders.</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAddClientModal()">➕ Onboard New Client Entity</button>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company Legal Name</th>
+                            <th>PAN</th>
+                            <th>Assessment Year</th>
+                            <th>Client Access Passcode</th>
+                            <th>OneDrive Upload Folder URL</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditorPortfolioTbody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 7: MASTER CLAUSE HUB (AUDITOR ONLY) ==================== -->
+        <div id="view-masterclause" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📋 Form 3CD Master Clause Matrix (Clauses 1 to 44)</h2>
+                    <p>Statutory checklist with ICAI Guidance Note references and working paper links.</p>
+                </div>
+                <a href="file:///S:/Sid Work/62.  Wakefit/Form-3CD-Tax-Audit-Interactive-Suite-AY-2026-27.xlsx" class="btn btn-primary btn-sm">📥 Open Clean Excel Suite</a>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">Clause</th>
+                            <th>Subject / Area</th>
+                            <th>Legal Scope</th>
+                            <th>Action Type</th>
+                            <th>PBC Requisition</th>
+                            <th>Applicable?</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fullMasterClauseTbody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 8: READINESS & REVIEW ==================== -->
+        <div id="view-readiness" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>🏆 Tax Audit Readiness & Completion Sign-Off</h2>
+                    <p>Final sign-off tracker before Form 3CA/3CD execution.</p>
+                </div>
+            </div>
+            <div class="app-card">
+                <div style="padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                    <span>1. All PBC Information Requests Submitted</span>
+                    <span class="badge badge-amber" id="readinessPbcBadge">Pending</span>
+                </div>
+                <div style="padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                    <span>2. MSME Section 43B(h) Vendor Aging Reconciled</span>
+                    <span class="badge badge-amber" id="readinessMsmeBadge">Pending</span>
+                </div>
+                <div style="padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                    <span>3. Employee PF/ESI 12-Month Challans Verified</span>
+                    <span class="badge badge-amber" id="readinessPfBadge">Pending</span>
+                </div>
+                <div style="padding: 10px 0; display: flex; justify-content: space-between;">
+                    <span>4. Income-tax Depreciation vs Books Reconciled</span>
+                    <span class="badge badge-amber" id="readinessDepBadge">Pending</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 9: HELP CENTRE ==================== -->
+        <div id="view-help" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📚 Help Centre & Preparation Guides</h2>
+                    <p>Step-by-step guidance for finance and accounts personnel.</p>
+                </div>
+            </div>
+            <div class="grid-12">
+                <div class="col-4">
+                    <div class="app-card">
+                        <h3>⏳ MSME 43B(h) Preparation Guide</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">How to verify Udyam registration and exclude retail/wholesale traders.</p>
+                        <button class="btn btn-outline btn-sm" onclick="alert('Viewing MSME 43B(h) Guide...')">Read Guide →</button>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="app-card">
+                        <h3>👥 PF/ESI 15th Due Date Guide</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">Supreme Court ruling details and TRRN payment receipt extraction.</p>
+                        <button class="btn btn-outline btn-sm" onclick="alert('Viewing PF/ESI Guide...')">Read Guide →</button>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="app-card">
+                        <h3>📉 Depreciation FAR Reconciliation</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">180-day put-to-use splitting and factory log documentation.</p>
+                        <button class="btn btn-outline btn-sm" onclick="alert('Viewing Depreciation Guide...')">Read Guide →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modals -->
+    <!-- 1. Add Client Modal (Auditor Only) -->
+    <div class="modal-overlay" id="modalAddClient">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>➕ Onboard New Client Company</h3>
+                <button class="modal-close-btn" onclick="closeModal('modalAddClient')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Company Legal Name:</label>
+                    <input type="text" id="newClientName" class="form-control" placeholder="e.g. Apex Industries Limited">
+                </div>
+                <div class="grid-12" style="margin-bottom: 12px;">
+                    <div class="col-6">
+                        <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Company PAN:</label>
+                        <input type="text" id="newClientPan" class="form-control" placeholder="e.g. AABCA9918F" style="text-transform: uppercase;">
+                    </div>
+                    <div class="col-6">
+                        <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Assessment Year:</label>
+                        <input type="text" id="newClientAy" class="form-control" value="2026-27">
+                    </div>
+                </div>
+                <div class="grid-12" style="margin-bottom: 12px;">
+                    <div class="col-6">
+                        <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Custom Client Passcode (Set Manually):</label>
+                        <input type="text" id="newClientPasscode" class="form-control" placeholder="e.g. APEX2026" style="text-transform: uppercase;">
+                    </div>
+                    <div class="col-6">
+                        <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">OneDrive File Request Upload URL:</label>
+                        <input type="url" id="newClientOnedrive" class="form-control" placeholder="https://1drv.ms/u/s!... or SharePoint link">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modalAddClient')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveNewClient()">Create Client Workspace</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Edit Client Passcode & OneDrive Modal (Auditor Only) -->
+    <div class="modal-overlay" id="modalEditPasscode">
+        <div class="modal-card" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3>✏️ Configure Client Passcode & OneDrive Link</h3>
+                <button class="modal-close-btn" onclick="closeModal('modalEditPasscode')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editPasscodeClientId">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;" id="editPasscodeClientLabel">
+                    Configure access for: <strong>Company Name</strong>
+                </p>
+                <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Company Access Passcode:</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="editPasscodeVal" class="form-control" style="font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">
+                        <button class="btn btn-outline btn-sm" onclick="generateRandomPasscode()">🔄 Random</button>
+                    </div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">OneDrive 'File Request' Upload Link:</label>
+                    <input type="url" id="editOnedriveVal" class="form-control" placeholder="https://1drv.ms/u/s!... or SharePoint Request link">
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 3px;">
+                        💡 Right-click your client OneDrive folder &gt; select 'Request files' &gt; paste link here.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modalEditPasscode')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveEditedPasscode()">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Upload File to OneDrive Modal (Client Facing) -->
+    <div class="modal-overlay" id="modalUploadToCloud">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="cloudUploadTitle">📤 Transmit File to BRC Audit OneDrive</h3>
+                <button class="modal-close-btn" onclick="closeModal('modalUploadToCloud')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.85rem; color: var(--text-muted);" id="cloudUploadSubtitle">
+                    Transmit requested schedule or documents directly to Bihani Rashmi & Co.'s secure audit cloud.
+                </p>
+                <div class="onedrive-box">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="#0078D4"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                    <h4 style="color: var(--primary); margin: 8px 0 4px 0;">Microsoft OneDrive Secure Audit Channel</h4>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
+                        Click below to open your company's dedicated BRC upload portal:
+                    </p>
+                    <button class="btn btn-onedrive" id="btnLaunchOnedrive" onclick="launchClientOnedriveUpload()">
+                        ☁️ Upload File via OneDrive (Instant Sync)
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modalUploadToCloud')">Close</button>
+                <button class="btn btn-primary" onclick="confirmCloudSubmission()">Mark Upload Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Send Link / Share Modal (Auditor Only) -->
+    <div class="modal-overlay" id="modalSendLink">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🔗 Client Secure Portal Invitation (Auditor View)</h3>
+                <button class="modal-close-btn" onclick="closeModal('modalSendLink')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+                    Copy this confidential invitation and send it to the client's finance team. They will authenticate using their PAN and Passcode with complete client isolation.
+                </p>
+                <div style="background: #F8FAFC; border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-md); margin-bottom: 14px;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">CONFIDENTIAL INVITATION TEXT:</div>
+                    <textarea id="invitationTextarea" class="form-control" rows="8" style="font-family: inherit; font-size: 0.82rem; margin-top: 6px; background: #FFF;" readonly></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modalSendLink')">Close</button>
+                <button class="btn btn-primary" onclick="copyClientInvitation()">📋 Copy Invitation Message</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Bihani Rashmi & Co., Chartered Accountants | BRC Tax Audit Digital Workspace | Direct Tax Engagement Team</p>
+    </footer>
+
+    <!-- App Engine Script -->
+    <script>
+        // Multi-Client Isolated Database with OneDrive Support
+        const defaultClients = [
+            {
+                id: "wakefit",
+                name: "Wakefit Innovations Limited",
+                pan: "AABCW7791A",
+                ay: "2026-27",
+                fy: "2025-26",
+                section: "Third Proviso to Section 44AB",
+                passcode: "WF2026",
+                onedriveUrl: "https://onedrive.live.com/", // Replace with exact BRC OneDrive 'Request files' link
+                spoc: "Parul Gupta (CFO)",
+                email: "finance@wakefit.co",
+                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
+            },
+            {
+                id: "triad",
+                name: "Triad Mobility Private Limited",
+                pan: "AABCT9921B",
+                ay: "2026-27",
+                fy: "2025-26",
+                section: "Section 44AB(a)",
+                passcode: "TM2026",
+                onedriveUrl: "https://onedrive.live.com/",
+                spoc: "Director",
+                email: "accounts@triadmobility.com",
+                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
+            }
+        ];
+
+        let clientsList = JSON.parse(localStorage.getItem('brc_tax_audit_clients')) || defaultClients;
+        let activeClientId = null;
+        let currentSessionRole = null;
+        let currentUploadReqId = null;
+
+        // 10 Master Requisitions
+        const pbcMasterRequirements = [
+            { req: 1, title: "Signed Audited Financial Statements with Notes", dept: "Finance & Accounts", clause: "All", template: "financials" },
+            { req: 2, title: "Annual Trial Balance mapped with Financials", dept: "Finance & Accounts", clause: "All", template: "tb" },
+            { req: 3, title: "Fixed Asset Register (FAR) with Put-to-Use Proof", dept: "Asset Management", clause: "18", template: "far" },
+            { req: 4, title: "MSME Vendor Master with Udyam Certificates & Aging", dept: "Accounts Payable", clause: "22 / 43B(h)", template: "msme" },
+            { req: 5, title: "Monthly PF & ESI Challans with ECR Confirmation", dept: "HR & Payroll", clause: "20(b)", template: "pf" },
+            { req: 6, title: "Quarterly TDS Returns (24Q/26Q) & TRACES Defaults", dept: "Taxation", clause: "21(b), 34", template: "tds" },
+            { req: 7, title: "GSTR-1, GSTR-3B & GSTR-2B ITC Reconciliation", dept: "Indirect Tax", clause: "4, 27, 44", template: "gst" },
+            { req: 8, title: "Related Party Register & Form 3CEB TP Study", dept: "Finance & Accounts", clause: "23", template: "rpt" },
+            { req: 9, title: "Rule 11UA Valuation Report for Fresh Share Issue", dept: "Finance & Accounts", clause: "28-29", template: "valuation" },
+            { req: 10, title: "Inventory Valuation Policy & Physical Stock Sheets", dept: "Supply Chain", clause: "14, 35", template: "stock" }
+        ];
+
+        // Master 61 Clauses Catalog
+        const masterClauseCatalog = [
+            { id: "1", title: "Name of Assessee", scope: "Verify legal name against PAN & MCA.", action: "Data Compilation Only", pbc: "PAN Card, Certificate of Incorporation" },
+            { id: "2", title: "Address of Assessee", scope: "Verify registered and communicating office.", action: "Data Compilation Only", pbc: "Latest ITR, Utility Bills, GST RCs" },
+            { id: "3", title: "PAN & Aadhaar", scope: "Verify corporate PAN and directors Aadhaar.", action: "Data Compilation Only", pbc: "PAN Card of Company & Directors" },
+            { id: "4", title: "Indirect Tax Registrations", scope: "Disclose all active State GSTINs & IEC.", action: "Document Verification", pbc: "List of all State GST Certificates (REG-06)" },
+            { id: "5", title: "Status of Assessee", scope: "Entity status (Company/Firm/Individual).", action: "Data Compilation Only", pbc: "MOA, AOA, Certificate of Incorporation" },
+            { id: "8", title: "Audit Clause u/s 44AB", scope: "Third Proviso: Accounts audited under Companies Act.", action: "Review & Computation Check", pbc: "Statutory Audit Report by Statutory Auditor" },
+            { id: "18", title: "Income Tax Depreciation", scope: "Block-wise schedule, 180-day put-to-use.", action: "Document Verification", pbc: "Fixed Asset Register (FAR), Addition Invoices" },
+            { id: "20(b)", title: "Employee PF/ESI Contributions", scope: "Month-wise testing: due vs actual deposit.", action: "Document Verification", pbc: "Monthly ECR Challans with timestamps" },
+            { id: "21(b)", title: "TDS Defaults u/s 40(a)(ia)", scope: "30% disallowance on professional fees default.", action: "Review & Computation Check", pbc: "TDS Returns (24Q/26Q), TRACES Defaults" },
+            { id: "22", title: "MSME Overdue u/s 43B(h)", scope: "Disallowance of overdue dues to Micro/Small.", action: "Review & Computation Check", pbc: "Trade Payables Aging, Udyam Certificates" },
+            { id: "26", title: "Section 43B Statutory Dues", scope: "Taxes, PF, Bonus, Leave paid by 139(1).", action: "Document Verification", pbc: "Payment challans for GST, PF, Bonus" },
+            { id: "40", title: "Financial Ratios (GP, NP, Stock)", scope: "GP%, NP%, Stock/Turnover ratios.", action: "Review & Computation Check", pbc: "Audited Financial Statements, Trial Balance" }
+        ];
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenClient = urlParams.get('client');
+            const tokenCode = urlParams.get('code');
+
+            if(tokenClient && tokenCode) {
+                const target = clientsList.find(c => c.id === tokenClient && c.passcode.toUpperCase() === tokenCode.toUpperCase());
+                if(target) {
+                    activeClientId = target.id;
+                    currentSessionRole = 'client';
+                    initClientWorkspace();
+                    return;
+                }
+            }
+
+            showAuthGate();
+        };
+
+        function showAuthGate() { document.getElementById('authGate').style.display = 'flex'; }
+        function hideAuthGate() { document.getElementById('authGate').style.display = 'none'; }
+
+        function switchAuthTab(type) {
+            document.getElementById('tabBtnClientAuth').classList.toggle('active', type === 'client');
+            document.getElementById('tabBtnAuditorAuth').classList.toggle('active', type === 'auditor');
+            document.getElementById('clientAuthForm').style.display = type === 'client' ? 'block' : 'none';
+            document.getElementById('auditorAuthForm').style.display = type === 'auditor' ? 'block' : 'none';
+            document.getElementById('clientAuthError').style.display = 'none';
+            document.getElementById('auditorAuthError').style.display = 'none';
+        }
+
+        function verifyClientCredentials() {
+            const enteredPan = document.getElementById('clientLoginPan').value.trim().toUpperCase();
+            const enteredCode = document.getElementById('clientLoginPasscode').value.trim().toUpperCase();
+            const client = clientsList.find(c => c.pan.toUpperCase() === enteredPan && c.passcode.toUpperCase() === enteredCode);
+
+            if(client) {
+                activeClientId = client.id;
+                currentSessionRole = 'client';
+                hideAuthGate();
+                initClientWorkspace();
+            } else {
+                document.getElementById('clientAuthError').style.display = 'block';
+            }
+        }
+
+        function verifyAuditorCredentials() {
+            const pin = document.getElementById('auditorMasterPin').value.trim();
+            if(pin === 'BRC@2026' || pin === 'BRCADMIN2026' || pin === 'admin') {
+                currentSessionRole = 'auditor';
+                activeClientId = clientsList[0].id;
+                hideAuthGate();
+                initAuditorWorkspace();
+            } else {
+                document.getElementById('auditorAuthError').style.display = 'block';
+            }
+        }
+
+        function initClientWorkspace() {
+            const client = getActiveClient();
+            document.getElementById('auditorNavbarControls').style.display = 'none';
+            document.getElementById('btnAddClientTopBtn').style.display = 'none';
+            document.querySelectorAll('.auditor-only').forEach(el => el.style.display = 'none');
+            
+            document.getElementById('clientNavbarBanner').style.display = 'block';
+            document.getElementById('clientHeaderName').innerText = client.name;
+            document.getElementById('clientHeaderMeta').innerText = `PAN: ${client.pan} | AY ${client.ay} (FY ${client.fy})`;
+            
+            document.getElementById('ovClientHeading').innerText = `${client.name} — Tax Audit Workspace`;
+            document.getElementById('ovClientMeta').innerText = `PAN: ${client.pan} | AY ${client.ay} (FY ${client.fy}) | ${client.section}`;
+
+            renderPbcCards();
+            renderIcdsTable();
+            loadWorking('msme');
+            recalculateOverview();
+        }
+
+        function initAuditorWorkspace() {
+            document.getElementById('clientNavbarBanner').style.display = 'none';
+            document.getElementById('auditorNavbarControls').style.display = 'flex';
+            document.getElementById('btnAddClientTopBtn').style.display = 'inline-flex';
+            document.querySelectorAll('.auditor-only').forEach(el => el.style.display = 'flex');
+
+            renderAuditorClientSelect();
+            auditorSwitchClient(activeClientId);
+            renderAuditorPortfolio();
+            renderMasterClauseTable();
+        }
+
+        function renderAuditorClientSelect() {
+            const select = document.getElementById('auditorClientSelect');
+            select.innerHTML = '';
+            clientsList.forEach(client => {
+                const opt = document.createElement('option');
+                opt.value = client.id;
+                opt.innerText = `${client.name} (${client.pan})`;
+                if(client.id === activeClientId) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        function auditorSwitchClient(newId) {
+            activeClientId = newId;
+            const client = getActiveClient();
+            document.getElementById('ovClientHeading').innerText = `${client.name} — Tax Audit Engagement`;
+            document.getElementById('ovClientMeta').innerText = `PAN: ${client.pan} | AY ${client.ay} (FY ${client.fy}) | ${client.section}`;
+            
+            renderPbcCards();
+            renderIcdsTable();
+            loadWorking('msme');
+            recalculateOverview();
+            updateInvitationText(client);
+        }
+
+        function getActiveClient() {
+            return clientsList.find(c => c.id === activeClientId) || clientsList[0];
+        }
+
+        function logoutSession() {
+            activeClientId = null;
+            currentSessionRole = null;
+            document.getElementById('clientLoginPan').value = '';
+            document.getElementById('clientLoginPasscode').value = '';
+            document.getElementById('auditorMasterPin').value = '';
+            showAuthGate();
+        }
+
+        function switchNav(viewId, btn) {
+            document.querySelectorAll('.view-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item-btn').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(viewId);
+            if(target) target.classList.add('active');
+            if(btn) {
+                btn.classList.add('active');
+            } else {
+                const navBtn = Array.from(document.querySelectorAll('.nav-item-btn')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(viewId));
+                if(navBtn) navBtn.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // PBC Cards with Dynamic Excel Template & OneDrive Upload
+        function renderPbcCards() {
+            const container = document.getElementById('pbcRequestCardsContainer');
+            container.innerHTML = '';
+            const client = getActiveClient();
+
+            pbcMasterRequirements.forEach(req => {
+                const col = document.createElement('div');
+                col.className = 'col-6';
+                const status = (client.data.pbcStatus && client.data.pbcStatus[req.req]) || 'Pending';
+                const statusBadge = status === 'Submitted' ? 'badge-green' : 'badge-amber';
+
+                col.innerHTML = `
+                    <div class="app-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <div>
+                                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Req #${req.req} | ${req.dept}</span>
+                                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 2px;">${req.title}</h4>
+                                </div>
+                                <span class="badge ${statusBadge}">${status}</span>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">
+                                Relevant to Form 3CD Clause: <strong>${req.clause}</strong>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 6px; border-top: 1px solid var(--border-subtle); padding-top: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-onedrive btn-sm" onclick="openCloudUploadModal(${req.req}, '${req.title}')">☁️ Upload to OneDrive</button>
+                            <button class="btn btn-outline btn-sm" onclick="downloadTemplate('${req.template}')">📥 Download Template (.xlsx)</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        // Dynamic Excel Template Generator (.xlsx)
+        function downloadTemplate(type) {
+            let data = [];
+            let filename = "BRC_Template.xlsx";
+
+            if(type === 'msme') {
+                filename = "BRC_MSME_Vendor_Aging_Template.xlsx";
+                data = [
+                    ["Vendor / Supplier Name", "PAN", "Udyam Registration No", "MSME Category (Micro/Small/Medium)", "Activity (Manufacturer/Service/Trader)", "Invoice No", "Invoice Date (YYYY-MM-DD)", "Invoice Amount (Rs)", "Agreed Credit Term (Days)", "Actual Payment Date (YYYY-MM-DD)"],
+                    ["Example Vendor 1", "ABCDE1234F", "UDYAM-KR-03-0012345", "Micro", "Manufacturer", "INV-001", "2026-01-15", 500000, 45, "2026-04-10"]
+                ];
+            } else if(type === 'pf' || type === 'pf_pack') {
+                filename = "BRC_Employee_PF_ESI_Deposit_Schedule.xlsx";
+                data = [
+                    ["Month", "Welfare Fund Name", "Employee Share Deducted (Rs)", "Employer Share (Rs)", "Statutory Due Date (15th)", "Actual Challan Deposit Date", "TRRN / Electronic Challan No"],
+                    ["Apr-2025", "Provident Fund (EPF)", 0, 0, "2025-05-15", "", ""],
+                    ["May-2025", "Provident Fund (EPF)", 0, 0, "2025-06-15", "", ""],
+                    ["Jun-2025", "Provident Fund (EPF)", 0, 0, "2025-07-15", "", ""]
+                ];
+            } else if(type === 'far' || type === 'finance_pack') {
+                filename = "BRC_Fixed_Asset_FAR_Additions_Schedule.xlsx";
+                data = [
+                    ["Asset Description", "Income Tax Block (P&M/Computers/Furniture)", "Depreciation Rate", "Invoice No", "Capitalization Date", "Put to Use Date", "Cost of Addition (Rs)", "Put to Use Period (>=180D or <180D)"],
+                    ["CNC Foam Cutting Machine", "Plant & Machinery (Mfg)", "15%", "INV-9921", "2025-06-15", "2025-06-20", 2500000, ">= 180 Days"]
+                ];
+            } else if(type === 'tds' || type === 'tax_pack') {
+                filename = "BRC_TDS_Reconciliation_Schedule.xlsx";
+                data = [
+                    ["Section", "Nature of Payment", "Total Expense in Books (Rs)", "Amount Subject to TDS (Rs)", "TDS Rate (%)", "TDS Deducted (Rs)", "TDS Deposited (Rs)", "Date of Deposit", "Challan BSR Code / CIN"],
+                    ["194J", "Professional & Technical Fees", 0, 0, "10%", 0, 0, "", ""]
+                ];
+            } else {
+                filename = "BRC_Audit_Requisition_Template.xlsx";
+                data = [
+                    ["Field / Parameter", "Description / Amount", "Supporting Document Reference"],
+                    ["Item 1", "", ""]
+                ];
+            }
+
+            if(typeof XLSX !== 'undefined') {
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Template");
+                XLSX.writeFile(wb, filename);
+            } else {
+                alert(`Downloading ${filename}...`);
+            }
+        }
+
+        // OneDrive Upload Trigger
+        function openCloudUploadModal(reqId, title) {
+            currentUploadReqId = reqId;
+            const client = getActiveClient();
+            document.getElementById('cloudUploadTitle').innerText = `📤 Upload Req #${reqId}: ${title}`;
+            document.getElementById('cloudUploadSubtitle').innerText = `Direct upload to Bihani Rashmi & Co. OneDrive for ${client.name}.`;
+            document.getElementById('modalUploadToCloud').classList.add('active');
+        }
+
+        function launchClientOnedriveUpload() {
+            const client = getActiveClient();
+            const targetUrl = client.onedriveUrl || "https://onedrive.live.com/";
+            window.open(targetUrl, '_blank');
+        }
+
+        function confirmCloudSubmission() {
+            if(currentUploadReqId) {
+                markPbcSubmitted(currentUploadReqId);
+            }
+            closeModal('modalUploadToCloud');
+        }
+
+        function markPbcSubmitted(reqId) {
+            const client = getActiveClient();
+            if(!client.data.pbcStatus) client.data.pbcStatus = {};
+            client.data.pbcStatus[reqId] = 'Submitted';
+            saveClientsToStorage();
+            renderPbcCards();
+            recalculateOverview();
+            alert(`Document for Request #${reqId} marked as uploaded to OneDrive!`);
+        }
+
+        // Clean Guided Workings
+        function openWorking(workName) {
+            switchNav('view-workings');
+            document.getElementById('workingSelectDropdown').value = workName;
+            loadWorking(workName);
+        }
+
+        function switchWorkingTab(val) { loadWorking(val); }
+
+        function loadWorking(name) {
+            const container = document.getElementById('activeWorkingContainer');
+            const client = getActiveClient();
+
+            if(name === 'msme') {
+                container.innerHTML = `
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>⏳ MSME Section 43B(h) Compliance Working (Clause 22)</h3>
+                                <p>Enter vendor invoices as of 31-March. Auto-calculates 15/45-day delay, excludes traders, and computes 43B(h) disallowance.</p>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Download MSME Template (.xlsx)</button>
+                                <button class="btn btn-primary btn-sm" onclick="addMsmeCleanRow()">➕ Add Vendor Invoice</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Supplier Name</th>
+                                        <th>Category</th>
+                                        <th>Activity</th>
+                                        <th>Invoice Date</th>
+                                        <th style="text-align: right;">Amount (Rs)</th>
+                                        <th>Agreed Term</th>
+                                        <th>Actual Pay Date</th>
+                                        <th>Delay Days</th>
+                                        <th style="text-align: right;">Sec 43B(h) Disallowed</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="msmeTbody">
+                                    <!-- Clean rows -->
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="4">TOTAL 43B(h) DISALLOWANCE:</td>
+                                        <td id="msmeTotAmt" style="text-align: right;">Rs 0</td>
+                                        <td colspan="3"></td>
+                                        <td id="msmeTotDis" style="text-align: right; color: var(--danger);">Rs 0</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                renderMsmeRows();
+            } else if(name === 'pfesi') {
+                container.innerHTML = `
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>👥 Employee PF & ESI Contribution Compliance (Clause 20(b))</h3>
+                                <p>Enter monthly employee share deducted and actual payment date. Auto-verifies 15th statutory due date.</p>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="downloadTemplate('pf')">📥 Download PF/ESI Template (.xlsx)</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Welfare Fund</th>
+                                        <th style="text-align: right;">Employee Share (Rs)</th>
+                                        <th>Statutory Due Date</th>
+                                        <th>Actual Deposit Date</th>
+                                        <th>Deposit Status</th>
+                                        <th style="text-align: right;">Disallowance u/s 36(1)(va)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pfTbody">
+                                    <!-- Clean months -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                renderPfRows();
+            } else if(name === 'depreciation') {
+                container.innerHTML = `
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>📉 Income-tax Depreciation Working (Clause 18 / Section 32)</h3>
+                                <p>Enter opening WDV, additions >=180 days and <180 days. Auto-calculates allowable IT depreciation.</p>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="downloadTemplate('far')">📥 Download FAR Template (.xlsx)</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Asset Block</th>
+                                        <th>Rate</th>
+                                        <th style="text-align: right;">Opening WDV (Rs)</th>
+                                        <th style="text-align: right;">Additions >=180D (Rs)</th>
+                                        <th style="text-align: right;">Additions <180D (Rs)</th>
+                                        <th style="text-align: right;">Deletions (Rs)</th>
+                                        <th style="text-align: right;">Allowable IT Dep</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="depTbody">
+                                    <!-- Clean blocks -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                renderDepRows();
+            } else {
+                container.innerHTML = `
+                    <div class="app-card">
+                        <h3>Working: ${name.toUpperCase()}</h3>
+                        <p style="color: var(--text-muted); margin-top: 4px;">Clean data entry template ready.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // MSME Logic
+        function renderMsmeRows() {
+            const client = getActiveClient();
+            const tbody = document.getElementById('msmeTbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            let tAmt = 0, tDis = 0;
+
+            if(!client.data.msme) client.data.msme = [];
+
+            client.data.msme.forEach((item, idx) => {
+                tAmt += Number(item.amt || 0);
+                let delay = 0, dis = 0;
+
+                if(item.date && item.payDate) {
+                    const d1 = new Date(item.date);
+                    const d2 = new Date(item.payDate);
+                    const due = new Date(d1.getTime() + (Math.min(item.term || 45, 45) * 86400000));
+                    if(d2 > due) {
+                        delay = Math.round((d2 - due) / 86400000);
+                        if(item.cat !== "Medium" && item.act !== "Trader" && d2 > new Date("2026-03-31")) {
+                            dis = item.amt;
+                        }
+                    }
+                }
+                tDis += dis;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="text" class="form-control" value="${item.name || ''}" placeholder="Vendor Name" onchange="client.data.msme[${idx}].name = this.value; saveClientsToStorage();"></td>
+                    <td>
+                        <select class="form-select" onchange="client.data.msme[${idx}].cat = this.value; saveClientsToStorage(); renderMsmeRows();">
+                            <option value="Micro" ${item.cat === 'Micro' ? 'selected' : ''}>Micro</option>
+                            <option value="Small" ${item.cat === 'Small' ? 'selected' : ''}>Small</option>
+                            <option value="Medium" ${item.cat === 'Medium' ? 'selected' : ''}>Medium (Exempt)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select" onchange="client.data.msme[${idx}].act = this.value; saveClientsToStorage(); renderMsmeRows();">
+                            <option value="Manufacturer" ${item.act === 'Manufacturer' ? 'selected' : ''}>Manufacturer</option>
+                            <option value="Service Provider" ${item.act === 'Service Provider' ? 'selected' : ''}>Service Provider</option>
+                            <option value="Trader" ${item.act === 'Trader' ? 'selected' : ''}>Trader (Exempt)</option>
+                        </select>
+                    </td>
+                    <td><input type="date" class="form-control" value="${item.date || ''}" onchange="client.data.msme[${idx}].date = this.value; saveClientsToStorage(); renderMsmeRows();"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="client.data.msme[${idx}].amt = Number(this.value); saveClientsToStorage(); renderMsmeRows();"></td>
+                    <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" onchange="client.data.msme[${idx}].term = Number(this.value); saveClientsToStorage(); renderMsmeRows();"></td>
+                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="client.data.msme[${idx}].payDate = this.value; saveClientsToStorage(); renderMsmeRows();"></td>
+                    <td style="text-align: center; font-weight: 700; color: ${delay > 0 ? 'var(--danger)' : 'var(--success)'};">${delay} Days</td>
+                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="client.data.msme.splice(${idx}, 1); saveClientsToStorage(); renderMsmeRows();">🗑️</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('msmeTotAmt').innerText = "Rs " + tAmt.toLocaleString('en-IN');
+            document.getElementById('msmeTotDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            document.getElementById('ovMsmeDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
+        }
+
+        function addMsmeCleanRow() {
+            const client = getActiveClient();
+            if(!client.data.msme) client.data.msme = [];
+            client.data.msme.push({ name: "", cat: "Small", act: "Manufacturer", date: "", amt: 0, term: 45, payDate: "" });
+            saveClientsToStorage();
+            renderMsmeRows();
+        }
+
+        // PF / ESI Logic
+        const defaultPfMonths = [
+            { m: "Apr-2025", due: "2025-05-15" }, { m: "May-2025", due: "2025-06-15" }, { m: "Jun-2025", due: "2025-07-15" },
+            { m: "Jul-2025", due: "2025-08-15" }, { m: "Aug-2025", due: "2025-09-15" }, { m: "Sep-2025", due: "2025-10-15" },
+            { m: "Oct-2025", due: "2025-11-15" }, { m: "Nov-2025", due: "2025-12-15" }, { m: "Dec-2025", due: "2026-01-15" },
+            { m: "Jan-2026", due: "2026-02-15" }, { m: "Feb-2026", due: "2026-03-15" }, { m: "Mar-2026", due: "2026-04-15" }
+        ];
+
+        function renderPfRows() {
+            const client = getActiveClient();
+            const tbody = document.getElementById('pfTbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            let tDis = 0;
+
+            if(!client.data.pf || client.data.pf.length === 0) {
+                client.data.pf = defaultPfMonths.map(d => ({ ...d, amt: 0, payDate: "" }));
+            }
+
+            client.data.pf.forEach((item, idx) => {
+                let status = '<span class="badge badge-gray">Enter Date</span>';
+                let dis = 0;
+
+                if(item.payDate) {
+                    if(item.payDate <= item.due) {
+                        status = '<span class="badge badge-green">IN TIME</span>';
+                    } else {
+                        status = '<span class="badge badge-red">LATE DEPOSIT</span>';
+                        dis = Number(item.amt || 0);
+                    }
+                }
+                tDis += dis;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${item.m}</strong></td>
+                    <td>Provident Fund (EPF)</td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="client.data.pf[${idx}].amt = Number(this.value); saveClientsToStorage(); renderPfRows();"></td>
+                    <td>${item.due}</td>
+                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="client.data.pf[${idx}].payDate = this.value; saveClientsToStorage(); renderPfRows();"></td>
+                    <td style="text-align: center;">${status}</td>
+                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('ovPfDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
+        }
+
+        // Depreciation Clean Schedule
+        const defaultDepBlocks = [
+            { name: "Plant & Machinery (Mfg)", rate: 0.15, op: 0, a180: 0, aHalf: 0, del: 0 },
+            { name: "Computer Equipment & Servers", rate: 0.40, op: 0, a180: 0, aHalf: 0, del: 0 },
+            { name: "Furniture & Fixtures", rate: 0.10, op: 0, a180: 0, aHalf: 0, del: 0 },
+            { name: "Office Equipment", rate: 0.15, op: 0, a180: 0, aHalf: 0, del: 0 }
+        ];
+
+        function renderDepRows() {
+            const client = getActiveClient();
+            const tbody = document.getElementById('depTbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            let tAllow = 0;
+
+            if(!client.data.dep || client.data.dep.length === 0) {
+                client.data.dep = defaultDepBlocks.map(b => ({ ...b }));
+            }
+
+            client.data.dep.forEach((b, idx) => {
+                const normalDep = Math.round(((b.op + b.a180 - b.del) * b.rate) + (b.aHalf * b.rate * 0.5));
+                const allowable = Math.max(0, normalDep);
+                tAllow += allowable;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${b.name}</strong></td>
+                    <td style="text-align: center;">${(b.rate*100).toFixed(0)}%</td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.op || ''}" placeholder="0" onchange="client.data.dep[${idx}].op = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.a180 || ''}" placeholder="0" onchange="client.data.dep[${idx}].a180 = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.aHalf || ''}" placeholder="0" onchange="client.data.dep[${idx}].aHalf = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.del || ''}" placeholder="0" onchange="client.data.dep[${idx}].del = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
+                    <td style="text-align: right; font-weight: 700; color: var(--success);">Rs ${allowable.toLocaleString('en-IN')}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('ovDepAllow').innerText = "Rs " + tAllow.toLocaleString('en-IN') + " (Allowable)";
+            recalculateOverview();
+        }
+
+        // ICDS Clean Table
+        function renderIcdsTable() {
+            const tbody = document.getElementById('icdsSummaryTableBody');
+            tbody.innerHTML = '';
+            const standards = [
+                "ICDS I — Accounting Policies", "ICDS II — Valuation of Inventories", "ICDS III — Construction Contracts",
+                "ICDS IV — Revenue Recognition", "ICDS V — Tangible Fixed Assets", "ICDS VI — Foreign Exchange",
+                "ICDS VII — Government Grants", "ICDS VIII — Securities", "ICDS IX — Borrowing Costs", "ICDS X — Provisions"
+            ];
+
+            standards.forEach(std => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${std.split('—')[0].trim()}</strong></td>
+                    <td>${std.split('—')[1].trim()}</td>
+                    <td>
+                        <select class="form-select">
+                            <option>Applicable</option>
+                            <option>Not Applicable</option>
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control" style="text-align: right;" placeholder="0"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" placeholder="0"></td>
+                    <td style="text-align: right; font-weight: 700;">Rs 0</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Master Clause Hub Table
+        function renderMasterClauseTable() {
+            const tbody = document.getElementById('fullMasterClauseTbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            masterClauseCatalog.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 700; color: var(--primary);">${c.id}</td>
+                    <td><strong>${c.title}</strong></td>
+                    <td style="font-size: 0.8rem; color: var(--text-muted);">${c.scope}</td>
+                    <td><span class="badge badge-gray">${c.action}</span></td>
+                    <td style="font-size: 0.8rem;">${c.pbc}</td>
+                    <td style="text-align: center;"><span class="badge badge-green">Y</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Multi-Client Management (Auditor View)
+        function renderAuditorPortfolio() {
+            const tbody = document.getElementById('auditorPortfolioTbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            clientsList.forEach(client => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${client.name}</strong></td>
+                    <td><code>${client.pan}</code></td>
+                    <td>AY ${client.ay}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <code style="background: #E2E8F0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">${client.passcode}</code>
+                            <button class="btn btn-outline btn-sm" style="padding: 2px 6px;" title="Edit Passcode" onclick="openEditPasscodeModal('${client.id}')">✏️</button>
+                        </div>
+                    </td>
+                    <td>
+                        <span style="font-size: 0.76rem; color: var(--text-muted);">${client.onedriveUrl ? '✓ OneDrive Linked' : '⚠️ No Link'}</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="auditorSwitchClient('${client.id}')">Audit Workspace</button>
+                        <button class="btn btn-outline btn-sm" onclick="openSendLinkModalForClient('${client.id}')">Generate Invite</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openEditPasscodeModal(cId) {
+            const client = clientsList.find(c => c.id === cId);
+            if(!client) return;
+            document.getElementById('editPasscodeClientId').value = client.id;
+            document.getElementById('editPasscodeClientLabel').innerHTML = `Configure access for: <strong>${client.name}</strong> (${client.pan})`;
+            document.getElementById('editPasscodeVal').value = client.passcode;
+            document.getElementById('editOnedriveVal').value = client.onedriveUrl || '';
+            document.getElementById('modalEditPasscode').classList.add('active');
+        }
+
+        function generateRandomPasscode() {
+            const code = 'BRC' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('editPasscodeVal').value = code;
+        }
+
+        function saveEditedPasscode() {
+            const cId = document.getElementById('editPasscodeClientId').value;
+            const newCode = document.getElementById('editPasscodeVal').value.trim().toUpperCase();
+            const newOnedrive = document.getElementById('editOnedriveVal').value.trim();
+            if(!newCode) {
+                alert("Passcode cannot be empty.");
+                return;
+            }
+            const client = clientsList.find(c => c.id === cId);
+            if(client) {
+                client.passcode = newCode;
+                client.onedriveUrl = newOnedrive;
+                saveClientsToStorage();
+                renderAuditorPortfolio();
+                closeModal('modalEditPasscode');
+                alert(`Settings for ${client.name} updated!`);
+            }
+        }
+
+        function openAddClientModal() { document.getElementById('modalAddClient').classList.add('active'); }
+
+        function saveNewClient() {
+            const name = document.getElementById('newClientName').value.trim();
+            const pan = document.getElementById('newClientPan').value.trim().toUpperCase();
+            const ay = document.getElementById('newClientAy').value.trim();
+            const passcode = (document.getElementById('newClientPasscode').value.trim() || 'BRC' + Math.floor(1000 + Math.random() * 9000)).toUpperCase();
+            const onedrive = document.getElementById('newClientOnedrive').value.trim();
+
+            if(!name || !pan) {
+                alert("Please provide at least the Company Name and PAN.");
+                return;
+            }
+
+            const newId = name.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 15);
+            const newClientObj = {
+                id: newId,
+                name: name,
+                pan: pan,
+                ay: ay,
+                fy: "2025-26",
+                section: "Third Proviso to Section 44AB",
+                passcode: passcode,
+                onedriveUrl: onedrive,
+                spoc: "Finance Team",
+                email: "",
+                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
+            };
+
+            clientsList.push(newClientObj);
+            saveClientsToStorage();
+            activeClientId = newId;
+            renderAuditorClientSelect();
+            initAuditorWorkspace();
+            closeModal('modalAddClient');
+            alert(`New client workspace created successfully! Assigned Passcode: ${passcode}`);
+        }
+
+        function saveClientsToStorage() { localStorage.setItem('brc_tax_audit_clients', JSON.stringify(clientsList)); }
+
+        function clearCurrentClientData() {
+            if(confirm("Are you sure you want to reset all entered numbers for this company?")) {
+                const client = getActiveClient();
+                client.data = { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} };
+                saveClientsToStorage();
+                if(currentSessionRole === 'auditor') {
+                    initAuditorWorkspace();
+                } else {
+                    initClientWorkspace();
+                }
+                alert("Workspace reset to clean template!");
+            }
+        }
+
+        function recalculateOverview() {
+            const client = getActiveClient();
+            let pbcCount = Object.keys(client.data.pbcStatus || {}).length;
+            let percent = Math.min(100, Math.round((pbcCount / 10) * 50 + (client.data.msme?.length ? 25 : 0) + (client.data.pf?.length ? 25 : 0)));
+            document.getElementById('progressPercentDisplay').innerText = percent + "%";
+            document.getElementById('progressBarFill').style.width = percent + "%";
+        }
+
+        function updateInvitationText(client) {
+            const currentUrl = window.location.href.split('?')[0];
+            const text = `Dear ${client.spoc || 'Finance Team'},
+
+` +
+                         `Bihani Rashmi & Co., Chartered Accountants has provisioned your confidential Digital Tax Audit Workspace for FY ${client.fy} (AY ${client.ay}).
+
+` +
+                         `🔗 Direct Access Link: ${currentUrl}?client=${client.id}&code=${client.passcode}
+` +
+                         `🏢 Company PAN: ${client.pan}
+` +
+                         `🔑 Access Passcode: ${client.passcode}
+
+` +
+                         `You can download clean Excel templates (.xlsx), input your data, and transmit schedules directly to our OneDrive audit folder.
+
+` +
+                         `Warm regards,
+Bihani Rashmi & Co., Chartered Accountants
+Siddhant Surana, FCA | Rashmi Bihani, FCA`;
+            document.getElementById('invitationTextarea').value = text;
+        }
+
+        function openSendLinkModal() {
+            const client = getActiveClient();
+            updateInvitationText(client);
+            document.getElementById('modalSendLink').classList.add('active');
+        }
+
+        function openSendLinkModalForClient(cId) {
+            const client = clientsList.find(c => c.id === cId);
+            if(client) {
+                updateInvitationText(client);
+                document.getElementById('modalSendLink').classList.add('active');
+            }
+        }
+
+        function copyClientInvitation() {
+            const txt = document.getElementById('invitationTextarea');
+            txt.select();
+            document.execCommand('copy');
+            alert("✓ Invitation message and direct access link copied to clipboard! Ready to paste into an email to the client CFO.");
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    </script>
+</body>
+</html>
