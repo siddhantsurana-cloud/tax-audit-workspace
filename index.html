@@ -342,6 +342,8 @@
         .btn-ghost:hover { background: #F1F5F9; }
         .btn-onedrive { background: #0078D4; color: #FFFFFF; }
         .btn-onedrive:hover { background: #005A9E; }
+        .btn-cloud-sync { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF; }
+        .btn-cloud-sync:hover { background: #047857; }
         .btn-sm { padding: 4px 10px; font-size: 0.76rem; }
 
         /* Progress Bar */
@@ -465,10 +467,6 @@
             background: #EFF6FF;
             border-left: 4px solid var(--primary);
             font-weight: 700;
-        }
-
-        .req-section-item.active h4 {
-            color: var(--primary);
         }
 
         .req-detail-panel {
@@ -679,8 +677,11 @@
                 <button class="btn btn-sm" style="background: rgba(255,255,255,0.2); color:#FFF; padding: 2px 8px;" onclick="openSendLinkModal()">🔗 Generate Invite</button>
             </div>
 
-            <!-- User Session Controls -->
+            <!-- User Session Controls & Remote Cloud Sync -->
             <div class="user-controls">
+                <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">
+                    ☁️ Transmit & Sync Workings
+                </button>
                 <button id="btnAddClientTopBtn" class="btn btn-outline btn-sm" style="display: none; background: rgba(255,255,255,0.15); color: #FFF; border-color: rgba(255,255,255,0.3);" onclick="openAddClientModal()">
                     ➕ Onboard Client
                 </button>
@@ -755,9 +756,12 @@
                     <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
                 </div>
 
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
-                    🔒 All files and workings are transmitted directly to Bihani Rashmi & Co.'s secure OneDrive audit folder.
-                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">
+                        🔒 Transmitted workings sync securely across cities directly to Bihani Rashmi & Co.'s OneDrive audit hub.
+                    </p>
+                    <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Save & Transmit Workings to CA</button>
+                </div>
             </div>
 
             <div class="grid-12">
@@ -954,13 +958,16 @@
                     <h2>🛠️ Guided Tax Audit Workings (Clean Data Entry)</h2>
                     <p>Enter data into the light yellow cells below. All calculations and disallowances execute automatically.</p>
                 </div>
-                <select id="workingSelectDropdown" class="form-select" onchange="switchWorkingTab(this.value)">
-                    <option value="msme">1. MSME Section 43B(h) Compliance Working</option>
-                    <option value="sec43b">2. Section 43B Statutory Liabilities Working</option>
-                    <option value="pfesi">3. Employee Contribution Compliance Working (PF/ESI)</option>
-                    <option value="depreciation">4. Income-tax Depreciation Working (Section 32)</option>
-                    <option value="tds">5. TDS Compliance & Reconciliation (Sec 40a/34)</option>
-                </select>
+                <div style="display: flex; gap: 8px;">
+                    <select id="workingSelectDropdown" class="form-select" onchange="switchWorkingTab(this.value)">
+                        <option value="msme">1. MSME Section 43B(h) Compliance Working</option>
+                        <option value="sec43b">2. Section 43B Statutory Liabilities Working</option>
+                        <option value="pfesi">3. Employee Contribution Compliance Working (PF/ESI)</option>
+                        <option value="depreciation">4. Income-tax Depreciation Working (Section 32)</option>
+                        <option value="tds">5. TDS Compliance & Reconciliation (Sec 40a/34)</option>
+                    </select>
+                    <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Sync Workings</button>
+                </div>
             </div>
             <div id="activeWorkingContainer">
                 <!-- Swapped dynamically -->
@@ -1000,10 +1007,13 @@
         <div id="view-portfolio" class="view-pane">
             <div class="card-header-flex">
                 <div>
-                    <h2>👥 Auditor Client Portfolio & OneDrive Cloud Integration</h2>
-                    <p>Manage corporate clients, set custom passcodes manually, and configure direct OneDrive upload folders.</p>
+                    <h2>👥 Auditor Client Portfolio & Remote Cross-City Cloud Sync</h2>
+                    <p>Manage corporate clients, set custom passcodes, configure OneDrive upload folders, and fetch remote submissions from client systems.</p>
                 </div>
-                <button class="btn btn-primary" onclick="openAddClientModal()">➕ Onboard New Client Entity</button>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-outline btn-sm" onclick="openImportSubmissionModal()">📥 Import Client Submission Package</button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddClientModal()">➕ Onboard New Client Entity</button>
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -1014,7 +1024,7 @@
                             <th>PAN</th>
                             <th>Assessment Year</th>
                             <th>Client Access Passcode</th>
-                            <th>OneDrive Upload Folder URL</th>
+                            <th>Cloud Sync & OneDrive Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -1149,6 +1159,10 @@
                         <input type="url" id="newClientOnedrive" class="form-control" placeholder="https://1drv.ms/u/s!... or SharePoint link">
                     </div>
                 </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Automated Cloud Sync Webhook URL (Power Automate / Cloudflare / Supabase):</label>
+                    <input type="url" id="newClientWebhook" class="form-control" placeholder="Optional: https://prod-xx.flow.microsoft.com/... (auto-saves directly to OneDrive)">
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeModal('modalAddClient')">Cancel</button>
@@ -1157,11 +1171,11 @@
         </div>
     </div>
 
-    <!-- 2. Edit Client Passcode & OneDrive Modal (Auditor Only) -->
+    <!-- 2. Edit Client Passcode & Cloud Sync Modal (Auditor Only) -->
     <div class="modal-overlay" id="modalEditPasscode">
-        <div class="modal-card" style="max-width: 520px;">
+        <div class="modal-card" style="max-width: 540px;">
             <div class="modal-header">
-                <h3>✏️ Configure Client Passcode & OneDrive Link</h3>
+                <h3>✏️ Configure Client Passcode & Cloud Sync Bridge</h3>
                 <button class="modal-close-btn" onclick="closeModal('modalEditPasscode')">✕</button>
             </div>
             <div class="modal-body">
@@ -1179,8 +1193,12 @@
                 <div style="margin-bottom: 12px;">
                     <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">OneDrive 'File Request' Upload Link:</label>
                     <input type="url" id="editOnedriveVal" class="form-control" placeholder="https://1drv.ms/u/s!... or SharePoint Request link">
-                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 3px;">
-                        💡 Right-click your client OneDrive folder &gt; select 'Request files' &gt; paste link here.
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Cloud Sync Webhook URL (Power Automate / Cloud Store):</label>
+                    <input type="url" id="editWebhookVal" class="form-control" placeholder="https://prod-xx.flow.microsoft.com/... (auto-saves data to OneDrive on click)">
+                    <p style="font-size: 0.74rem; color: var(--text-muted); margin-top: 3px;">
+                        💡 When client clicks 'Save & Transmit', their entered PF/MSME data is automatically pushed over the internet to your OneDrive!
                     </p>
                 </div>
             </div>
@@ -1191,7 +1209,70 @@
         </div>
     </div>
 
-    <!-- 3. Upload File to OneDrive Modal (Client Facing) -->
+    <!-- 3. Remote Cloud Sync Submission Modal (Client & Auditor) -->
+    <div class="modal-overlay" id="modalCloudSync">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="display: flex; align-items: center; gap: 6px;">
+                    ☁️ Remote Cloud Sync & Data Transmission
+                </h3>
+                <button class="modal-close-btn" onclick="closeModal('modalCloudSync')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="cloudSyncStatusMsg" style="background: var(--info-bg); border: 1px solid var(--info-border); padding: 12px; border-radius: var(--radius-md); font-size: 0.84rem; color: var(--info-text); margin-bottom: 14px;">
+                    Ready to package and transmit all entered working papers (PF/ESI, MSME 43B(h), Depreciation, TDS, ICDS) to Bihani Rashmi & Co.'s secure audit cloud.
+                </div>
+
+                <div class="grid-12">
+                    <div class="col-6">
+                        <div class="app-card" style="margin-bottom: 0; text-align: center; height: 100%;">
+                            <h4 style="color: var(--primary); margin-bottom: 6px;">Method 1: Direct Cloud Webhook</h4>
+                            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">Transmits data directly over the web to the CA's OneDrive repository.</p>
+                            <button class="btn btn-cloud-sync" style="width: 100%;" onclick="executeWebhookSync()">
+                                🚀 Transmit to CA Team
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="app-card" style="margin-bottom: 0; text-align: center; height: 100%;">
+                            <h4 style="color: var(--primary); margin-bottom: 6px;">Method 2: Submission File (.json)</h4>
+                            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">Download all your entered numbers in a secure package to upload to OneDrive.</p>
+                            <button class="btn btn-outline" style="width: 100%;" onclick="downloadSubmissionPackage()">
+                                📥 Download Submission File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modalCloudSync')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Import Client Submission Modal (Auditor View) -->
+    <div class="modal-overlay" id="modalImportSubmission">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>📥 Import Client Remote Submission</h3>
+                <button class="modal-close-btn" onclick="closeModal('modalImportSubmission')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+                    Select the `.json` submission package downloaded by the client or synced from your OneDrive folder to load their entered numbers directly into your workspace:
+                </p>
+                <div style="border: 2px dashed var(--border); padding: 2rem; text-align: center; border-radius: var(--radius-md); background: #F8FAFC; margin-bottom: 12px;">
+                    <input type="file" id="clientSubmissionFileInput" accept=".json" style="font-size: 0.85rem;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modalImportSubmission')">Cancel</button>
+                <button class="btn btn-primary" onclick="loadClientSubmissionFile()">Load Client Data into Workspace</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Upload File to OneDrive Modal (Client Facing) -->
     <div class="modal-overlay" id="modalUploadToCloud">
         <div class="modal-card">
             <div class="modal-header">
@@ -1220,7 +1301,7 @@
         </div>
     </div>
 
-    <!-- 4. Send Link / Share Modal (Auditor Only) -->
+    <!-- 6. Send Link / Share Modal (Auditor Only) -->
     <div class="modal-overlay" id="modalSendLink">
         <div class="modal-card">
             <div class="modal-header">
@@ -1250,7 +1331,7 @@
 
     <!-- App Engine Script -->
     <script>
-        // Multi-Client Isolated Database with OneDrive Support
+        // Multi-Client Isolated Database with Cloud Sync & OneDrive Support
         const defaultClients = [
             {
                 id: "wakefit",
@@ -1261,6 +1342,7 @@
                 section: "Third Proviso to Section 44AB",
                 passcode: "WF2026",
                 onedriveUrl: "https://onedrive.live.com/",
+                webhookUrl: "",
                 spoc: "Parul Gupta (CFO)",
                 email: "finance@wakefit.co",
                 data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
@@ -1274,6 +1356,7 @@
                 section: "Section 44AB(a)",
                 passcode: "TM2026",
                 onedriveUrl: "https://onedrive.live.com/",
+                webhookUrl: "",
                 spoc: "Director",
                 email: "accounts@triadmobility.com",
                 data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
@@ -1683,7 +1766,6 @@
                     <button class="btn btn-outline btn-sm" onclick="downloadTemplate('${sec.template}')">📥 Download Template (.xlsx)</button>
                 </div>
 
-                <!-- 1. Data Required -->
                 <div class="req-box-info" style="border-left: 4px solid var(--primary);">
                     <h4>📑 1. Relevant Data & Documents Required from Client:</h4>
                     <ul style="margin-left: 20px; font-size: 0.84rem; line-height: 1.6;">
@@ -1691,7 +1773,6 @@
                     </ul>
                 </div>
 
-                <!-- 2. Income Tax Provisions -->
                 <div class="req-box-info" style="border-left: 4px solid var(--accent); background: #F0F7FF;">
                     <h4 style="color: var(--accent);">⚖️ 2. Respective Income Tax Provisions & Law:</h4>
                     <p style="font-size: 0.84rem; color: #1E3A8A; line-height: 1.5; font-weight: 500;">
@@ -1699,7 +1780,6 @@
                     </p>
                 </div>
 
-                <!-- 3. ICAI Guidance Notes Standard -->
                 <div class="req-box-info" style="border-left: 4px solid var(--purple); background: #FAF5FF;">
                     <h4 style="color: var(--purple-text);">🛡️ 3. Mandatory ICAI Guidance Notes & Peer-Review Standards:</h4>
                     <p style="font-size: 0.84rem; color: #581C87; line-height: 1.5;">
@@ -1713,6 +1793,119 @@
                     ${sec.workingLink === 'icds' ? `<button class="btn btn-primary btn-sm" onclick="switchNav('view-icds')">Open ICDS Centre →</button>` : ''}
                 </div>
             `;
+        }
+
+        // Remote Cross-City Cloud Sync Engine
+        function triggerCloudSync() {
+            document.getElementById('modalCloudSync').classList.add('active');
+        }
+
+        function executeWebhookSync() {
+            const client = getActiveClient();
+            const payload = {
+                timestamp: new Date().toISOString(),
+                clientId: client.id,
+                companyName: client.name,
+                pan: client.pan,
+                ay: client.ay,
+                submittedBy: client.spoc || "Client Finance Team",
+                data: client.data
+            };
+
+            if(client.webhookUrl && client.webhookUrl.startsWith('http')) {
+                fetch(client.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(res => {
+                    alert("✓ Workings successfully transmitted to Bihani Rashmi & Co.'s Cloud Repository!");
+                    closeModal('modalCloudSync');
+                }).catch(err => {
+                    console.error("Webhook push error:", err);
+                    fallbackToPackageDownload(payload);
+                });
+            } else {
+                fallbackToPackageDownload(payload);
+            }
+        }
+
+        function fallbackToPackageDownload(payload) {
+            downloadSubmissionPackage();
+            alert("✓ Your prepared workings package has been created. Upload this file directly to the BRC OneDrive folder or email it to your engagement partner.");
+            closeModal('modalCloudSync');
+        }
+
+        function downloadSubmissionPackage() {
+            const client = getActiveClient();
+            const payload = {
+                version: "2026.1",
+                timestamp: new Date().toISOString(),
+                clientId: client.id,
+                companyName: client.name,
+                pan: client.pan,
+                ay: client.ay,
+                data: client.data
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `BRC_${client.id.toUpperCase()}_Tax_Audit_Submission_AY2026-27.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function openImportSubmissionModal() {
+            document.getElementById('modalImportSubmission').classList.add('active');
+        }
+
+        function loadClientSubmissionFile() {
+            const fileInput = document.getElementById('clientSubmissionFileInput');
+            if(!fileInput.files.length) {
+                alert("Please choose a valid .json submission file.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if(!parsed.clientId || !parsed.data) {
+                        alert("Invalid submission package format.");
+                        return;
+                    }
+                    let client = clientsList.find(c => c.id === parsed.clientId || c.pan === parsed.pan);
+                    if(!client) {
+                        client = {
+                            id: parsed.clientId,
+                            name: parsed.companyName || "Imported Entity",
+                            pan: parsed.pan || "UNKNOWN",
+                            ay: parsed.ay || "2026-27",
+                            fy: "2025-26",
+                            section: "Section 44AB",
+                            passcode: "BRC" + Math.floor(1000 + Math.random() * 9000),
+                            onedriveUrl: "",
+                            webhookUrl: "",
+                            spoc: "Finance Team",
+                            email: "",
+                            data: parsed.data
+                        };
+                        clientsList.push(client);
+                    } else {
+                        client.data = parsed.data;
+                    }
+                    saveClientsToStorage();
+                    activeClientId = client.id;
+                    renderAuditorClientSelect();
+                    initAuditorWorkspace();
+                    closeModal('modalImportSubmission');
+                    alert(`✓ Successfully loaded submitted numbers for ${client.name}! All PF, MSME, and Depreciation ledgers are populated.`);
+                } catch(err) {
+                    alert("Error parsing file: " + err.message);
+                }
+            };
+            reader.readAsText(fileInput.files[0]);
         }
 
         // PBC Cards with Dynamic Excel Template & OneDrive Upload
@@ -2199,7 +2392,7 @@
                         </div>
                     </td>
                     <td>
-                        <span style="font-size: 0.76rem; color: var(--text-muted);">${client.onedriveUrl ? '✓ OneDrive Linked' : '⚠️ No Link'}</span>
+                        <span style="font-size: 0.76rem; color: var(--text-muted);">${client.onedriveUrl ? '✓ OneDrive' : '⚠️ No OneDrive'} | ${client.webhookUrl ? '⚡ Live Sync' : '📁 Package Sync'}</span>
                     </td>
                     <td>
                         <button class="btn btn-primary btn-sm" onclick="auditorSwitchClient('${client.id}')">Audit Workspace</button>
@@ -2217,6 +2410,7 @@
             document.getElementById('editPasscodeClientLabel').innerHTML = `Configure access for: <strong>${client.name}</strong> (${client.pan})`;
             document.getElementById('editPasscodeVal').value = client.passcode;
             document.getElementById('editOnedriveVal').value = client.onedriveUrl || '';
+            document.getElementById('editWebhookVal').value = client.webhookUrl || '';
             document.getElementById('modalEditPasscode').classList.add('active');
         }
 
@@ -2229,6 +2423,7 @@
             const cId = document.getElementById('editPasscodeClientId').value;
             const newCode = document.getElementById('editPasscodeVal').value.trim().toUpperCase();
             const newOnedrive = document.getElementById('editOnedriveVal').value.trim();
+            const newWebhook = document.getElementById('editWebhookVal').value.trim();
             if(!newCode) {
                 alert("Passcode cannot be empty.");
                 return;
@@ -2237,6 +2432,7 @@
             if(client) {
                 client.passcode = newCode;
                 client.onedriveUrl = newOnedrive;
+                client.webhookUrl = newWebhook;
                 saveClientsToStorage();
                 renderAuditorPortfolio();
                 closeModal('modalEditPasscode');
@@ -2252,6 +2448,7 @@
             const ay = document.getElementById('newClientAy').value.trim();
             const passcode = (document.getElementById('newClientPasscode').value.trim() || 'BRC' + Math.floor(1000 + Math.random() * 9000)).toUpperCase();
             const onedrive = document.getElementById('newClientOnedrive').value.trim();
+            const webhook = document.getElementById('newClientWebhook').value.trim();
 
             if(!name || !pan) {
                 alert("Please provide at least the Company Name and PAN.");
@@ -2268,6 +2465,7 @@
                 section: "Third Proviso to Section 44AB",
                 passcode: passcode,
                 onedriveUrl: onedrive,
+                webhookUrl: webhook,
                 spoc: "Finance Team",
                 email: "",
                 data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
