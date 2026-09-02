@@ -671,6 +671,82 @@
             margin-top: auto;
         }
 
+    
+        /* KPI Summary Stat Chips */
+        .kpi-row-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        @media (max-width: 900px) {
+            .kpi-row-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .kpi-row-grid { grid-template-columns: 1fr; }
+        }
+        .kpi-chip {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.25rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s;
+        }
+        .kpi-chip:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .kpi-chip-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 4px;
+        }
+        .kpi-chip-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+        .kpi-chip.danger .kpi-chip-val { color: var(--danger); }
+        .kpi-chip.success .kpi-chip-val { color: var(--success-text); }
+        .kpi-chip.warning .kpi-chip-val { color: var(--warning-text); }
+        .kpi-chip.info .kpi-chip-val { color: var(--info-text); }
+        
+        .search-box-wrap {
+            position: relative;
+            max-width: 320px;
+            width: 100%;
+        }
+        .search-input-field {
+            width: 100%;
+            padding: 7px 12px 7px 32px;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.82rem;
+            outline: none;
+            background: #FFFFFF;
+            transition: all 0.2s;
+        }
+        .search-input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.1);
+        }
+        .search-icon-svg {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
     </style>
 </head>
 <body>
@@ -1264,31 +1340,39 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 8: MASTER CLAUSE HUB (AUDITOR ONLY) ==================== -->
+                <!-- ==================== VIEW 8: MASTER CLAUSE HUB (AUDITOR ONLY) ==================== -->
         <div id="view-masterclause" class="view-pane">
             <div class="card-header-flex">
                 <div>
-                    <h2>📋 Form 3CD Master Clause Matrix (Clauses 1 to 44)</h2>
-                    <p>Statutory checklist with ICAI Guidance Note references and working paper links.</p>
+                    <h2>📋 Form 3CD Master Clause Matrix (All 44 Statutory Clauses)</h2>
+                    <p>Complete statutory audit checklist covering Clauses 1 to 44 with sub-clauses, Income-tax Act sections, and ICAI Guidance Notes.</p>
                 </div>
-                <a href="file:///S:/Sid Work/62.  Wakefit/Form-3CD-Tax-Audit-Interactive-Suite-AY-2026-27.xlsx" class="btn btn-primary btn-sm">📥 Open Clean Excel Suite</a>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <div class="search-box-wrap" style="max-width: 280px;">
+                        <svg class="search-icon-svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" class="search-input-field" placeholder="Filter clause by number or title..." oninput="filterMasterClauses(this.value)">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="downloadTemplate('full_requisition')">📥 Export Master Checklist (.xlsx)</button>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 60px;">Clause</th>
-                            <th>Subject / Area</th>
-                            <th>Legal Scope</th>
-                            <th>Action Type</th>
-                            <th>PBC Requisition</th>
-                            <th>Applicable?</th>
-                        </tr>
-                    </thead>
-                    <tbody id="fullMasterClauseTbody">
-                        <!-- Populated dynamically -->
-                    </tbody>
-                </table>
+            <div class="app-card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 75px;">Clause</th>
+                                <th>Subject / Statutory Area</th>
+                                <th>Legal Scope & Income-tax Provisions</th>
+                                <th>Action Type</th>
+                                <th>Required PBC Document / Schedule</th>
+                                <th style="width: 90px; text-align: center;">Applicable?</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fullMasterClauseTbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -2155,6 +2239,128 @@
         }
 
         
+        
+        // ==================== SEARCH FILTERS & KPI STAT AGGREGATORS ====================
+        let msmeSearchFilterQuery = "";
+        let tdsSearchFilterQuery = "";
+        let masterClauseFilterQuery = "";
+
+        function filterMsmeTable(query) {
+            msmeSearchFilterQuery = query.toLowerCase().trim();
+            renderMsmeRows();
+        }
+
+        function filterTdsTable(query) {
+            tdsSearchFilterQuery = query.toLowerCase().trim();
+            renderTdsRows();
+        }
+
+        function filterMasterClauses(query) {
+            masterClauseFilterQuery = query.toLowerCase().trim();
+            renderMasterClauseTable();
+        }
+
+        function updateMsmeKpiStats() {
+            const client = getActiveClient();
+            let tAmt = 0, tDis = 0, tInt = 0, delayedCount = 0;
+            (client.data.msme || []).forEach(m => {
+                const res = calculateMsmeRowValues(m);
+                tAmt += res.amt;
+                tDis += res.dis;
+                tInt += res.interest;
+                if(res.delay > 0) delayedCount++;
+            });
+
+            const kpiAmt = document.getElementById('kpiMsmeTotAmt');
+            const kpiDelayed = document.getElementById('kpiMsmeDelayedCount');
+            const kpiDis = document.getElementById('kpiMsmeDisAmt');
+            const kpiInt = document.getElementById('kpiMsmeIntAmt');
+
+            if(kpiAmt) kpiAmt.innerText = "Rs " + tAmt.toLocaleString('en-IN');
+            if(kpiDelayed) kpiDelayed.innerText = `${delayedCount} Invoices`;
+            if(kpiDis) kpiDis.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            if(kpiInt) kpiInt.innerText = "Rs " + tInt.toLocaleString('en-IN');
+        }
+
+        function updateSec43bKpiStats() {
+            const client = getActiveClient();
+            let tInc = 0, tPaid = 0, tDis = 0;
+            (client.data.sec43b || []).forEach(s => {
+                const res = calculateSec43bRowValues(s);
+                tInc += res.incurred;
+                tPaid += res.paid;
+                tDis += res.dis;
+            });
+
+            const kpiInc = document.getElementById('kpiSec43bTotIncurred');
+            const kpiPaid = document.getElementById('kpiSec43bTotPaid');
+            const kpiDis = document.getElementById('kpiSec43bTotDis');
+
+            if(kpiInc) kpiInc.innerText = "Rs " + tInc.toLocaleString('en-IN');
+            if(kpiPaid) kpiPaid.innerText = "Rs " + tPaid.toLocaleString('en-IN');
+            if(kpiDis) kpiDis.innerText = "Rs " + tDis.toLocaleString('en-IN');
+        }
+
+        function updatePfKpiStats() {
+            const client = getActiveClient();
+            let tAmt = 0, inTimeCount = 0, tDis = 0;
+            (client.data.pf || []).forEach(p => {
+                const res = calculatePfRowValues(p);
+                tAmt += res.amt;
+                tDis += res.dis;
+                if(p.payDate && p.payDate <= p.due) inTimeCount++;
+            });
+
+            const kpiAmt = document.getElementById('kpiPfTotAmt');
+            const kpiCount = document.getElementById('kpiPfInTimeCount');
+            const kpiDis = document.getElementById('kpiPfDisAmt');
+
+            if(kpiAmt) kpiAmt.innerText = "Rs " + tAmt.toLocaleString('en-IN');
+            if(kpiCount) kpiCount.innerText = `${inTimeCount} / 12 Months`;
+            if(kpiDis) kpiDis.innerText = "Rs " + tDis.toLocaleString('en-IN');
+        }
+
+        function updateDepKpiStats() {
+            const client = getActiveClient();
+            let tOp = 0, tAdd = 0, tAllow = 0;
+            (client.data.dep || []).forEach(b => {
+                tOp += Number(b.op || 0);
+                tAdd += (Number(b.a180 || 0) + Number(b.aHalf || 0));
+                tAllow += calculateDepRowValues(b);
+            });
+
+            const kpiOp = document.getElementById('kpiDepOpening');
+            const kpiAdd = document.getElementById('kpiDepAdditions');
+            const kpiAllow = document.getElementById('kpiDepAllowable');
+
+            if(kpiOp) kpiOp.innerText = "Rs " + tOp.toLocaleString('en-IN');
+            if(kpiAdd) kpiAdd.innerText = "Rs " + tAdd.toLocaleString('en-IN');
+            if(kpiAllow) kpiAllow.innerText = "Rs " + tAllow.toLocaleString('en-IN');
+        }
+
+        function updateTdsKpiStats() {
+            const client = getActiveClient();
+            let tBase = 0, tDed = 0, tDep = 0, tDis = 0;
+            (client.data.tds || []).forEach(t => {
+                const res = calculateTdsRowValues(t);
+                tBase += res.base;
+                tDed += res.ded;
+                tDep += res.dep;
+                tDis += res.dis;
+            });
+
+            const kpiBase = document.getElementById('kpiTdsTotBase');
+            const kpiDed = document.getElementById('kpiTdsTotDed');
+            const kpiDep = document.getElementById('kpiTdsTotDep');
+            const kpiDis = document.getElementById('kpiTdsTotDis');
+
+            if(kpiBase) kpiBase.innerText = "Rs " + tBase.toLocaleString('en-IN');
+            if(kpiDed) kpiDed.innerText = "Rs " + tDed.toLocaleString('en-IN');
+            if(kpiDep) kpiDep.innerText = "Rs " + tDep.toLocaleString('en-IN');
+            if(kpiDis) kpiDis.innerText = "Rs " + tDis.toLocaleString('en-IN');
+        }
+
+
         // Multi-Client Isolated Database with Cloud Sync & OneDrive Support
         const defaultClients = [
             {
@@ -3017,21 +3223,45 @@
 
         function switchWorkingTab(val) { loadWorking(val); }
 
-                function loadWorking(name) {
+                        function loadWorking(name) {
             const container = document.getElementById('activeWorkingContainer');
 
             if(name === 'msme') {
                 container.innerHTML = `
+                    <!-- MSME Live KPI Stat Chips -->
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Total Invoices Entered</div>
+                            <div class="kpi-chip-val" id="kpiMsmeTotAmt">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip warning">
+                            <div class="kpi-chip-label">Delayed in FY 25-26 (Interest)</div>
+                            <div class="kpi-chip-val" id="kpiMsmeDelayedCount">0 Invoices</div>
+                        </div>
+                        <div class="kpi-chip danger">
+                            <div class="kpi-chip-label">43B(h) Disallowance (Unpaid/Next FY)</div>
+                            <div class="kpi-chip-val" id="kpiMsmeDisAmt">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip warning">
+                            <div class="kpi-chip-label">Clause 22 Penal Interest (3x RBI)</div>
+                            <div class="kpi-chip-val" id="kpiMsmeIntAmt">Rs 0</div>
+                        </div>
+                    </div>
+
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
                                 <h3>⏳ 1. MSME Section 43B(h) Compliance Working (Clause 22)</h3>
-                                <p>Download the clean template, enter your vendor aging offline, and upload it here to auto-populate all rows and calculations instantly.</p>
+                                <p>Automated statutory delay tracking, wholesale/retail trader exemptions, and 100% year-end unpaid disallowance.</p>
                             </div>
-                            <div style="display:flex; gap:6px; flex-wrap: wrap;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Download Template (.xlsx)</button>
+                            <div style="display:flex; gap:6px; flex-wrap: wrap; align-items: center;">
+                                <div class="search-box-wrap">
+                                    <svg class="search-icon-svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                                    <input type="text" class="search-input-field" placeholder="Search vendor name or invoice..." oninput="filterMsmeTable(this.value)">
+                                </div>
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Template (.xlsx)</button>
                                 <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
-                                    📤 Upload Filled Excel (.xlsx)
+                                    📤 Upload Excel
                                     <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('msme', this)">
                                 </label>
                                 <button class="btn btn-ghost btn-sm" style="border: 1px solid var(--border);" onclick="addMsmeCleanRow()">➕ Add Row</button>
@@ -3074,16 +3304,36 @@
                 renderMsmeRows();
             } else if(name === 'sec43b') {
                 container.innerHTML = `
+                    <!-- Section 43B Live KPI Stat Chips -->
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Total Incurred Liabilities</div>
+                            <div class="kpi-chip-val" id="kpiSec43bTotIncurred">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Paid by 139(1) (31-Oct-2026)</div>
+                            <div class="kpi-chip-val" id="kpiSec43bTotPaid">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip danger">
+                            <div class="kpi-chip-label">Disallowance u/s 43B</div>
+                            <div class="kpi-chip-val" id="kpiSec43bTotDis">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">ITR Filing Deadline</div>
+                            <div class="kpi-chip-val" style="font-size:1.1rem;">31-Oct-2026</div>
+                        </div>
+                    </div>
+
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
                                 <h3>📑 2. Section 43B Statutory Liabilities Working (Clause 26)</h3>
-                                <p>Download the template, fill GST/PF/Bonus statutory dues, and upload to auto-populate and calculate 43B unpaid disallowances.</p>
+                                <p>Statutory taxes, duty, cess, employer welfare funds, bonus, and leave encashment cleared before 31-Oct-2026.</p>
                             </div>
                             <div style="display:flex; gap:6px; flex-wrap: wrap;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('sec43b')">📥 Download Template (.xlsx)</button>
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('sec43b')">📥 Template (.xlsx)</button>
                                 <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
-                                    📤 Upload Filled Excel (.xlsx)
+                                    📤 Upload Excel
                                     <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('sec43b', this)">
                                 </label>
                                 <button class="btn btn-ghost btn-sm" style="border: 1px solid var(--border);" onclick="addSec43bCleanRow()">➕ Add Row</button>
@@ -3122,16 +3372,36 @@
                 renderSec43bRows();
             } else if(name === 'pfesi') {
                 container.innerHTML = `
+                    <!-- PF/ESI Live KPI Stat Chips -->
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Total Employee Share Deducted</div>
+                            <div class="kpi-chip-val" id="kpiPfTotAmt">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Complied Months (<=15th)</div>
+                            <div class="kpi-chip-val" id="kpiPfInTimeCount">0 / 12</div>
+                        </div>
+                        <div class="kpi-chip danger">
+                            <div class="kpi-chip-label">Permanent Disallowance (36(1)(va))</div>
+                            <div class="kpi-chip-val" id="kpiPfDisAmt">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Governing Precedent</div>
+                            <div class="kpi-chip-val" style="font-size:0.95rem;">Checkmate (SC)</div>
+                        </div>
+                    </div>
+
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
                                 <h3>👥 3. Employee PF & ESI Contribution Compliance (Clause 20(b))</h3>
-                                <p>Download the 12-month salary & challan deposit template, and upload to verify against the 15th statutory due date automatically.</p>
+                                <p>Month-by-month testing against the 15th statutory due date under EPF & ESI Acts.</p>
                             </div>
                             <div style="display:flex; gap:6px; flex-wrap: wrap;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('pf')">📥 Download Template (.xlsx)</button>
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('pf')">📥 Template (.xlsx)</button>
                                 <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
-                                    📤 Upload Filled Excel (.xlsx)
+                                    📤 Upload Excel
                                     <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('pfesi', this)">
                                 </label>
                             </div>
@@ -3157,16 +3427,36 @@
                 renderPfRows();
             } else if(name === 'depreciation') {
                 container.innerHTML = `
+                    <!-- Depreciation Live KPI Stat Chips -->
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Opening WDV (All Blocks)</div>
+                            <div class="kpi-chip-val" id="kpiDepOpening">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Total Additions (>=180D & <180D)</div>
+                            <div class="kpi-chip-val" id="kpiDepAdditions">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Allowable IT Depreciation</div>
+                            <div class="kpi-chip-val" id="kpiDepAllowable">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Put-to-Use Cut-off</div>
+                            <div class="kpi-chip-val" style="font-size:1.1rem;">03-Oct-2025</div>
+                        </div>
+                    </div>
+
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
                                 <h3>📉 4. Income-tax Depreciation Working (Clause 18 / Section 32)</h3>
-                                <p>Download the asset block schedule template, fill opening WDV & additions, and upload to compute block depreciation instantly.</p>
+                                <p>Asset block WDV reconciliation, 180-day put-to-use splitting, and allowable tax depreciation.</p>
                             </div>
                             <div style="display:flex; gap:6px; flex-wrap: wrap;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('far')">📥 Download Template (.xlsx)</button>
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('far')">📥 Template (.xlsx)</button>
                                 <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
-                                    📤 Upload Filled Excel (.xlsx)
+                                    📤 Upload Excel
                                     <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('depreciation', this)">
                                 </label>
                             </div>
@@ -3192,16 +3482,40 @@
                 renderDepRows();
             } else if(name === 'tds') {
                 container.innerHTML = `
+                    <!-- TDS Live KPI Stat Chips -->
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Total Expense Base</div>
+                            <div class="kpi-chip-val" id="kpiTdsTotBase">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Total TDS Deducted</div>
+                            <div class="kpi-chip-val" id="kpiTdsTotDed">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Total TDS Deposited</div>
+                            <div class="kpi-chip-val" id="kpiTdsTotDep">Rs 0</div>
+                        </div>
+                        <div class="kpi-chip danger">
+                            <div class="kpi-chip-label">40(a)(ia) Disallowance (30%/100%)</div>
+                            <div class="kpi-chip-val" id="kpiTdsTotDis">Rs 0</div>
+                        </div>
+                    </div>
+
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
                                 <h3>⚖️ 5. TDS Compliance & 40(a)(ia) Reconciliation (Clauses 21(b) & 34)</h3>
-                                <p>Download the TDS reconciliation template, and upload to auto-populate ledgers and calculate 30% / 100% disallowances u/s 40(a)(ia).</p>
+                                <p>Ledger-wise withholding tax reconciliation against Form 26Q/24Q/27Q and TRACES defaults.</p>
                             </div>
-                            <div style="display:flex; gap:6px; flex-wrap: wrap;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('tds')">📥 Download Template (.xlsx)</button>
+                            <div style="display:flex; gap:6px; flex-wrap: wrap; align-items: center;">
+                                <div class="search-box-wrap">
+                                    <svg class="search-icon-svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                                    <input type="text" class="search-input-field" placeholder="Search section or expense head..." oninput="filterTdsTable(this.value)">
+                                </div>
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('tds')">📥 Template (.xlsx)</button>
                                 <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
-                                    📤 Upload Filled Excel (.xlsx)
+                                    📤 Upload Excel
                                     <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('tds', this)">
                                 </label>
                                 <button class="btn btn-ghost btn-sm" style="border: 1px solid var(--border);" onclick="addTdsCleanRow()">➕ Add Row</button>
@@ -3596,7 +3910,7 @@
             }
         }
 
-        function renderMsmeRows() {
+                function renderMsmeRows() {
             const client = getActiveClient();
             const tbody = document.getElementById('msmeTbody');
             if(!tbody) return;
@@ -3610,6 +3924,14 @@
                 tAmt += amt;
                 tDis += dis;
                 tInt += interest;
+
+                // Apply search filter
+                if(msmeSearchFilterQuery) {
+                    const match = (item.name || '').toLowerCase().includes(msmeSearchFilterQuery) || 
+                                  (item.cat || '').toLowerCase().includes(msmeSearchFilterQuery) ||
+                                  (item.act || '').toLowerCase().includes(msmeSearchFilterQuery);
+                    if(!match) return;
+                }
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -3646,6 +3968,7 @@
             const totIntEl = document.getElementById('msmeTotInt');
             if(totIntEl) totIntEl.innerText = "Rs " + tInt.toLocaleString('en-IN');
             document.getElementById('ovMsmeDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            updateMsmeKpiStats();
             recalculateOverview();
         }
 
@@ -3769,6 +4092,7 @@
             document.getElementById('sec43bTotPaid').innerText = "Rs " + tPaid.toLocaleString('en-IN');
             document.getElementById('sec43bTotDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
             document.getElementById('ov43bDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            updateSec43bKpiStats();
             recalculateOverview();
         }
 
@@ -3863,6 +4187,7 @@
             });
 
             document.getElementById('ovPfDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            updatePfKpiStats();
             recalculateOverview();
         }
 
@@ -3930,6 +4255,7 @@
             });
 
             document.getElementById('ovDepAllow').innerText = "Rs " + tAllow.toLocaleString('en-IN') + " (Allowable)";
+            updateDepKpiStats();
             recalculateOverview();
         }
 
@@ -4010,7 +4336,7 @@
             { sec: "195", head: "Foreign Royalty & Technical Services", exp: 0, base: 0, rate: "20%", ded: 0, dep: 0, payDate: "", status: "No Default" }
         ];
 
-        function renderTdsRows() {
+                function renderTdsRows() {
             const client = getActiveClient();
             const tbody = document.getElementById('tdsTbody');
             if(!tbody) return;
@@ -4028,6 +4354,13 @@
                 tDed += ded;
                 tDep += dep;
                 tDis += dis;
+
+                // Apply search filter
+                if(tdsSearchFilterQuery) {
+                    const match = (item.sec || '').toLowerCase().includes(tdsSearchFilterQuery) || 
+                                  (item.head || '').toLowerCase().includes(tdsSearchFilterQuery);
+                    if(!match) return;
+                }
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -4070,6 +4403,7 @@
             document.getElementById('tdsTotDep').innerText = "Rs " + tDep.toLocaleString('en-IN');
             document.getElementById('tdsTotDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
             document.getElementById('ovTdsDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            updateTdsKpiStats();
             recalculateOverview();
         }
 
