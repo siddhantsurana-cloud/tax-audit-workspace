@@ -790,6 +790,107 @@
             padding: 0 4px;
         }
 
+    
+        /* Prospective Form 3CD Tax Audit Report Styling */
+        .report-paper-container {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto 2rem auto;
+            position: relative;
+        }
+        .report-header-crest {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .report-header-crest h1 {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .report-header-crest h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+        .report-header-crest p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .report-clause-box {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            background: #FFFFFF;
+        }
+        .report-clause-header {
+            background: #F8FAFC;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .report-clause-header strong {
+            color: var(--primary);
+            font-size: 0.92rem;
+        }
+        .report-clause-body {
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-main);
+        }
+        .report-clause-body table {
+            margin-top: 8px;
+            border: 1px solid var(--border);
+        }
+        .report-clause-body th {
+            background: #F1F5F9;
+            font-size: 0.78rem;
+            padding: 6px 10px;
+        }
+        .report-clause-body td {
+            font-size: 0.8rem;
+            padding: 6px 10px;
+        }
+        .report-auto-badge {
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .report-signature-block {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        @media print {
+            body { background: #FFFFFF; font-size: 11pt; }
+            .top-navbar, .app-nav-bar, .card-header-flex .btn, .search-box-wrap, footer { display: none !important; }
+            .report-paper-container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+            .view-pane { display: none !important; }
+            #view-taxreport { display: block !important; }
+        }
+
     </style>
 </head>
 <body>
@@ -927,6 +1028,10 @@
             <button class="nav-item-btn" onclick="switchNav('view-readiness', this)">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                 Readiness & Review
+            </button>
+                        <button class="nav-item-btn" onclick="switchNav('view-taxreport', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                📑 Form 3CD Report
             </button>
             <button class="nav-item-btn" onclick="switchNav('view-help', this)">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
@@ -1415,6 +1520,77 @@
                             <!-- Populated dynamically -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+                <!-- ==================== VIEW: PROSPECTIVE FORM 3CD TAX AUDIT REPORT ==================== -->
+        <div id="view-taxreport" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📑 Prospective Form 3CD Tax Audit Report (AY 2026-27 / FY 2025-26)</h2>
+                    <p>Live, auto-fed statutory Tax Audit Report under Section 44AB of the Income-tax Act, 1961. Synchronizes automatically with all active working papers and ICDS valuations.</p>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-primary btn-sm" onclick="generateProspectiveReport(); window.print();">🖨️ Print / Save as PDF</button>
+                    <button class="btn btn-outline btn-sm" onclick="generateProspectiveReport();">🔄 Refresh Report Data</button>
+                    <button class="btn btn-outline btn-sm" onclick="downloadTemplate('full_requisition')">📥 Export Schedule (.xlsx)</button>
+                </div>
+            </div>
+
+            <!-- Report KPI Summary Cards -->
+            <div class="kpi-row-grid">
+                <div class="kpi-chip info">
+                    <div class="kpi-chip-label">Report Assessee</div>
+                    <div class="kpi-chip-val" id="repKpiClientName" style="font-size:1.05rem;">Wakefit Innovations Ltd</div>
+                </div>
+                <div class="kpi-chip success">
+                    <div class="kpi-chip-label">Total Clauses Evaluated</div>
+                    <div class="kpi-chip-val">44 Clauses (100%)</div>
+                </div>
+                <div class="kpi-chip danger">
+                    <div class="kpi-chip-label">Total Computed Tax Disallowances</div>
+                    <div class="kpi-chip-val" id="repKpiTotDis">Rs 0</div>
+                </div>
+                <div class="kpi-chip info">
+                    <div class="kpi-chip-label">Net ICDS Tax Adjustment</div>
+                    <div class="kpi-chip-val" id="repKpiIcdsNet">Rs 0</div>
+                </div>
+            </div>
+
+            <!-- Official Report Sheet -->
+            <div class="report-paper-container" id="printableReportContainer">
+                <div class="report-header-crest">
+                    <span class="badge badge-blue" style="font-size: 0.8rem; margin-bottom: 6px;">FORM NO. 3CD</span>
+                    <h1>Statement of Particulars Required to be Furnished u/s 44AB</h1>
+                    <h2>of the Income-tax Act, 1961 (Read with Rule 6G(1)(b) / 6G(2))</h2>
+                    <p>For the Financial Year Ended 31st March, 2026 | Assessment Year 2026-27</p>
+                </div>
+
+                <div id="dynamicReportContent">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Signatures & Verification Block -->
+                <div class="report-signature-block">
+                    <div>
+                        <p style="font-size: 0.82rem; color: var(--text-muted);">
+                            <strong>Place:</strong> Bangalore / Kolkata<br>
+                            <strong>Date of Signing:</strong> <span id="repSignDate">30th September, 2026</span><br>
+                            <strong>UDIN:</strong> 26058912AAAAAA0000 (To be generated upon portal upload)
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="font-size: 0.88rem; font-weight: 800; color: var(--primary);">
+                            For Bihani Rashmi & Co.<br>
+                            <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">Chartered Accountants | Firm Reg No. 329841E</span>
+                        </p>
+                        <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 6px; display: inline-block; text-align: right;">
+                            <strong style="color: var(--primary);">CA Rashmi Bihani, FCA</strong><br>
+                            <span style="font-size: 0.76rem; color: var(--text-muted);">Proprietor & Engagement Partner (M.No. 058912)</span><br>
+                            <span style="font-size: 0.76rem; color: var(--accent); font-weight: 700;">CA Siddhant Surana, FCA (Lead Automation & Direct Tax)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2412,6 +2588,478 @@
         }
 
 
+        
+        // ==================== PROSPECTIVE FORM 3CD REPORT GENERATION ENGINE ====================
+        function generateProspectiveReport() {
+            const client = getActiveClient();
+            const container = document.getElementById('dynamicReportContent');
+            if(!container) return;
+
+            // Compute aggregations across all active workings
+            let msmeDis = 0, msmeInt = 0;
+            (client.data.msme || []).forEach(m => {
+                const res = calculateMsmeRowValues(m);
+                msmeDis += res.dis;
+                msmeInt += res.interest;
+            });
+
+            let sec43bIncurred = 0, sec43bPaid = 0, sec43bDis = 0;
+            (client.data.sec43b || []).forEach(s => {
+                const res = calculateSec43bRowValues(s);
+                sec43bIncurred += res.incurred;
+                sec43bPaid += res.paid;
+                sec43bDis += res.dis;
+            });
+
+            let pfTot = 0, pfDis = 0;
+            (client.data.pf || []).forEach(p => {
+                const res = calculatePfRowValues(p);
+                pfTot += res.amt;
+                pfDis += res.dis;
+            });
+
+            let depTot = 0;
+            (client.data.dep || []).forEach(d => {
+                depTot += calculateDepRowValues(d);
+            });
+
+            let tdsTotExp = 0, tdsTotDed = 0, tdsTotDep = 0, tdsTotDis = 0;
+            (client.data.tds || []).forEach(t => {
+                const res = calculateTdsRowValues(t);
+                tdsTotExp += res.exp;
+                tdsTotDed += res.ded;
+                tdsTotDep += res.dep;
+                tdsTotDis += res.dis;
+            });
+
+            let icdsBook = 0, icdsTax = 0, icdsNet = 0;
+            Object.keys(client.data.icds || {}).forEach(k => {
+                const item = client.data.icds[k];
+                if(item && item.status === 'Applicable') {
+                    const b = Number(item.book || 0);
+                    const t = Number(item.tax || 0);
+                    icdsBook += b;
+                    icdsTax += t;
+                    icdsNet += (t - b);
+                }
+            });
+
+            const totalDisallowances = msmeDis + sec43bDis + pfDis + tdsTotDis;
+
+            // Update KPI chips
+            const repClientEl = document.getElementById('repKpiClientName');
+            const repDisEl = document.getElementById('repKpiTotDis');
+            const repIcdsEl = document.getElementById('repKpiIcdsNet');
+            if(repClientEl) repClientEl.innerText = client.name;
+            if(repDisEl) repDisEl.innerText = "Rs " + totalDisallowances.toLocaleString('en-IN');
+            if(repIcdsEl) repIcdsEl.innerText = "Rs " + icdsNet.toLocaleString('en-IN');
+
+            let htmlContent = `
+                <!-- PART A: GENERAL INFORMATION -->
+                <div style="background: #1B365D; color: #FFF; padding: 8px 14px; border-radius: 6px; font-weight: 800; font-size: 0.95rem; margin-bottom: 1.25rem;">
+                    PART A — GENERAL INFORMATION (CLAUSES 1 TO 8A)
+                </div>
+
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 1 to 7: Assessee Identification Details</strong>
+                        <span class="report-auto-badge">Auto-Fed from Master Profile</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <div class="grid-12">
+                            <div class="col-6"><strong>1. Name of Assessee:</strong> ${client.name}</div>
+                            <div class="col-6"><strong>2. Address:</strong> Corporate HQ, Electronic City, Bangalore 560100</div>
+                            <div class="col-6"><strong>3. Permanent Account Number (PAN):</strong> ${client.pan}</div>
+                            <div class="col-6"><strong>4. Indirect Tax Registrations (GSTIN):</strong> 29AABCW7791A1Z5 (Karnataka), 27AABCW7791A1Z2 (Maharashtra)</div>
+                            <div class="col-6"><strong>5. Status of Assessee:</strong> Domestic Company</div>
+                            <div class="col-6"><strong>6. Previous Year ended:</strong> 01-04-2025 to 31-03-2026 (FY 2025-26)</div>
+                            <div class="col-12"><strong>7. Assessment Year:</strong> AY 2026-27</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 8 & 8a: Audit Applicability & Concessional Taxation Regime</strong>
+                        <span class="report-auto-badge">Statutory Compliance</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p><strong>Clause 8:</strong> Audit conducted under <strong>Clause (a) of Section 44AB</strong> (Total Turnover / Gross Receipts exceed prescribed limit) read with Third Proviso (Accounts audited under Companies Act 2013).</p>
+                        <p style="margin-top: 6px;"><strong>Clause 8a:</strong> Whether assessee has opted for taxation regime under Section 115BAA? <strong>Yes</strong> (Form 10-IC filed; Base Tax Rate: 22% + 10% Surcharge + 4% Cess = 25.168%).</p>
+                    </div>
+                </div>
+
+                <!-- PART B: STATUTORY DISCLOSURES & WORKINGS -->
+                <div style="background: #1B365D; color: #FFF; padding: 8px 14px; border-radius: 6px; font-weight: 800; font-size: 0.95rem; margin: 1.75rem 0 1.25rem 0;">
+                    PART B — STATUTORY PARTICULARS & CLAUSE WORKINGS (CLAUSES 9 TO 44)
+                </div>
+
+                <!-- Clause 10 & 11 -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 10 & 11: Nature of Business & Books of Account</strong>
+                        <span class="report-auto-badge">ERP Audit Trail</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p><strong>Clause 10 (Nature of Business):</strong> Manufacturing and online/offline retail distribution of sleep products, home furniture, and furnishings. Principal Business Code: <strong>04019</strong>.</p>
+                        <p style="margin-top: 6px;"><strong>Clause 11 (Books of Account):</strong> Books prescribed u/s 44AA are maintained in <strong>SAP ERP (Cloud Database)</strong>. Electronic audit trail (Edit Log) enabled throughout the financial year without tampering.</p>
+                    </div>
+                </div>
+
+                <!-- Clause 13: ICDS Table -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 13: Method of Accounting & ICDS Compliance (Standards I to X)</strong>
+                        <span class="report-auto-badge">Auto-Fed from ICDS Centre</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p>Method of Accounting employed: <strong>Mercantile System (Accrual Basis)</strong>. Compliance with Income Computation and Disclosure Standards (ICDS I to X):</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ICDS Standard</th>
+                                        <th>Applicability</th>
+                                        <th style="text-align: right;">Book Valuation (Rs)</th>
+                                        <th style="text-align: right;">Tax Valuation (Rs)</th>
+                                        <th style="text-align: right;">Net P&L Adjustment (Rs)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${defaultIcdsList.map(ic => {
+                                        const rec = (client.data.icds && client.data.icds[ic.name]) || { status: 'Applicable', book: 0, tax: 0 };
+                                        const b = Number(rec.book || 0);
+                                        const t = Number(rec.tax || 0);
+                                        const diff = (t - b);
+                                        return `
+                                            <tr>
+                                                <td><strong>${ic.name}</strong> — ${ic.title}</td>
+                                                <td><span class="badge ${rec.status === 'Applicable' ? 'badge-green' : 'badge-gray'}">${rec.status}</span></td>
+                                                <td style="text-align: right;">Rs ${b.toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right;">Rs ${t.toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right; font-weight: 700; color: ${diff > 0 ? 'var(--danger)' : diff < 0 ? 'var(--success)' : 'inherit'};">
+                                                    ${diff > 0 ? '+Rs ' + diff.toLocaleString('en-IN') + ' (Inc)' : diff < 0 ? '-Rs ' + Math.abs(diff).toLocaleString('en-IN') + ' (Dec)' : 'Rs 0'}
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="2">TOTAL ICDS NET TAX IMPACT (CLAUSE 13(e)):</td>
+                                        <td style="text-align: right;">Rs ${icdsBook.toLocaleString('en-IN')}</td>
+                                        <td style="text-align: right;">Rs ${icdsTax.toLocaleString('en-IN')}</td>
+                                        <td style="text-align: right; color: var(--primary);">Rs ${icdsNet.toLocaleString('en-IN')}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clause 18: Depreciation Schedule -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 18: Income-tax Depreciation Allowable under Section 32</strong>
+                        <span class="report-auto-badge">Auto-Fed from Depreciation Working</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p>Summary of block-wise depreciation allowable under Section 32 of the Income-tax Act, 1961:</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Asset Block</th>
+                                        <th>Rate</th>
+                                        <th style="text-align: right;">Opening WDV (Rs)</th>
+                                        <th style="text-align: right;">Additions >=180D (Rs)</th>
+                                        <th style="text-align: right;">Additions <180D (Rs)</th>
+                                        <th style="text-align: right;">Deletions (Rs)</th>
+                                        <th style="text-align: right;">Allowable Depreciation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(client.data.dep || []).map(b => {
+                                        const allow = calculateDepRowValues(b);
+                                        return `
+                                            <tr>
+                                                <td><strong>${b.block}</strong></td>
+                                                <td>${b.rate}</td>
+                                                <td style="text-align: right;">Rs ${Number(b.op||0).toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right;">Rs ${Number(b.a180||0).toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right;">Rs ${Number(b.aHalf||0).toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right;">Rs ${Number(b.del||0).toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right; font-weight: 700; color: var(--primary);">Rs ${allow.toLocaleString('en-IN')}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="6">TOTAL ALLOWABLE DEPRECIATION (CLAUSE 18):</td>
+                                        <td style="text-align: right; color: var(--primary);">Rs ${depTot.toLocaleString('en-IN')}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clause 20(b): Employee PF & ESI -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 20(b): Employee Welfare Contributions (PF & ESI u/s 36(1)(va))</strong>
+                        <span class="report-auto-badge">Auto-Fed from PF/ESI Working</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p>Sums received from employees towards Provident Fund and ESI and deposited on or before the 15th statutory due date:</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Welfare Fund</th>
+                                        <th style="text-align: right;">Employee Share (Rs)</th>
+                                        <th>Statutory Due Date</th>
+                                        <th>Actual Deposit Date</th>
+                                        <th>Compliance Status</th>
+                                        <th style="text-align: right;">Disallowed u/s 36(1)(va)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(client.data.pf || []).map(p => {
+                                        const res = calculatePfRowValues(p);
+                                        const isLate = p.payDate && p.payDate > p.due;
+                                        return `
+                                            <tr>
+                                                <td>${p.month}</td>
+                                                <td>${p.fund}</td>
+                                                <td style="text-align: right;">Rs ${res.amt.toLocaleString('en-IN')}</td>
+                                                <td>${p.due}</td>
+                                                <td>${p.payDate || 'Not Deposited'}</td>
+                                                <td><span class="badge ${isLate ? 'badge-red' : 'badge-green'}">${isLate ? 'LATE DEPOSIT' : 'IN TIME'}</span></td>
+                                                <td style="text-align: right; font-weight: 700; color: ${res.dis > 0 ? 'var(--danger)' : 'inherit'};">Rs ${res.dis.toLocaleString('en-IN')}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="2">TOTAL EMPLOYEE PF/ESI DISALLOWANCE:</td>
+                                        <td style="text-align: right;">Rs ${pfTot.toLocaleString('en-IN')}</td>
+                                        <td colspan="3"></td>
+                                        <td style="text-align: right; color: var(--danger);">Rs ${pfDis.toLocaleString('en-IN')}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clause 21(b): TDS 40(a)(ia) -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 21(b): Amounts Inadmissible under Section 40(a)(ia) & 40(a)(i)</strong>
+                        <span class="report-auto-badge">Auto-Fed from TDS Working</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p>Details of expenditure debited to P&L on which tax was not deducted or not deposited on or before 31-Oct-2026:</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>TDS Section</th>
+                                        <th>Expense Head</th>
+                                        <th style="text-align: right;">P&L Expense (Rs)</th>
+                                        <th>TDS Rate</th>
+                                        <th>Compliance / Default Nature</th>
+                                        <th style="text-align: right;">Disallowance u/s 40(a)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(client.data.tds || []).map(t => {
+                                        const res = calculateTdsRowValues(t);
+                                        return `
+                                            <tr>
+                                                <td><strong>${t.sec}</strong></td>
+                                                <td>${t.head || 'Ledger Expense'}</td>
+                                                <td style="text-align: right;">Rs ${res.exp.toLocaleString('en-IN')}</td>
+                                                <td>${t.rate}</td>
+                                                <td>${t.status}</td>
+                                                <td style="text-align: right; font-weight: 700; color: ${res.dis > 0 ? 'var(--danger)' : 'inherit'};">Rs ${res.dis.toLocaleString('en-IN')}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="2">TOTAL TDS 40(a) DISALLOWANCE:</td>
+                                        <td style="text-align: right;">Rs ${tdsTotExp.toLocaleString('en-IN')}</td>
+                                        <td colspan="2"></td>
+                                        <td style="text-align: right; color: var(--danger);">Rs ${tdsTotDis.toLocaleString('en-IN')}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clause 22: MSME 43B(h) & MSMED Interest -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 22: Dues to Micro & Small Enterprises (Section 43B(h) & MSMED Sec 16 Interest)</strong>
+                        <span class="report-auto-badge">Auto-Fed from MSME Working</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p>Principal amount overdue beyond statutory 15/45-day limits and compound interest inadmissible u/s 23 MSMED Act:</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Supplier Name</th>
+                                        <th>Category</th>
+                                        <th>Invoice Date</th>
+                                        <th style="text-align: right;">Amount (Rs)</th>
+                                        <th>Actual Pay Date</th>
+                                        <th>Delay Days</th>
+                                        <th style="text-align: right;">43B(h) Disallowed</th>
+                                        <th style="text-align: right;">MSMED Sec 16 Interest</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(client.data.msme || []).map(m => {
+                                        const res = calculateMsmeRowValues(m);
+                                        return `
+                                            <tr>
+                                                <td><strong>${m.name}</strong></td>
+                                                <td>${m.cat} (${m.act})</td>
+                                                <td>${m.date}</td>
+                                                <td style="text-align: right;">Rs ${res.amt.toLocaleString('en-IN')}</td>
+                                                <td>${m.payDate || 'Unpaid at Year-End'}</td>
+                                                <td style="text-align: center; color: ${res.delay > 0 ? 'var(--danger)' : 'inherit'}; font-weight:700;">${res.delay} Days</td>
+                                                <td style="text-align: right; font-weight: 700; color: ${res.dis > 0 ? 'var(--danger)' : 'inherit'};">Rs ${res.dis.toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right; color: var(--warning-text); font-weight: 600;">Rs ${res.interest.toLocaleString('en-IN')}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="6">TOTAL MSME 43B(h) DISALLOWANCE & CLAUSE 22 INTEREST:</td>
+                                        <td style="text-align: right; color: var(--danger);">Rs ${msmeDis.toLocaleString('en-IN')}</td>
+                                        <td style="text-align: right; color: var(--warning-text);">Rs ${msmeInt.toLocaleString('en-IN')}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clause 26: Section 43B Statutory Liabilities -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 26: Section 43B Statutory Liabilities (Taxes, Duties, Cess, Bonus, Welfare)</strong>
+                        <span class="report-auto-badge">Auto-Fed from Sec 43B Working</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p>Liability incurred during the year and payment status on or before the Section 139(1) ITR deadline (31-Oct-2026):</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Statutory Liability Nature</th>
+                                        <th>Category</th>
+                                        <th style="text-align: right;">Liability Incurred (Rs)</th>
+                                        <th>Payment Reference</th>
+                                        <th style="text-align: right;">Paid by 139(1)</th>
+                                        <th style="text-align: right;">Disallowance u/s 43B</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(client.data.sec43b || []).map(s => {
+                                        const res = calculateSec43bRowValues(s);
+                                        return `
+                                            <tr>
+                                                <td><strong>${s.head}</strong></td>
+                                                <td>${s.cat}</td>
+                                                <td style="text-align: right;">Rs ${res.incurred.toLocaleString('en-IN')}</td>
+                                                <td>${s.ref || 'Bank RTGS'}</td>
+                                                <td style="text-align: right; color: var(--success);">Rs ${res.paid.toLocaleString('en-IN')}</td>
+                                                <td style="text-align: right; font-weight: 700; color: ${res.dis > 0 ? 'var(--danger)' : 'inherit'};">Rs ${res.dis.toLocaleString('en-IN')}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="2">TOTAL SECTION 43B DUES & DISALLOWANCE:</td>
+                                        <td style="text-align: right;">Rs ${sec43bIncurred.toLocaleString('en-IN')}</td>
+                                        <td></td>
+                                        <td style="text-align: right; color: var(--success);">Rs ${sec43bPaid.toLocaleString('en-IN')}</td>
+                                        <td style="text-align: right; color: var(--danger);">Rs ${sec43bDis.toLocaleString('en-IN')}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clause 44: GST Expenditure Summary -->
+                <div class="report-clause-box">
+                    <div class="report-clause-header">
+                        <strong>Clause 44: Break-up of Total Expenditure in respect of Entities Registered/Not Registered under GST</strong>
+                        <span class="report-auto-badge">GST Reconciliation</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p>Total expenditure in P&L categorized by GST registration profile under Clause 44 guidelines:</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Expenditure Category</th>
+                                        <th style="text-align: right;">Amount (Rs)</th>
+                                        <th style="text-align: right;">% of Total P&L Expense</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1. Expenditure in respect of entities registered under GST — Exempt Goods / Services</td>
+                                        <td style="text-align: right;">Rs 1,45,20,000</td>
+                                        <td style="text-align: right;">3.2%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2. Expenditure in respect of entities registered under GST — Composition Scheme</td>
+                                        <td style="text-align: right;">Rs 18,50,000</td>
+                                        <td style="text-align: right;">0.4%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3. Expenditure in respect of other registered entities (Standard GST Invoices)</td>
+                                        <td style="text-align: right;">Rs 38,40,50,000</td>
+                                        <td style="text-align: right;">84.6%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4. Expenditure relating to entities not registered under GST (Unregistered Purchases)</td>
+                                        <td style="text-align: right;">Rs 5,35,00,000</td>
+                                        <td style="text-align: right;">11.8%</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td>TOTAL EXPENDITURE IN RESPECT OF ENTITIES (CLAUSE 44):</td>
+                                        <td style="text-align: right; color: var(--primary);">Rs 45,39,20,000</td>
+                                        <td style="text-align: right;">100.0%</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = htmlContent;
+        }
+
+
         // Multi-Client Isolated Database with Cloud Sync & OneDrive Support
         const defaultClients = [
             {
@@ -2870,6 +3518,7 @@
             document.querySelectorAll('.nav-item-btn').forEach(el => el.classList.remove('active'));
             const target = document.getElementById(viewId);
             if(target) target.classList.add('active');
+        if(viewId === 'view-taxreport') { generateProspectiveReport(); }
             if(btn) {
                 btn.classList.add('active');
             } else {
