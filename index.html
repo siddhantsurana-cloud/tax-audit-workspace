@@ -2302,7 +2302,7 @@
                 const navBtn = Array.from(document.querySelectorAll('.nav-item-btn')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(viewId));
                 if(navBtn) navBtn.classList.add('active');
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if(window.scrollTo) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         }
 
         // Render Section-Wise Initial Requisition Module
@@ -4015,22 +4015,6 @@
             let tBook = 0, tTax = 0, tNet = 0;
             icdsStandardsDetailedList.forEach(std => {
                 const rec = (client.data.icds && client.data.icds[std.id]) || { status: "Applicable", book: 0, tax: 0 };
-                if(rec.status === "Applicable") {
-                    const b = Number(rec.book || 0);
-                    const t = Number(rec.tax || 0);
-                    tBook += b;
-                    tTax += t;
-                    tNet += (t - b);
-                }
-            });
-
-            const totBookEl = document.getElementById('icdsTotBook');
-            const totTaxEl = document.getElementById('icdsTotTax');
-            const totNetEl = document.getElementById('icdsTotNet');
-            if(totBookEl) totBookEl.innerText = "Rs " + tBook.toLocaleString('en-IN');
-            if(totTaxEl) totTaxEl.innerText = "Rs " + tTax.toLocaleString('en-IN');
-            if(totNetEl) totNetEl.innerText = "Rs " + tNet.toLocaleString('en-IN');
-        };
                 if(rec.status === "Applicable") {
                     const b = Number(rec.book || 0);
                     const t = Number(rec.tax || 0);
