@@ -747,6 +747,49 @@
             pointer-events: none;
         }
 
+    
+        /* Direct Requisition File Upload Boxes */
+        .pbc-upload-dropzone {
+            border: 2px dashed var(--border);
+            background: #F8FAFC;
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pbc-upload-dropzone:hover, .pbc-upload-dropzone.dragover {
+            border-color: var(--primary);
+            background: #EFF6FF;
+        }
+        .uploaded-file-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #EFF6FF;
+            border: 1px solid var(--info-border);
+            border-radius: 6px;
+            padding: 4px 10px;
+            margin-top: 6px;
+            font-size: 0.76rem;
+            color: var(--primary);
+        }
+        .uploaded-file-chip strong {
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .file-del-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-weight: 700;
+            padding: 0 4px;
+        }
+
     </style>
 </head>
 <body>
@@ -2321,6 +2364,51 @@
             if(kpiDed) kpiDed.innerText = "Rs " + tDed.toLocaleString('en-IN');
             if(kpiDep) kpiDep.innerText = "Rs " + tDep.toLocaleString('en-IN');
             if(kpiDis) kpiDis.innerText = "Rs " + tDis.toLocaleString('en-IN');
+        }
+
+
+        
+        // ==================== DIRECT REQUISITION FILE UPLOAD ENGINE ====================
+        function handlePbcDirectFileUpload(reqId, inputEl) {
+            const files = inputEl.files;
+            if(!files || files.length === 0) return;
+
+            const client = getActiveClient();
+            if(!client.data.pbcUploads) client.data.pbcUploads = {};
+            if(!client.data.pbcUploads[reqId]) client.data.pbcUploads[reqId] = [];
+            if(!client.data.pbcStatus) client.data.pbcStatus = {};
+
+            Array.from(files).forEach(file => {
+                const sizeStr = file.size > 1024 * 1024 ? 
+                                (file.size / (1024 * 1024)).toFixed(1) + ' MB' : 
+                                (file.size / 1024).toFixed(0) + ' KB';
+                const fileRecord = {
+                    name: file.name,
+                    size: sizeStr,
+                    type: file.type || 'Document',
+                    date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                };
+                client.data.pbcUploads[reqId].push(fileRecord);
+            });
+
+            client.data.pbcStatus[reqId] = "Uploaded / Under Review";
+            saveClientsToStorage();
+            renderPbcCards();
+            recalculateOverview();
+            inputEl.value = '';
+        }
+
+        function deletePbcFile(reqId, fileIdx) {
+            const client = getActiveClient();
+            if(client.data.pbcUploads && client.data.pbcUploads[reqId]) {
+                client.data.pbcUploads[reqId].splice(fileIdx, 1);
+                if(client.data.pbcUploads[reqId].length === 0) {
+                    client.data.pbcStatus[reqId] = "Pending Upload";
+                }
+                saveClientsToStorage();
+                renderPbcCards();
+                recalculateOverview();
+            }
         }
 
 
