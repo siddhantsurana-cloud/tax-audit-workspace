@@ -979,12 +979,21 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 6: ICDS CENTRE ==================== -->
+                <!-- ==================== VIEW 6: ICDS CENTRE ==================== -->
         <div id="view-icds" class="view-pane">
             <div class="card-header-flex">
                 <div>
-                    <h2>📊 ICDS Compliance & Standard Disclosures Centre</h2>
-                    <p>Assess and calculate adjustments for all 10 Income Computation & Disclosure Standards. When selecting "Not Applicable", fields are locked automatically.</p>
+                    <h2>📊 ICDS Compliance, Standard Disclosures & Computation Centre</h2>
+                    <p>Assess and calculate adjustments for all 10 Income Computation & Disclosure Standards (Section 145(2) / Form 3CD Clause 13). Click <strong>ℹ️ Guidance</strong> on any row for detailed instructions on what values to enter.</p>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="btn btn-primary btn-sm" onclick="openGuideModal('guide_icds')">📖 Read ICDS Full Guide</button>
+                    <button class="btn btn-outline btn-sm" onclick="downloadTemplate('icds')">📥 Download ICDS Template (.xlsx)</button>
+                    <label class="btn btn-outline btn-sm" style="cursor: pointer; margin-bottom: 0;">
+                        📤 Upload Excel (.xlsx)
+                        <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('icds', this)">
+                    </label>
+                    <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Transmit to CA</button>
                 </div>
             </div>
             <div class="app-card">
@@ -993,11 +1002,11 @@
                         <thead>
                             <tr>
                                 <th>ICDS Standard</th>
-                                <th>Subject Matter Area</th>
+                                <th>Subject Matter & Scope</th>
                                 <th style="width: 160px;">Applicable?</th>
-                                <th style="text-align: right; width: 200px;">Book Valuation (Rs)</th>
-                                <th style="text-align: right; width: 200px;">Tax Valuation (Rs)</th>
-                                <th style="text-align: right; width: 180px;">Net Adjustment (Rs)</th>
+                                <th style="text-align: right; width: 190px;">Book Valuation (Rs)</th>
+                                <th style="text-align: right; width: 190px;">Tax Valuation (Rs)</th>
+                                <th style="text-align: right; width: 170px;">Net Adjustment (Rs)</th>
                             </tr>
                         </thead>
                         <tbody id="icdsSummaryTableBody">
@@ -2576,6 +2585,21 @@
                     ["Vendor / Supplier Name", "PAN", "Udyam Registration No", "MSME Category (Micro/Small/Medium)", "Activity (Manufacturer/Service/Trader)", "Invoice No", "Invoice Date (YYYY-MM-DD)", "Invoice Amount (Rs)", "Agreed Credit Term (Days)", "Actual Payment Date (YYYY-MM-DD)"],
                     ["Example Vendor 1", "ABCDE1234F", "UDYAM-KR-03-0012345", "Micro", "Manufacturer", "INV-001", "2026-01-15", 500000, 45, "2026-04-10"]
                 ];
+                        } else if(type === 'icds') {
+                filename = "BRC_ICDS_Standards_I_to_X_Tax_Adjustment_Schedule.xlsx";
+                data = [
+                    ["ICDS Standard", "Standard Name", "Applicability (Applicable / Not Applicable)", "Book Valuation as per P&L / Balance Sheet (Rs)", "Tax Valuation under ICDS Provisions (Rs)", "Net Tax Adjustment (Rs)", "Clause 13 Disclosure Paragraph"],
+                    ["ICDS I", "Accounting Policies", "Applicable", 0, 0, 0, "No mark-to-market loss debited in P&L."],
+                    ["ICDS II", "Valuation of Inventories", "Applicable", 0, 0, 0, "Inclusive method u/s 145A followed."],
+                    ["ICDS III", "Construction Contracts", "Not Applicable", 0, 0, 0, "Entity does not undertake construction contracts."],
+                    ["ICDS IV", "Revenue Recognition", "Applicable", 0, 0, 0, "Revenue recognized as per ICDS IV."],
+                    ["ICDS V", "Tangible Fixed Assets", "Applicable", 0, 0, 0, "Machinery spares capitalized appropriately."],
+                    ["ICDS VI", "Effects of Changes in Forex", "Applicable", 0, 0, 0, "Forex on capital loans adjusted u/s 43A."],
+                    ["ICDS VII", "Government Grants", "Applicable", 0, 0, 0, "Grants reduced from asset cost."],
+                    ["ICDS VIII", "Securities", "Not Applicable", 0, 0, 0, "No securities held as stock-in-trade."],
+                    ["ICDS IX", "Borrowing Costs", "Applicable", 0, 0, 0, "Borrowing costs capitalized till put-to-use."],
+                    ["ICDS X", "Provisions & Contingencies", "Applicable", 0, 0, 0, "Provisions recognized on reasonable certainty."]
+                ];
             } else if(type === 'sec43b' || type === 'finance_pack') {
                 filename = "BRC_Section_43B_Statutory_Dues_Schedule.xlsx";
                 data = [
@@ -2991,6 +3015,29 @@
                             renderMsmeRows();
                             alert(`✅ Successfully imported ${importedCount} MSME vendor invoices from Excel! All Section 43B(h) disallowances and delay calculations are live.`);
                         }
+                                        } else if(workingType === 'icds') {
+                        if(!client.data.icds) client.data.icds = {};
+                        for(let i = 1; i < rows.length; i++) {
+                            const r = rows[i];
+                            if(!r || r.length === 0) continue;
+                            const stdId = String(r[0] || '').trim();
+                            const isApplicable = !String(r[2] || '').toLowerCase().includes('not');
+                            const book = cleanExcelNum(r[3]);
+                            const tax = cleanExcelNum(r[4]);
+
+                            const targetStd = icdsStandardsDetailedList.find(s => s.id.toLowerCase() === stdId.toLowerCase() || s.id.toLowerCase() === `icds ${stdId}`.toLowerCase());
+                            if(targetStd) {
+                                client.data.icds[targetStd.id] = {
+                                    status: isApplicable ? "Applicable" : "Not Applicable",
+                                    book: isApplicable ? book : 0,
+                                    tax: isApplicable ? tax : 0
+                                };
+                                importedCount++;
+                            }
+                        }
+                        saveClientsToStorage();
+                        renderIcdsTable();
+                        alert(`✅ Successfully imported ICDS standards evaluation from Excel!`);
                     } else if(workingType === 'sec43b') {
                         if(!client.data.sec43b) client.data.sec43b = [];
                         const newSec43b = [];
@@ -3718,20 +3765,106 @@
         }
 
         // ==================== 6. ICDS CENTRE LOGIC (ZERO FOCUS LOSS) ====================
-        const icdsStandardsList = [
-            { id: "ICDS I", title: "Accounting Policies" },
-            { id: "ICDS II", title: "Valuation of Inventories" },
-            { id: "ICDS III", title: "Construction Contracts" },
-            { id: "ICDS IV", title: "Revenue Recognition" },
-            { id: "ICDS V", title: "Tangible Fixed Assets" },
-            { id: "ICDS VI", title: "Effects of Changes in Forex Rates" },
-            { id: "ICDS VII", title: "Government Grants" },
-            { id: "ICDS VIII", title: "Securities" },
-            { id: "ICDS IX", title: "Borrowing Costs" },
-            { id: "ICDS X", title: "Provisions, Contingent Liabilities & Assets" }
+                // ==================== ICDS DETAILED GUIDANCE & EXPLANATIONS DATABASE ====================
+        const icdsStandardsDetailedList = [
+            {
+                id: "ICDS I",
+                title: "Accounting Policies",
+                scope: "Fundamental assumptions (Going Concern, Consistency, Accrual). Modifies prudence concept.",
+                bookGuidance: "Enter Mark-to-market (MTM) unrealized losses or expected losses debited to P&L under Ind AS (e.g. on derivative contracts or financial instruments).",
+                taxGuidance: "Enter the actual realized losses allowable under tax law (unrealized MTM losses are recognized as Nil under ICDS I unless specifically permitted).",
+                trigger: "MTM losses debited in books are disallowed (added back to taxable profit).",
+                clause13Note: "Para 13(a) disclosure: Mark-to-market loss of Rs X debited in P&L has been disallowed in accordance with ICDS I."
+            },
+            {
+                id: "ICDS II",
+                title: "Valuation of Inventories",
+                scope: "Lower of actual cost or NRV. Mandatory inclusion of taxes, duties, and cesses u/s 145A (Inclusive Method).",
+                bookGuidance: "Enter Closing Inventory value recognized in Balance Sheet under Ind AS 2 / AS 2 (which is typically exclusive of recoverable GST/ITC).",
+                taxGuidance: "Enter Closing Inventory revalued on 'Inclusive Method' u/s 145A (including GST on unutilized raw materials, WIP, and finished goods).",
+                trigger: "Difference between Section 145A tax valuation and book inventory valuation.",
+                clause13Note: "Para 13(d) disclosure: Method of inventory valuation adopted, cost formula used, and Section 145A inclusive tax adjustment."
+            },
+            {
+                id: "ICDS III",
+                title: "Construction Contracts",
+                scope: "Mandatory Percentage of Completion Method (POCM). Mandatory inclusion of retention money in contract revenue.",
+                bookGuidance: "Enter Contract Revenue and profit recognized in books under Ind AS 115.",
+                taxGuidance: "Enter Contract Revenue computed strictly on POCM under ICDS III (including retention money and without reducing incidental interest from contract cost).",
+                trigger: "Retention money deferred in books but required to be taxed on POCM basis under ICDS III.",
+                clause13Note: "Para 13(e) disclosure: Amount of contract revenue recognized, method used to determine stage of completion, and retention monies."
+            },
+            {
+                id: "ICDS IV",
+                title: "Revenue Recognition",
+                scope: "Sale of goods on transfer of significant risks/property. Service revenue recognized strictly on POCM (Completed Contract allowed only if duration <= 90 days).",
+                bookGuidance: "Enter Revenue from service contracts and export incentive subsidies recognized in P&L.",
+                taxGuidance: "Enter Service revenue recognized on POCM under ICDS IV, and government export incentives recognized when reasonable certainty of receipt exists (Section 145B(3)).",
+                trigger: "Service revenue postponed in books due to milestone billing recognized earlier under ICDS IV POCM.",
+                clause13Note: "Para 13(f) disclosure: Disclose revenue recognition policies for service transactions and export incentives."
+            },
+            {
+                id: "ICDS V",
+                title: "Tangible Fixed Assets",
+                scope: "Capitalization of assets. Machinery spares capitalized only when used with tangible asset. Start-up/commissioning costs capitalized till put to use.",
+                bookGuidance: "Enter Asset cost and machinery spares / commissioning expense debited to P&L or capitalized in books under Ind AS 16.",
+                taxGuidance: "Enter Actual Cost of asset capitalized in accordance with ICDS V and Section 43(1) (excluding GST ITC).",
+                trigger: "Machinery spares expensed in books but required to be capitalized under ICDS V.",
+                clause13Note: "Para 13(g) disclosure: Capitalization of machinery spares and trial run expense adjustments."
+            },
+            {
+                id: "ICDS VI",
+                title: "Effects of Changes in Forex Rates",
+                scope: "Foreign exchange translation. Monetary items at closing rate. Forex on foreign currency borrowings for capital assets adjusted u/s 43A.",
+                bookGuidance: "Enter Net Foreign Exchange Gain/Loss recognized in P&L under Ind AS 21.",
+                taxGuidance: "Enter Allowable / Taxable forex gain/loss under ICDS VI (forex on foreign asset loans adjusted against asset WDV u/s 43A, not routed through P&L).",
+                trigger: "Unrealized MTM forex gain/loss on foreign loans adjusted against asset cost u/s 43A instead of P&L.",
+                clause13Note: "Para 13(h) disclosure: Net forex gain/loss recognized in P&L and amount adjusted in asset WDV under Section 43A."
+            },
+            {
+                id: "ICDS VII",
+                title: "Government Grants",
+                scope: "Grants cannot be postponed beyond date of actual receipt. Capital grants for depreciable assets reduced from actual cost / WDV.",
+                bookGuidance: "Enter Government grants recognized in P&L as deferred income or amortized over asset life under Ind AS 20.",
+                taxGuidance: "Enter Government subsidy reduced from actual cost of asset u/s 43(1) Explanation 10 or recognized on receipt u/s 145B(3).",
+                trigger: "Government capital grant credited to P&L in books but required to be deducted from block WDV for tax.",
+                clause13Note: "Para 13(i) disclosure: Nature and extent of government grants recognized and deducted from asset cost."
+            },
+            {
+                id: "ICDS VIII",
+                title: "Securities",
+                scope: "Securities held as stock-in-trade valued at lower of actual cost or NRV category-wise (Shares, Debt, Convertibles).",
+                bookGuidance: "Enter Valuation of securities held as stock-in-trade on individual script-by-script basis under AS 13 / Ind AS 109.",
+                taxGuidance: "Enter Valuation of securities on bucket / category-wise lower of cost or NRV under ICDS VIII.",
+                trigger: "Difference arising between category-wise tax valuation and individual script-wise book valuation.",
+                clause13Note: "Para 13(j) disclosure: Category-wise valuation of securities and comparison with book value."
+            },
+            {
+                id: "ICDS IX",
+                title: "Borrowing Costs",
+                scope: "Borrowing costs capitalized until asset is first put to use. Specific vs general borrowings formula.",
+                bookGuidance: "Enter Borrowing costs expensed in P&L after asset is substantially completed under Ind AS 23.",
+                taxGuidance: "Enter Borrowing costs required to be capitalized until the date the asset is actually put to commercial use.",
+                trigger: "Interest incurred between 'substantially ready' and 'actual commercial put-to-use' capitalized for tax.",
+                clause13Note: "Para 13(k) disclosure: Accounting policy for borrowing costs and amount capitalized during the year."
+            },
+            {
+                id: "ICDS X",
+                title: "Provisions, Contingent Liabilities & Assets",
+                scope: "Provision recognized only when outflow of resources is 'reasonably certain' (higher threshold than Ind AS 37 'probable').",
+                bookGuidance: "Enter Provisions for warranties, customer claims, or estimated contract losses debited to P&L under Ind AS 37.",
+                taxGuidance: "Enter Allowable provision supported by historical scientific data and reasonably certain present obligation under ICDS X.",
+                trigger: "Ad-hoc or contingent provisions debited in books disallowed under ICDS X.",
+                clause13Note: "Para 13(l) disclosure: Movement of provisions, brief description of nature of obligation, and timing of outflows."
+            }
         ];
 
-        function getSafeIcdsKey(stdId) { return stdId.replace(/\s+/g, '_'); }
+        let expandedIcdsKey = null;
+
+        function toggleIcdsGuidance(stdKey) {
+            expandedIcdsKey = (expandedIcdsKey === stdKey) ? null : stdKey;
+            renderIcdsTable();
+        }
 
         function renderIcdsTable() {
             const client = getActiveClient();
@@ -3742,11 +3875,12 @@
 
             if(!client.data.icds) client.data.icds = {};
 
-            icdsStandardsList.forEach(std => {
+            icdsStandardsDetailedList.forEach(std => {
                 const stdKey = std.id;
                 const safeKey = getSafeIcdsKey(stdKey);
                 const rec = client.data.icds[stdKey] || { status: "Applicable", book: 0, tax: 0 };
                 const isApplicable = rec.status === "Applicable";
+                const isExpanded = expandedIcdsKey === stdKey;
 
                 let netAdj = 0;
                 if(isApplicable) {
@@ -3758,8 +3892,16 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><strong>${std.id}</strong></td>
-                    <td>${std.title}</td>
+                    <td>
+                        <strong>${std.id}</strong>
+                        <button class="btn btn-ghost btn-sm" style="padding: 1px 6px; font-size: 0.72rem; color: var(--accent); margin-left: 4px;" onclick="toggleIcdsGuidance('${stdKey}')">
+                            ${isExpanded ? '▲ Hide Guidance' : 'ℹ️ Guidance'}
+                        </button>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600;">${std.title}</div>
+                        <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">${std.scope}</div>
+                    </td>
                     <td>
                         <select class="form-select" onchange="updateIcdsStatus('${stdKey}', this.value)">
                             <option value="Applicable" ${isApplicable ? 'selected' : ''}>Applicable</option>
@@ -3777,6 +3919,42 @@
                     </td>
                 `;
                 tbody.appendChild(tr);
+
+                // If expanded, render detailed guidance panel directly below the standard row
+                if(isExpanded) {
+                    const guidanceTr = document.createElement('tr');
+                    guidanceTr.style.background = '#F8FAFC';
+                    guidanceTr.innerHTML = `
+                        <td colspan="6" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--accent); background: #F0F7FF;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <h4 style="color: var(--primary); font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+                                    📘 Guidance for ${std.id} — ${std.title}
+                                </h4>
+                                <span class="badge badge-blue">Form 3CD Clause 13</span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 10px; font-size: 0.82rem;">
+                                <div style="background: #FFFFFF; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px;">
+                                    <strong style="color: var(--primary);">📝 What to enter in 'Book Valuation (Rs)':</strong>
+                                    <p style="color: var(--text-main); margin-top: 4px; line-height: 1.5;">${std.bookGuidance}</p>
+                                </div>
+                                <div style="background: #FFFFFF; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px;">
+                                    <strong style="color: var(--primary);">📝 What to enter in 'Tax Valuation (Rs)':</strong>
+                                    <p style="color: var(--text-main); margin-top: 4px; line-height: 1.5;">${std.taxGuidance}</p>
+                                </div>
+                            </div>
+
+                            <div style="background: #FFFBEB; border: 1px solid var(--warning-border); padding: 8px 12px; border-radius: 6px; margin-top: 10px; font-size: 0.8rem; color: var(--warning-text);">
+                                <strong>💡 Typical Adjustment Trigger:</strong> ${std.trigger}
+                            </div>
+
+                            <div style="background: #FAF5FF; border: 1px solid #E9D5FF; padding: 8px 12px; border-radius: 6px; margin-top: 8px; font-size: 0.8rem; color: var(--purple-text);">
+                                <strong>📑 Mandatory Clause 13 Disclosure Note:</strong> ${std.clause13Note}
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(guidanceTr);
+                }
             });
 
             document.getElementById('icdsTotBook').innerText = "Rs " + tBook.toLocaleString('en-IN');
