@@ -2389,8 +2389,8 @@
                         </select>
                     </td>
                     <td><input type="date" class="form-control" value="${item.date || ''}" onchange="updateMsmeField(${idx}, 'date', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="updateMsmeField(${idx}, 'amt', this.value)"></td>
-                    <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" onchange="updateMsmeField(${idx}, 'term', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" oninput="updateMsmeField(${idx}, 'amt', this.value)" onchange="updateMsmeField(${idx}, 'amt', this.value)"></td>
+                    <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" oninput="updateMsmeField(${idx}, 'term', this.value)" onchange="updateMsmeField(${idx}, 'term', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateMsmeField(${idx}, 'payDate', this.value)"></td>
                     <td style="text-align: center; font-weight: 700; color: ${delay > 0 ? 'var(--danger)' : 'var(--success)'};">${delay} Days</td>
                     <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
@@ -2478,11 +2478,11 @@
                             <option value="Railway Payable" ${item.head === 'Railway Payable' ? 'selected' : ''}>Railway Asset Usage</option>
                         </select>
                     </td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.incurred || ''}" placeholder="0" onchange="updateSec43bField(${idx}, 'incurred', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.incurred || ''}" placeholder="0" oninput="updateSec43bField(${idx}, 'incurred', this.value)" onchange="updateSec43bField(${idx}, 'incurred', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.dueDate || '2026-10-31'}" onchange="updateSec43bField(${idx}, 'dueDate', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateSec43bField(${idx}, 'payDate', this.value)"></td>
                     <td><input type="text" class="form-control" value="${item.ref || ''}" placeholder="Challan / BSR No." onchange="updateSec43bField(${idx}, 'ref', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.paid || ''}" placeholder="0" onchange="updateSec43bField(${idx}, 'paid', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.paid || ''}" placeholder="0" oninput="updateSec43bField(${idx}, 'paid', this.value)" onchange="updateSec43bField(${idx}, 'paid', this.value)"></td>
                     <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
                     <td><button class="btn btn-outline btn-sm" onclick="deleteSec43bRow(${idx})">🗑️</button></td>
                 `;
@@ -2550,7 +2550,7 @@
                 tr.innerHTML = `
                     <td><strong>${item.m}</strong></td>
                     <td>Provident Fund (EPF)</td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="updatePfField(${idx}, 'amt', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" oninput="updatePfField(${idx}, 'amt', this.value)" onchange="updatePfField(${idx}, 'amt', this.value)"></td>
                     <td>${item.due}</td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updatePfField(${idx}, 'payDate', this.value)"></td>
                     <td style="text-align: center;">${status}</td>
@@ -2600,10 +2600,10 @@
                 tr.innerHTML = `
                     <td><strong>${b.name}</strong></td>
                     <td style="text-align: center;">${(b.rate*100).toFixed(0)}%</td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.op || ''}" placeholder="0" onchange="updateDepField(${idx}, 'op', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.a180 || ''}" placeholder="0" onchange="updateDepField(${idx}, 'a180', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.aHalf || ''}" placeholder="0" onchange="updateDepField(${idx}, 'aHalf', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.del || ''}" placeholder="0" onchange="updateDepField(${idx}, 'del', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.op || ''}" placeholder="0" oninput="updateDepField(${idx}, 'op', this.value)" onchange="updateDepField(${idx}, 'op', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.a180 || ''}" placeholder="0" oninput="updateDepField(${idx}, 'a180', this.value)" onchange="updateDepField(${idx}, 'a180', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.aHalf || ''}" placeholder="0" oninput="updateDepField(${idx}, 'aHalf', this.value)" onchange="updateDepField(${idx}, 'aHalf', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.del || ''}" placeholder="0" oninput="updateDepField(${idx}, 'del', this.value)" onchange="updateDepField(${idx}, 'del', this.value)"></td>
                     <td style="text-align: right; font-weight: 700; color: var(--success);">Rs ${allowable.toLocaleString('en-IN')}</td>
                 `;
                 tbody.appendChild(tr);
@@ -2686,11 +2686,11 @@
                         </select>
                     </td>
                     <td><input type="text" class="form-control" value="${item.head || ''}" placeholder="Expense Head in Books" onchange="updateTdsField(${idx}, 'head', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.exp || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'exp', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.base || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'base', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.exp || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'exp', this.value)" onchange="updateTdsField(${idx}, 'exp', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.base || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'base', this.value)" onchange="updateTdsField(${idx}, 'base', this.value)"></td>
                     <td><input type="text" class="form-control" style="width: 60px; text-align: center;" value="${item.rate || '10%'}" onchange="updateTdsField(${idx}, 'rate', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.ded || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'ded', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.dep || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'dep', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.ded || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'ded', this.value)" onchange="updateTdsField(${idx}, 'ded', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.dep || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'dep', this.value)" onchange="updateTdsField(${idx}, 'dep', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateTdsField(${idx}, 'payDate', this.value)"></td>
                     <td>
                         <select class="form-select" onchange="updateTdsField(${idx}, 'status', this.value)">
@@ -2770,10 +2770,10 @@
                         </select>
                     </td>
                     <td>
-                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.book || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} onchange="updateIcdsValue('${stdKey}', 'book', this.value)">
+                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.book || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} oninput="updateIcdsValue('${stdKey}', 'book', this.value)" onchange="updateIcdsValue('${stdKey}', 'book', this.value)">
                     </td>
                     <td>
-                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.tax || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} onchange="updateIcdsValue('${stdKey}', 'tax', this.value)">
+                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.tax || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} oninput="updateIcdsValue('${stdKey}', 'tax', this.value)" onchange="updateIcdsValue('${stdKey}', 'tax', this.value)">
                     </td>
                     <td style="text-align: right; font-weight: 700; color: ${isApplicable && netAdj !== 0 ? (netAdj > 0 ? 'var(--danger)' : 'var(--success)') : 'var(--text-muted)'};">
                         ${isApplicable ? 'Rs ' + netAdj.toLocaleString('en-IN') : '<span style="color: var(--text-light); font-weight: 400;">— (N/A)</span>'}
