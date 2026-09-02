@@ -46,6 +46,7 @@
             --purple-text: #5B21B6;
             
             --input-bg: #FFFDF0;
+            --input-disabled: #F1F5F9;
             --input-focus-border: #1B365D;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
@@ -439,6 +440,12 @@
             transition: all 0.2s;
         }
         .form-control:focus { background: #FFFFFF; border-color: var(--input-focus-border); box-shadow: 0 0 0 2px rgba(27, 54, 93, 0.1); }
+        .form-control:disabled {
+            background: var(--input-disabled) !important;
+            color: var(--text-light) !important;
+            cursor: not-allowed;
+            border-color: #E2E8F0;
+        }
         .form-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.82rem; background: #FFFFFF; color: var(--text-main); outline: none; cursor: pointer; }
 
         /* Initial Requisition Layout */
@@ -797,6 +804,13 @@
                                         <td><button class="btn btn-ghost btn-sm" onclick="openWorking('msme')">Enter Vendor Dues →</button></td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Section 43B Statutory Liabilities</strong></td>
+                                        <td>Clause 26</td>
+                                        <td><span class="badge badge-amber">Clean Input</span></td>
+                                        <td id="ov43bDis" style="font-weight: 700; color: var(--danger);">Rs 0</td>
+                                        <td><button class="btn btn-ghost btn-sm" onclick="openWorking('sec43b')">Enter Statutory Dues →</button></td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Employee PF/ESI Share</strong></td>
                                         <td>Clause 20(b)</td>
                                         <td><span class="badge badge-amber">Clean Input</span></td>
@@ -816,13 +830,6 @@
                                         <td><span class="badge badge-amber">Clean Input</span></td>
                                         <td id="ovTdsDis" style="font-weight: 700; color: var(--danger);">Rs 0</td>
                                         <td><button class="btn btn-ghost btn-sm" onclick="openWorking('tds')">Enter TDS Ledgers →</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Section 43B Statutory Liabilities</strong></td>
-                                        <td>Clause 26</td>
-                                        <td><span class="badge badge-amber">Clean Input</span></td>
-                                        <td id="ov43bDis" style="font-weight: 700;">Rs 0</td>
-                                        <td><button class="btn btn-ghost btn-sm" onclick="openWorking('sec43b')">Enter Unpaid Dues →</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -958,17 +965,17 @@
                 </div>
                 <div style="display: flex; gap: 8px;">
                     <select id="workingSelectDropdown" class="form-select" onchange="switchWorkingTab(this.value)">
-                        <option value="msme">1. MSME Section 43B(h) Compliance Working</option>
-                        <option value="sec43b">2. Section 43B Statutory Liabilities Working</option>
-                        <option value="pfesi">3. Employee Contribution Compliance Working (PF/ESI)</option>
-                        <option value="depreciation">4. Income-tax Depreciation Working (Section 32)</option>
+                        <option value="msme">1. MSME Section 43B(h) Compliance Working (Clause 22)</option>
+                        <option value="sec43b">2. Section 43B Statutory Liabilities Working (Clause 26)</option>
+                        <option value="pfesi">3. Employee Contribution Compliance Working (PF/ESI) (Clause 20(b))</option>
+                        <option value="depreciation">4. Income-tax Depreciation Working (Section 32 / Clause 18)</option>
                         <option value="tds">5. TDS Compliance & Reconciliation (Sec 40a/34)</option>
                     </select>
                     <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Transmit to CA</button>
                 </div>
             </div>
             <div id="activeWorkingContainer">
-                <!-- Swapped dynamically -->
+                <!-- Swapped dynamically with rich working papers -->
             </div>
         </div>
 
@@ -977,7 +984,7 @@
             <div class="card-header-flex">
                 <div>
                     <h2>📊 ICDS Compliance & Standard Disclosures Centre</h2>
-                    <p>Assess and calculate adjustments for all 10 Income Computation & Disclosure Standards.</p>
+                    <p>Assess and calculate adjustments for all 10 Income Computation & Disclosure Standards. When selecting "Not Applicable", fields are locked automatically.</p>
                 </div>
             </div>
             <div class="app-card">
@@ -987,15 +994,23 @@
                             <tr>
                                 <th>ICDS Standard</th>
                                 <th>Subject Matter Area</th>
-                                <th>Applicable?</th>
-                                <th style="text-align: right;">Book Valuation (Rs)</th>
-                                <th style="text-align: right;">Tax Valuation (Rs)</th>
-                                <th style="text-align: right;">Net Adjustment (Rs)</th>
+                                <th style="width: 160px;">Applicable?</th>
+                                <th style="text-align: right; width: 200px;">Book Valuation (Rs)</th>
+                                <th style="text-align: right; width: 200px;">Tax Valuation (Rs)</th>
+                                <th style="text-align: right; width: 180px;">Net Adjustment (Rs)</th>
                             </tr>
                         </thead>
                         <tbody id="icdsSummaryTableBody">
-                            <!-- Populated with clean inputs -->
+                            <!-- Populated with reactive inputs -->
                         </tbody>
+                        <tfoot>
+                            <tr style="font-weight: 800; background: #F1F5F9;">
+                                <td colspan="3">TOTAL ICDS NET TAX ADJUSTMENTS:</td>
+                                <td id="icdsTotBook" style="text-align: right;">Rs 0</td>
+                                <td id="icdsTotTax" style="text-align: right;">Rs 0</td>
+                                <td id="icdsTotNet" style="text-align: right; color: var(--primary);">Rs 0</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -1196,9 +1211,6 @@
                 <div style="margin-bottom: 12px;">
                     <label style="font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 4px;">Cloud Sync Webhook URL (Power Automate / Custom Endpoint):</label>
                     <input type="url" id="editWebhookVal" class="form-control" placeholder="https://prod-xx.flow.microsoft.com/... (pushes data directly into OneDrive on click)">
-                    <p style="font-size: 0.74rem; color: var(--text-muted); margin-top: 3px;">
-                        💡 If left blank, data syncs directly via the secure BRC Cloud Storage channel with zero file downloads.
-                    </p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1219,7 +1231,7 @@
             </div>
             <div class="modal-body">
                 <div id="cloudSyncAlertBox" style="background: var(--info-bg); border: 1px solid var(--info-border); padding: 14px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--info-text); margin-bottom: 16px;">
-                    Ready to transmit all prepared working papers (PF/ESI, MSME Section 43B(h), Depreciation, TDS, ICDS) to Bihani Rashmi & Co.'s secure cloud repository.
+                    Ready to transmit all prepared working papers (PF/ESI, MSME Section 43B(h), Section 43B Dues, Depreciation, TDS, ICDS) to Bihani Rashmi & Co.'s secure cloud repository.
                 </div>
 
                 <div style="text-align: center; padding: 1rem 0;">
@@ -1338,7 +1350,7 @@
                 lastCloudSync: null,
                 spoc: "Parul Gupta (CFO)",
                 email: "finance@wakefit.co",
-                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
+                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], icds: {}, pbcStatus: {} }
             },
             {
                 id: "triad",
@@ -1353,7 +1365,7 @@
                 lastCloudSync: null,
                 spoc: "Director",
                 email: "accounts@triadmobility.com",
-                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
+                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], icds: {}, pbcStatus: {} }
             }
         ];
 
@@ -1842,7 +1854,6 @@
                 if(ovStatus) ovStatus.innerHTML = `✅ Synced with BRC Audit Cloud on ${payload.syncDate}`;
             }).catch(err => {
                 console.warn("Direct transmission notice:", err);
-                // Even on CORS-restricted public store, record local sync time
                 spinner.style.display = 'none';
                 btn.style.display = 'inline-flex';
                 client.lastCloudSync = new Date().toLocaleString('en-IN');
@@ -1943,7 +1954,7 @@
                     renderAuditorClientSelect();
                     initAuditorWorkspace();
                     closeModal('modalImportSubmission');
-                    alert(`✓ Successfully loaded submitted numbers for ${client.name}! All PF, MSME, and Depreciation ledgers are populated.`);
+                    alert(`✓ Successfully loaded submitted numbers for ${client.name}! All PF, MSME, 43B, TDS, and Depreciation ledgers are populated.`);
                 } catch(err) {
                     alert("Error parsing file: " + err.message);
                 }
@@ -1998,6 +2009,14 @@
                     ["Vendor / Supplier Name", "PAN", "Udyam Registration No", "MSME Category (Micro/Small/Medium)", "Activity (Manufacturer/Service/Trader)", "Invoice No", "Invoice Date (YYYY-MM-DD)", "Invoice Amount (Rs)", "Agreed Credit Term (Days)", "Actual Payment Date (YYYY-MM-DD)"],
                     ["Example Vendor 1", "ABCDE1234F", "UDYAM-KR-03-0012345", "Micro", "Manufacturer", "INV-001", "2026-01-15", 500000, 45, "2026-04-10"]
                 ];
+            } else if(type === 'sec43b' || type === 'finance_pack') {
+                filename = "BRC_Section_43B_Statutory_Dues_Schedule.xlsx";
+                data = [
+                    ["Nature of Statutory Liability", "Statutory Head (GST/Customs/PF/Bonus/Leave)", "Liability Incurred in FY 25-26 (Rs)", "Due Date u/s 139(1) (2026-10-31)", "Actual Payment Date", "Payment Reference / Challan No", "Amount Paid by Due Date (Rs)", "Disallowance u/s 43B (Rs)"],
+                    ["GST March 2026 Monthly Liability", "Taxes / Duty", 0, "2026-10-31", "", "", 0, 0],
+                    ["Employer Provident Fund (EPF)", "Welfare Fund", 0, "2026-10-31", "", "", 0, 0],
+                    ["Employee Bonus Provision", "Bonus / Commission", 0, "2026-10-31", "", "", 0, 0]
+                ];
             } else if(type === 'pf' || type === 'pf_pack') {
                 filename = "BRC_Employee_PF_ESI_Deposit_Schedule.xlsx";
                 data = [
@@ -2006,7 +2025,7 @@
                     ["May-2025", "Provident Fund (EPF)", 0, 0, "2025-06-15", "", ""],
                     ["Jun-2025", "Provident Fund (EPF)", 0, 0, "2025-07-15", "", ""]
                 ];
-            } else if(type === 'far' || type === 'finance_pack') {
+            } else if(type === 'far') {
                 filename = "BRC_Fixed_Asset_FAR_Additions_Schedule.xlsx";
                 data = [
                     ["Asset Description", "Income Tax Block (P&M/Computers/Furniture)", "Depreciation Rate", "Invoice No", "Capitalization Date", "Put to Use Date", "Cost of Addition (Rs)", "Put to Use Period (>=180D or <180D)"],
@@ -2015,17 +2034,21 @@
             } else if(type === 'tds' || type === 'tax_pack') {
                 filename = "BRC_TDS_Reconciliation_Schedule.xlsx";
                 data = [
-                    ["Section", "Nature of Payment", "Total Expense in Books (Rs)", "Amount Subject to TDS (Rs)", "TDS Rate (%)", "TDS Deducted (Rs)", "TDS Deposited (Rs)", "Date of Deposit", "Challan BSR Code / CIN"],
-                    ["194J", "Professional & Technical Fees", 0, 0, "10%", 0, 0, "", ""]
+                    ["Section", "Nature of Payment", "Total Expense in Books (Rs)", "Amount Subject to TDS (Rs)", "TDS Rate (%)", "TDS Deducted (Rs)", "TDS Deposited (Rs)", "Date of Deposit", "Challan BSR Code / CIN", "Disallowance u/s 40(a)(ia)"],
+                    ["194J", "Professional & Technical Fees", 0, 0, "10%", 0, 0, "", "", 0],
+                    ["194C", "Contractor & Freight Charges", 0, 0, "2%", 0, 0, "", "", 0],
+                    ["194I", "Office & Warehouse Rent", 0, 0, "10%", 0, 0, "", "", 0]
                 ];
             } else if(type === 'full_requisition') {
                 filename = "BRC_Tax_Audit_Initial_Requisition_Master_AY_2026-27.xlsx";
                 data = [
                     ["Section / Area", "Form 3CD Clauses", "Income Tax Provisions", "Documents & Data Required from Client", "ICAI Guidance Note Standards"],
                     ["1. Entity Profile", "Clauses 1-8, 10", "Section 44AB, 115BAA", "COI, MOA, All State GST REG-06, Form 10-IC", "Verify turnover computation & 5% cash limits"],
-                    ["2. Depreciation", "Clause 18", "Section 32, 32(1)(iia)", "FAR schedule, Invoices > Rs 2.7 Cr, Put-to-use logs", "Verify 180-day cut-off & 20% Addl Dep"],
-                    ["3. PF/ESI Welfare", "Clause 20(b)", "Section 36(1)(va)", "12 months ECR & TRRN challans", "Checkmate Services disallowance for late deposit"],
-                    ["4. MSME 43B(h)", "Clause 22", "Section 43B(h), MSMED Act", "Trade payables aging, Udyam RCs", "Exclude traders; verify 15/45-day cycle"]
+                    ["2. Section 43B", "Clause 26", "Section 43B(a)-(g)", "Paid challans for GST, Customs, Bonus, Leave by 139(1)", "Mandatory deduction on actual payment basis"],
+                    ["3. Depreciation", "Clause 18", "Section 32, 32(1)(iia)", "FAR schedule, Invoices > Rs 2.7 Cr, Put-to-use logs", "Verify 180-day cut-off & 20% Addl Dep"],
+                    ["4. PF/ESI Welfare", "Clause 20(b)", "Section 36(1)(va)", "12 months ECR & TRRN challans", "Checkmate Services disallowance for late deposit"],
+                    ["5. TDS Compliance", "Clauses 21(b), 34", "Section 40(a)(ia), 194C/I/J/Q", "Quarterly TDS returns 24Q/26Q, TRACES reports", "Verify 30% resident disallowance on default"],
+                    ["6. MSME 43B(h)", "Clause 22", "Section 43B(h), MSMED Act", "Trade payables aging, Udyam RCs", "Exclude traders; verify 15/45-day cycle"]
                 ];
             } else {
                 filename = "BRC_Audit_Requisition_Template.xlsx";
@@ -2077,7 +2100,7 @@
             alert(`Document for Request #${reqId} marked as uploaded to OneDrive!`);
         }
 
-        // Clean Guided Workings
+        // Guided Workings Router
         function openWorking(workName) {
             switchNav('view-workings');
             document.getElementById('workingSelectDropdown').value = workName;
@@ -2095,8 +2118,8 @@
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
-                                <h3>⏳ MSME Section 43B(h) Compliance Working (Clause 22)</h3>
-                                <p>Enter vendor invoices as of 31-March. Auto-calculates 15/45-day delay, excludes traders, and computes 43B(h) disallowance.</p>
+                                <h3>⏳ 1. MSME Section 43B(h) Compliance Working (Clause 22)</h3>
+                                <p>Enter vendor invoices. Auto-calculates statutory 15/45-day delay, excludes wholesale/retail traders, and computes 43B(h) disallowance.</p>
                             </div>
                             <div style="display:flex; gap:6px;">
                                 <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Download MSME Template (.xlsx)</button>
@@ -2119,9 +2142,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="msmeTbody">
-                                    <!-- Clean rows -->
-                                </tbody>
+                                <tbody id="msmeTbody"></tbody>
                                 <tfoot>
                                     <tr style="font-weight: 800; background: #F1F5F9;">
                                         <td colspan="4">TOTAL 43B(h) DISALLOWANCE:</td>
@@ -2136,13 +2157,57 @@
                     </div>
                 `;
                 renderMsmeRows();
+            } else if(name === 'sec43b') {
+                container.innerHTML = `
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>📑 2. Section 43B Statutory Liabilities Working (Clause 26)</h3>
+                                <p>Enter statutory dues incurred in FY 2025-26. Dues unpaid on or before Section 139(1) due date (31-Oct-2026) are automatically disallowed.</p>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('sec43b')">📥 Download 43B Template (.xlsx)</button>
+                                <button class="btn btn-primary btn-sm" onclick="addSec43bCleanRow()">➕ Add Statutory Due</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nature of Statutory Liability</th>
+                                        <th>Head / Category</th>
+                                        <th style="text-align: right;">Liability Incurred (Rs)</th>
+                                        <th>Due Date u/s 139(1)</th>
+                                        <th>Actual Payment Date</th>
+                                        <th>Payment Reference / Challan</th>
+                                        <th style="text-align: right;">Paid on/before 139(1)</th>
+                                        <th style="text-align: right;">Disallowance u/s 43B</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sec43bTbody"></tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="2">TOTAL SECTION 43B SUMMARY:</td>
+                                        <td id="sec43bTotIncurred" style="text-align: right;">Rs 0</td>
+                                        <td colspan="3"></td>
+                                        <td id="sec43bTotPaid" style="text-align: right; color: var(--success);">Rs 0</td>
+                                        <td id="sec43bTotDis" style="text-align: right; color: var(--danger);">Rs 0</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                renderSec43bRows();
             } else if(name === 'pfesi') {
                 container.innerHTML = `
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
-                                <h3>👥 Employee PF & ESI Contribution Compliance (Clause 20(b))</h3>
-                                <p>Enter monthly employee share deducted and actual payment date. Auto-verifies 15th statutory due date.</p>
+                                <h3>👥 3. Employee PF & ESI Contribution Compliance (Clause 20(b))</h3>
+                                <p>Enter monthly employee share deducted and actual payment date. Late deposits past the 15th are strictly disallowed u/s 36(1)(va).</p>
                             </div>
                             <button class="btn btn-outline btn-sm" onclick="downloadTemplate('pf')">📥 Download PF/ESI Template (.xlsx)</button>
                         </div>
@@ -2159,9 +2224,7 @@
                                         <th style="text-align: right;">Disallowance u/s 36(1)(va)</th>
                                     </tr>
                                 </thead>
-                                <tbody id="pfTbody">
-                                    <!-- Clean months -->
-                                </tbody>
+                                <tbody id="pfTbody"></tbody>
                             </table>
                         </div>
                     </div>
@@ -2172,8 +2235,8 @@
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
-                                <h3>📉 Income-tax Depreciation Working (Clause 18 / Section 32)</h3>
-                                <p>Enter opening WDV, additions >=180 days and <180 days. Auto-calculates allowable IT depreciation.</p>
+                                <h3>📉 4. Income-tax Depreciation Working (Clause 18 / Section 32)</h3>
+                                <p>Enter opening WDV, additions >=180 days and <180 days. Auto-calculates allowable IT block depreciation.</p>
                             </div>
                             <button class="btn btn-outline btn-sm" onclick="downloadTemplate('far')">📥 Download FAR Template (.xlsx)</button>
                         </div>
@@ -2190,25 +2253,83 @@
                                         <th style="text-align: right;">Allowable IT Dep</th>
                                     </tr>
                                 </thead>
-                                <tbody id="depTbody">
-                                    <!-- Clean blocks -->
-                                </tbody>
+                                <tbody id="depTbody"></tbody>
                             </table>
                         </div>
                     </div>
                 `;
                 renderDepRows();
-            } else {
+            } else if(name === 'tds') {
                 container.innerHTML = `
                     <div class="app-card">
-                        <h3>Working: ${name.toUpperCase()}</h3>
-                        <p style="color: var(--text-muted); margin-top: 4px;">Clean data entry template ready.</p>
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>⚖️ 5. TDS Compliance & 40(a)(ia) Reconciliation (Clauses 21(b) & 34)</h3>
+                                <p>Enter P&L expense ledgers and TDS deduction/deposit details. Auto-calculates 30% resident disallowance u/s 40(a)(ia) for non-deduction or late deposit.</p>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('tds')">📥 Download TDS Template (.xlsx)</button>
+                                <button class="btn btn-primary btn-sm" onclick="addTdsCleanRow()">➕ Add TDS Ledger Row</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>TDS Section</th>
+                                        <th>Expense Head in Books</th>
+                                        <th style="text-align: right;">P&L Expense (Rs)</th>
+                                        <th style="text-align: right;">Subject to TDS (Rs)</th>
+                                        <th>TDS Rate</th>
+                                        <th style="text-align: right;">TDS Deducted (Rs)</th>
+                                        <th style="text-align: right;">TDS Deposited (Rs)</th>
+                                        <th>Deposit Date</th>
+                                        <th>Default Nature</th>
+                                        <th style="text-align: right;">40(a)(ia) Disallowance</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tdsTbody"></tbody>
+                                <tfoot>
+                                    <tr style="font-weight: 800; background: #F1F5F9;">
+                                        <td colspan="2">TOTAL TDS SUMMARY:</td>
+                                        <td id="tdsTotExp" style="text-align: right;">Rs 0</td>
+                                        <td id="tdsTotBase" style="text-align: right;">Rs 0</td>
+                                        <td></td>
+                                        <td id="tdsTotDed" style="text-align: right;">Rs 0</td>
+                                        <td id="tdsTotDep" style="text-align: right; color: var(--success);">Rs 0</td>
+                                        <td colspan="2"></td>
+                                        <td id="tdsTotDis" style="text-align: right; color: var(--danger);">Rs 0</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 `;
+                renderTdsRows();
             }
         }
 
-        // MSME Logic
+        // 1. MSME Working Implementation with Robust Date Parsing & Reactive Handlers
+        function updateMsmeField(idx, field, val) {
+            const client = getActiveClient();
+            if(!client.data.msme) client.data.msme = [];
+            if(!client.data.msme[idx]) return;
+            client.data.msme[idx][field] = (field === 'amt' || field === 'term') ? Number(val || 0) : val;
+            saveClientsToStorage();
+            renderMsmeRows();
+        }
+
+        function deleteMsmeRow(idx) {
+            const client = getActiveClient();
+            if(client.data.msme) {
+                client.data.msme.splice(idx, 1);
+                saveClientsToStorage();
+                renderMsmeRows();
+            }
+        }
+
         function renderMsmeRows() {
             const client = getActiveClient();
             const tbody = document.getElementById('msmeTbody');
@@ -2219,17 +2340,32 @@
             if(!client.data.msme) client.data.msme = [];
 
             client.data.msme.forEach((item, idx) => {
-                tAmt += Number(item.amt || 0);
+                const amt = Number(item.amt || 0);
+                tAmt += amt;
                 let delay = 0, dis = 0;
 
-                if(item.date && item.payDate) {
+                if(item.date) {
                     const d1 = new Date(item.date);
-                    const d2 = new Date(item.payDate);
-                    const due = new Date(d1.getTime() + (Math.min(item.term || 45, 45) * 86400000));
-                    if(d2 > due) {
-                        delay = Math.round((d2 - due) / 86400000);
-                        if(item.cat !== "Medium" && item.act !== "Trader" && d2 > new Date("2026-03-31")) {
-                            dis = item.amt;
+                    const term = Math.min(Number(item.term || 45), 45);
+                    const due = new Date(d1.getTime() + (term * 86400000));
+                    const fyEnd = new Date("2026-03-31");
+
+                    if(item.payDate) {
+                        const d2 = new Date(item.payDate);
+                        if(d2 > due) {
+                            delay = Math.round((d2 - due) / 86400000);
+                            // If paid after FY end (after 31-March-2026), it is disallowed u/s 43B(h) in FY 2025-26
+                            if(d2 > fyEnd && item.cat !== "Medium" && item.act !== "Trader") {
+                                dis = amt;
+                            }
+                        }
+                    } else {
+                        // Unpaid as on date
+                        if(fyEnd > due) {
+                            delay = Math.round((fyEnd - due) / 86400000);
+                            if(item.cat !== "Medium" && item.act !== "Trader") {
+                                dis = amt;
+                            }
                         }
                     }
                 }
@@ -2237,28 +2373,28 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><input type="text" class="form-control" value="${item.name || ''}" placeholder="Vendor Name" onchange="client.data.msme[${idx}].name = this.value; saveClientsToStorage();"></td>
+                    <td><input type="text" class="form-control" value="${item.name || ''}" placeholder="Vendor Name" onchange="updateMsmeField(${idx}, 'name', this.value)"></td>
                     <td>
-                        <select class="form-select" onchange="client.data.msme[${idx}].cat = this.value; saveClientsToStorage(); renderMsmeRows();">
+                        <select class="form-select" onchange="updateMsmeField(${idx}, 'cat', this.value)">
                             <option value="Micro" ${item.cat === 'Micro' ? 'selected' : ''}>Micro</option>
                             <option value="Small" ${item.cat === 'Small' ? 'selected' : ''}>Small</option>
                             <option value="Medium" ${item.cat === 'Medium' ? 'selected' : ''}>Medium (Exempt)</option>
                         </select>
                     </td>
                     <td>
-                        <select class="form-select" onchange="client.data.msme[${idx}].act = this.value; saveClientsToStorage(); renderMsmeRows();">
+                        <select class="form-select" onchange="updateMsmeField(${idx}, 'act', this.value)">
                             <option value="Manufacturer" ${item.act === 'Manufacturer' ? 'selected' : ''}>Manufacturer</option>
                             <option value="Service Provider" ${item.act === 'Service Provider' ? 'selected' : ''}>Service Provider</option>
                             <option value="Trader" ${item.act === 'Trader' ? 'selected' : ''}>Trader (Exempt)</option>
                         </select>
                     </td>
-                    <td><input type="date" class="form-control" value="${item.date || ''}" onchange="client.data.msme[${idx}].date = this.value; saveClientsToStorage(); renderMsmeRows();"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="client.data.msme[${idx}].amt = Number(this.value); saveClientsToStorage(); renderMsmeRows();"></td>
-                    <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" onchange="client.data.msme[${idx}].term = Number(this.value); saveClientsToStorage(); renderMsmeRows();"></td>
-                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="client.data.msme[${idx}].payDate = this.value; saveClientsToStorage(); renderMsmeRows();"></td>
+                    <td><input type="date" class="form-control" value="${item.date || ''}" onchange="updateMsmeField(${idx}, 'date', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="updateMsmeField(${idx}, 'amt', this.value)"></td>
+                    <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" onchange="updateMsmeField(${idx}, 'term', this.value)"></td>
+                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateMsmeField(${idx}, 'payDate', this.value)"></td>
                     <td style="text-align: center; font-weight: 700; color: ${delay > 0 ? 'var(--danger)' : 'var(--success)'};">${delay} Days</td>
                     <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
-                    <td><button class="btn btn-outline btn-sm" onclick="client.data.msme.splice(${idx}, 1); saveClientsToStorage(); renderMsmeRows();">🗑️</button></td>
+                    <td><button class="btn btn-outline btn-sm" onclick="deleteMsmeRow(${idx})">🗑️</button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -2277,7 +2413,107 @@
             renderMsmeRows();
         }
 
-        // PF / ESI Logic
+        // 2. Section 43B Working Implementation
+        function updateSec43bField(idx, field, val) {
+            const client = getActiveClient();
+            if(!client.data.sec43b) client.data.sec43b = [];
+            if(!client.data.sec43b[idx]) return;
+            client.data.sec43b[idx][field] = (field === 'incurred' || field === 'paid') ? Number(val || 0) : val;
+            saveClientsToStorage();
+            renderSec43bRows();
+        }
+
+        function deleteSec43bRow(idx) {
+            const client = getActiveClient();
+            if(client.data.sec43b) {
+                client.data.sec43b.splice(idx, 1);
+                saveClientsToStorage();
+                renderSec43bRows();
+            }
+        }
+
+        const defaultSec43bRows = [
+            { nature: "GST / State Tax March Liability", head: "Taxes / Duty", incurred: 0, dueDate: "2026-10-31", payDate: "", ref: "", paid: 0 },
+            { nature: "Employer Provident Fund (EPF)", head: "Welfare Fund", incurred: 0, dueDate: "2026-10-31", payDate: "", ref: "", paid: 0 },
+            { nature: "Employee Bonus / Ex-gratia", head: "Bonus / Commission", incurred: 0, dueDate: "2026-10-31", payDate: "", ref: "", paid: 0 },
+            { nature: "Leave Encashment Provision", head: "Leave Encashment", incurred: 0, dueDate: "2026-10-31", payDate: "", ref: "", paid: 0 },
+            { nature: "Interest to Scheduled Bank / NBFC", head: "Interest Payable", incurred: 0, dueDate: "2026-10-31", payDate: "", ref: "", paid: 0 }
+        ];
+
+        function renderSec43bRows() {
+            const client = getActiveClient();
+            const tbody = document.getElementById('sec43bTbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            let tIncurred = 0, tPaid = 0, tDis = 0;
+
+            if(!client.data.sec43b || client.data.sec43b.length === 0) {
+                client.data.sec43b = defaultSec43bRows.map(r => ({ ...r }));
+            }
+
+            client.data.sec43b.forEach((item, idx) => {
+                const incurred = Number(item.incurred || 0);
+                const paid = Number(item.paid || 0);
+                tIncurred += incurred;
+                tPaid += paid;
+                let dis = 0;
+
+                if(incurred > 0) {
+                    if(!item.payDate || item.payDate > item.dueDate) {
+                        dis = Math.max(0, incurred - paid);
+                    }
+                }
+                tDis += dis;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="text" class="form-control" value="${item.nature || ''}" placeholder="Liability Description" onchange="updateSec43bField(${idx}, 'nature', this.value)"></td>
+                    <td>
+                        <select class="form-select" onchange="updateSec43bField(${idx}, 'head', this.value)">
+                            <option value="Taxes / Duty" ${item.head === 'Taxes / Duty' ? 'selected' : ''}>Taxes / Duty / Cess</option>
+                            <option value="Welfare Fund" ${item.head === 'Welfare Fund' ? 'selected' : ''}>Employer Welfare (PF/ESI)</option>
+                            <option value="Bonus / Commission" ${item.head === 'Bonus / Commission' ? 'selected' : ''}>Bonus / Commission</option>
+                            <option value="Leave Encashment" ${item.head === 'Leave Encashment' ? 'selected' : ''}>Leave Encashment</option>
+                            <option value="Interest Payable" ${item.head === 'Interest Payable' ? 'selected' : ''}>Interest to Bank/NBFC</option>
+                            <option value="Railway Payable" ${item.head === 'Railway Payable' ? 'selected' : ''}>Railway Asset Usage</option>
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.incurred || ''}" placeholder="0" onchange="updateSec43bField(${idx}, 'incurred', this.value)"></td>
+                    <td><input type="date" class="form-control" value="${item.dueDate || '2026-10-31'}" onchange="updateSec43bField(${idx}, 'dueDate', this.value)"></td>
+                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateSec43bField(${idx}, 'payDate', this.value)"></td>
+                    <td><input type="text" class="form-control" value="${item.ref || ''}" placeholder="Challan / BSR No." onchange="updateSec43bField(${idx}, 'ref', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.paid || ''}" placeholder="0" onchange="updateSec43bField(${idx}, 'paid', this.value)"></td>
+                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="deleteSec43bRow(${idx})">🗑️</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('sec43bTotIncurred').innerText = "Rs " + tIncurred.toLocaleString('en-IN');
+            document.getElementById('sec43bTotPaid').innerText = "Rs " + tPaid.toLocaleString('en-IN');
+            document.getElementById('sec43bTotDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            document.getElementById('ov43bDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
+        }
+
+        function addSec43bCleanRow() {
+            const client = getActiveClient();
+            if(!client.data.sec43b) client.data.sec43b = [];
+            client.data.sec43b.push({ nature: "", head: "Taxes / Duty", incurred: 0, dueDate: "2026-10-31", payDate: "", ref: "", paid: 0 });
+            saveClientsToStorage();
+            renderSec43bRows();
+        }
+
+        // 3. PF / ESI Logic
+        function updatePfField(idx, field, val) {
+            const client = getActiveClient();
+            if(!client.data.pf) client.data.pf = [];
+            if(!client.data.pf[idx]) return;
+            client.data.pf[idx][field] = field === 'amt' ? Number(val || 0) : val;
+            saveClientsToStorage();
+            renderPfRows();
+        }
+
         const defaultPfMonths = [
             { m: "Apr-2025", due: "2025-05-15" }, { m: "May-2025", due: "2025-06-15" }, { m: "Jun-2025", due: "2025-07-15" },
             { m: "Jul-2025", due: "2025-08-15" }, { m: "Aug-2025", due: "2025-09-15" }, { m: "Sep-2025", due: "2025-10-15" },
@@ -2314,9 +2550,9 @@
                 tr.innerHTML = `
                     <td><strong>${item.m}</strong></td>
                     <td>Provident Fund (EPF)</td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="client.data.pf[${idx}].amt = Number(this.value); saveClientsToStorage(); renderPfRows();"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" onchange="updatePfField(${idx}, 'amt', this.value)"></td>
                     <td>${item.due}</td>
-                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="client.data.pf[${idx}].payDate = this.value; saveClientsToStorage(); renderPfRows();"></td>
+                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updatePfField(${idx}, 'payDate', this.value)"></td>
                     <td style="text-align: center;">${status}</td>
                     <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
                 `;
@@ -2327,7 +2563,16 @@
             recalculateOverview();
         }
 
-        // Depreciation Clean Schedule
+        // 4. Depreciation Clean Schedule
+        function updateDepField(idx, field, val) {
+            const client = getActiveClient();
+            if(!client.data.dep) client.data.dep = [];
+            if(!client.data.dep[idx]) return;
+            client.data.dep[idx][field] = Number(val || 0);
+            saveClientsToStorage();
+            renderDepRows();
+        }
+
         const defaultDepBlocks = [
             { name: "Plant & Machinery (Mfg)", rate: 0.15, op: 0, a180: 0, aHalf: 0, del: 0 },
             { name: "Computer Equipment & Servers", rate: 0.40, op: 0, a180: 0, aHalf: 0, del: 0 },
@@ -2355,10 +2600,10 @@
                 tr.innerHTML = `
                     <td><strong>${b.name}</strong></td>
                     <td style="text-align: center;">${(b.rate*100).toFixed(0)}%</td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.op || ''}" placeholder="0" onchange="client.data.dep[${idx}].op = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.a180 || ''}" placeholder="0" onchange="client.data.dep[${idx}].a180 = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.aHalf || ''}" placeholder="0" onchange="client.data.dep[${idx}].aHalf = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.del || ''}" placeholder="0" onchange="client.data.dep[${idx}].del = Number(this.value); saveClientsToStorage(); renderDepRows();"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.op || ''}" placeholder="0" onchange="updateDepField(${idx}, 'op', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.a180 || ''}" placeholder="0" onchange="updateDepField(${idx}, 'a180', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.aHalf || ''}" placeholder="0" onchange="updateDepField(${idx}, 'aHalf', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.del || ''}" placeholder="0" onchange="updateDepField(${idx}, 'del', this.value)"></td>
                     <td style="text-align: right; font-weight: 700; color: var(--success);">Rs ${allowable.toLocaleString('en-IN')}</td>
                 `;
                 tbody.appendChild(tr);
@@ -2368,33 +2613,200 @@
             recalculateOverview();
         }
 
-        // ICDS Clean Table
-        function renderIcdsTable() {
-            const tbody = document.getElementById('icdsSummaryTableBody');
-            tbody.innerHTML = '';
-            const standards = [
-                "ICDS I — Accounting Policies", "ICDS II — Valuation of Inventories", "ICDS III — Construction Contracts",
-                "ICDS IV — Revenue Recognition", "ICDS V — Tangible Fixed Assets", "ICDS VI — Foreign Exchange",
-                "ICDS VII — Government Grants", "ICDS VIII — Securities", "ICDS IX — Borrowing Costs", "ICDS X — Provisions"
-            ];
+        // 5. TDS Compliance & 40(a)(ia) Working Implementation
+        function updateTdsField(idx, field, val) {
+            const client = getActiveClient();
+            if(!client.data.tds) client.data.tds = [];
+            if(!client.data.tds[idx]) return;
+            client.data.tds[idx][field] = (field === 'exp' || field === 'base' || field === 'ded' || field === 'dep') ? Number(val || 0) : val;
+            saveClientsToStorage();
+            renderTdsRows();
+        }
 
-            standards.forEach(std => {
+        function deleteTdsRow(idx) {
+            const client = getActiveClient();
+            if(client.data.tds) {
+                client.data.tds.splice(idx, 1);
+                saveClientsToStorage();
+                renderTdsRows();
+            }
+        }
+
+        const defaultTdsRows = [
+            { sec: "194J", head: "Professional & Legal Fees", exp: 0, base: 0, rate: "10%", ded: 0, dep: 0, payDate: "", status: "No Default" },
+            { sec: "194C", head: "Contractor & Logistics Charges", exp: 0, base: 0, rate: "2%", ded: 0, dep: 0, payDate: "", status: "No Default" },
+            { sec: "194I", head: "Office & Warehouse Rent", exp: 0, base: 0, rate: "10%", ded: 0, dep: 0, payDate: "", status: "No Default" },
+            { sec: "194Q", head: "Purchase of Goods (> 50L)", exp: 0, base: 0, rate: "0.1%", ded: 0, dep: 0, payDate: "", status: "No Default" },
+            { sec: "195", head: "Foreign Royalty & Technical Services", exp: 0, base: 0, rate: "20%", ded: 0, dep: 0, payDate: "", status: "No Default" }
+        ];
+
+        function renderTdsRows() {
+            const client = getActiveClient();
+            const tbody = document.getElementById('tdsTbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            let tExp = 0, tBase = 0, tDed = 0, tDep = 0, tDis = 0;
+
+            if(!client.data.tds || client.data.tds.length === 0) {
+                client.data.tds = defaultTdsRows.map(r => ({ ...r }));
+            }
+
+            client.data.tds.forEach((item, idx) => {
+                const exp = Number(item.exp || 0);
+                const base = Number(item.base || 0);
+                const ded = Number(item.ded || 0);
+                const dep = Number(item.dep || 0);
+                tExp += exp;
+                tBase += base;
+                tDed += ded;
+                tDep += dep;
+                let dis = 0;
+
+                if(item.status === "TDS Not Deducted" || item.status === "TDS Deducted but Not Deposited") {
+                    if(item.sec === "195") {
+                        dis = exp;
+                    } else {
+                        dis = Math.round(exp * 0.30);
+                    }
+                }
+                tDis += dis;
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><strong>${std.split('—')[0].trim()}</strong></td>
-                    <td>${std.split('—')[1].trim()}</td>
                     <td>
-                        <select class="form-select">
-                            <option>Applicable</option>
-                            <option>Not Applicable</option>
+                        <select class="form-select" onchange="updateTdsField(${idx}, 'sec', this.value)">
+                            <option value="194J" ${item.sec === '194J' ? 'selected' : ''}>194J — Professional Fees (10%)</option>
+                            <option value="194J(FTS)" ${item.sec === '194J(FTS)' ? 'selected' : ''}>194J — Tech Services (2%)</option>
+                            <option value="194C" ${item.sec === '194C' ? 'selected' : ''}>194C — Contractor/Freight (2%)</option>
+                            <option value="194I" ${item.sec === '194I' ? 'selected' : ''}>194I — Rent (Land/Bldg) (10%)</option>
+                            <option value="194I(P&M)" ${item.sec === '194I(P&M)' ? 'selected' : ''}>194I — Rent (Plant/Machinery) (2%)</option>
+                            <option value="194Q" ${item.sec === '194Q' ? 'selected' : ''}>194Q — Purchase of Goods (0.1%)</option>
+                            <option value="194H" ${item.sec === '194H' ? 'selected' : ''}>194H — Commission/Brokerage (5%)</option>
+                            <option value="195" ${item.sec === '195' ? 'selected' : ''}>195 — Non-Resident Payment (100% Dis)</option>
                         </select>
                     </td>
-                    <td><input type="number" class="form-control" style="text-align: right;" placeholder="0"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" placeholder="0"></td>
-                    <td style="text-align: right; font-weight: 700;">Rs 0</td>
+                    <td><input type="text" class="form-control" value="${item.head || ''}" placeholder="Expense Head in Books" onchange="updateTdsField(${idx}, 'head', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.exp || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'exp', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.base || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'base', this.value)"></td>
+                    <td><input type="text" class="form-control" style="width: 60px; text-align: center;" value="${item.rate || '10%'}" onchange="updateTdsField(${idx}, 'rate', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.ded || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'ded', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.dep || ''}" placeholder="0" onchange="updateTdsField(${idx}, 'dep', this.value)"></td>
+                    <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateTdsField(${idx}, 'payDate', this.value)"></td>
+                    <td>
+                        <select class="form-select" onchange="updateTdsField(${idx}, 'status', this.value)">
+                            <option value="No Default" ${item.status === 'No Default' ? 'selected' : ''}>✓ No Default (Fully Complied)</option>
+                            <option value="TDS Not Deducted" ${item.status === 'TDS Not Deducted' ? 'selected' : ''}>⚠️ TDS Not Deducted (30% Dis)</option>
+                            <option value="TDS Deducted but Not Deposited" ${item.status === 'TDS Deducted but Not Deposited' ? 'selected' : ''}>⚠️ Not Deposited by 139(1) (30% Dis)</option>
+                            <option value="Rate Shortfall" ${item.status === 'Rate Shortfall' ? 'selected' : ''}>ℹ️ Rate Shortfall (Interest Only)</option>
+                        </select>
+                    </td>
+                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="deleteTdsRow(${idx})">🗑️</button></td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            document.getElementById('tdsTotExp').innerText = "Rs " + tExp.toLocaleString('en-IN');
+            document.getElementById('tdsTotBase').innerText = "Rs " + tBase.toLocaleString('en-IN');
+            document.getElementById('tdsTotDed').innerText = "Rs " + tDed.toLocaleString('en-IN');
+            document.getElementById('tdsTotDep').innerText = "Rs " + tDep.toLocaleString('en-IN');
+            document.getElementById('tdsTotDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            document.getElementById('ovTdsDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
+        }
+
+        function addTdsCleanRow() {
+            const client = getActiveClient();
+            if(!client.data.tds) client.data.tds = [];
+            client.data.tds.push({ sec: "194J", head: "", exp: 0, base: 0, rate: "10%", ded: 0, dep: 0, payDate: "", status: "No Default" });
+            saveClientsToStorage();
+            renderTdsRows();
+        }
+
+        // ICDS Clean & Reactive Table with Auto-Disable for Not Applicable
+        const icdsStandardsList = [
+            { id: "ICDS I", title: "Accounting Policies" },
+            { id: "ICDS II", title: "Valuation of Inventories" },
+            { id: "ICDS III", title: "Construction Contracts" },
+            { id: "ICDS IV", title: "Revenue Recognition" },
+            { id: "ICDS V", title: "Tangible Fixed Assets" },
+            { id: "ICDS VI", title: "Effects of Changes in Forex Rates" },
+            { id: "ICDS VII", title: "Government Grants" },
+            { id: "ICDS VIII", title: "Securities" },
+            { id: "ICDS IX", title: "Borrowing Costs" },
+            { id: "ICDS X", title: "Provisions, Contingent Liabilities & Assets" }
+        ];
+
+        function renderIcdsTable() {
+            const client = getActiveClient();
+            const tbody = document.getElementById('icdsSummaryTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            let tBook = 0, tTax = 0, tNet = 0;
+
+            if(!client.data.icds) client.data.icds = {};
+
+            icdsStandardsList.forEach(std => {
+                const stdKey = std.id;
+                const rec = client.data.icds[stdKey] || { status: "Applicable", book: 0, tax: 0 };
+                const isApplicable = rec.status === "Applicable";
+
+                let netAdj = 0;
+                if(isApplicable) {
+                    netAdj = Number(rec.tax || 0) - Number(rec.book || 0);
+                    tBook += Number(rec.book || 0);
+                    tTax += Number(rec.tax || 0);
+                    tNet += netAdj;
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${std.id}</strong></td>
+                    <td>${std.title}</td>
+                    <td>
+                        <select class="form-select" onchange="updateIcdsStatus('${stdKey}', this.value)">
+                            <option value="Applicable" ${isApplicable ? 'selected' : ''}>Applicable</option>
+                            <option value="Not Applicable" ${!isApplicable ? 'selected' : ''}>Not Applicable</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.book || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} onchange="updateIcdsValue('${stdKey}', 'book', this.value)">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.tax || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} onchange="updateIcdsValue('${stdKey}', 'tax', this.value)">
+                    </td>
+                    <td style="text-align: right; font-weight: 700; color: ${isApplicable && netAdj !== 0 ? (netAdj > 0 ? 'var(--danger)' : 'var(--success)') : 'var(--text-muted)'};">
+                        ${isApplicable ? 'Rs ' + netAdj.toLocaleString('en-IN') : '<span style="color: var(--text-light); font-weight: 400;">— (N/A)</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('icdsTotBook').innerText = "Rs " + tBook.toLocaleString('en-IN');
+            document.getElementById('icdsTotTax').innerText = "Rs " + tTax.toLocaleString('en-IN');
+            document.getElementById('icdsTotNet').innerText = "Rs " + tNet.toLocaleString('en-IN');
+        }
+
+        function updateIcdsStatus(stdKey, newStatus) {
+            const client = getActiveClient();
+            if(!client.data.icds) client.data.icds = {};
+            if(!client.data.icds[stdKey]) client.data.icds[stdKey] = { status: "Applicable", book: 0, tax: 0 };
+            client.data.icds[stdKey].status = newStatus;
+            if(newStatus === "Not Applicable") {
+                client.data.icds[stdKey].book = 0;
+                client.data.icds[stdKey].tax = 0;
+            }
+            saveClientsToStorage();
+            renderIcdsTable();
+        }
+
+        function updateIcdsValue(stdKey, field, val) {
+            const client = getActiveClient();
+            if(!client.data.icds) client.data.icds = {};
+            if(!client.data.icds[stdKey]) client.data.icds[stdKey] = { status: "Applicable", book: 0, tax: 0 };
+            client.data.icds[stdKey][field] = Number(val || 0);
+            saveClientsToStorage();
+            renderIcdsTable();
         }
 
         // Master Clause Hub Table
@@ -2514,7 +2926,7 @@
                 lastCloudSync: null,
                 spoc: "Finance Team",
                 email: "",
-                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} }
+                data: { msme: [], pf: [], dep: [], tds: [], sec43b: [], icds: {}, pbcStatus: {} }
             };
 
             clientsList.push(newClientObj);
@@ -2531,7 +2943,7 @@
         function clearCurrentClientData() {
             if(confirm("Are you sure you want to reset all entered numbers for this company?")) {
                 const client = getActiveClient();
-                client.data = { msme: [], pf: [], dep: [], tds: [], sec43b: [], pbcStatus: {} };
+                client.data = { msme: [], pf: [], dep: [], tds: [], sec43b: [], icds: {}, pbcStatus: {} };
                 saveClientsToStorage();
                 if(currentSessionRole === 'auditor') {
                     initAuditorWorkspace();
@@ -2545,7 +2957,7 @@
         function recalculateOverview() {
             const client = getActiveClient();
             let pbcCount = Object.keys(client.data.pbcStatus || {}).length;
-            let percent = Math.min(100, Math.round((pbcCount / 10) * 50 + (client.data.msme?.length ? 25 : 0) + (client.data.pf?.length ? 25 : 0)));
+            let percent = Math.min(100, Math.round((pbcCount / 10) * 30 + (client.data.msme?.length ? 15 : 0) + (client.data.sec43b?.length ? 15 : 0) + (client.data.pf?.length ? 15 : 0) + (client.data.tds?.length ? 15 : 0) + (client.data.dep?.length ? 10 : 0)));
             document.getElementById('progressPercentDisplay').innerText = percent + "%";
             document.getElementById('progressBarFill').style.width = percent + "%";
         }
