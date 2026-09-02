@@ -3765,7 +3765,11 @@
         }
 
         // ==================== 6. ICDS CENTRE LOGIC (ZERO FOCUS LOSS) ====================
-                // ==================== ICDS DETAILED GUIDANCE & EXPLANATIONS DATABASE ====================
+                        // ==================== 6. ICDS CENTRE LOGIC & GUIDANCE ====================
+        function getSafeIcdsKey(stdId) {
+            return String(stdId || '').replace(/[^a-zA-Z0-9]/g, '_');
+        }
+
         const icdsStandardsDetailedList = [
             {
                 id: "ICDS I",
@@ -3880,7 +3884,7 @@
                 const safeKey = getSafeIcdsKey(stdKey);
                 const rec = client.data.icds[stdKey] || { status: "Applicable", book: 0, tax: 0 };
                 const isApplicable = rec.status === "Applicable";
-                const isExpanded = expandedIcdsKey === stdKey;
+                const isExpanded = (expandedIcdsKey === stdKey);
 
                 let netAdj = 0;
                 if(isApplicable) {
@@ -3893,13 +3897,13 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>
-                        <strong>${std.id}</strong>
+                        <strong style="color: var(--primary);">${std.id}</strong>
                         <button class="btn btn-ghost btn-sm" style="padding: 1px 6px; font-size: 0.72rem; color: var(--accent); margin-left: 4px;" onclick="toggleIcdsGuidance('${stdKey}')">
                             ${isExpanded ? '▲ Hide Guidance' : 'ℹ️ Guidance'}
                         </button>
                     </td>
                     <td>
-                        <div style="font-weight: 600;">${std.title}</div>
+                        <div style="font-weight: 700; color: var(--text-main);">${std.title}</div>
                         <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">${std.scope}</div>
                     </td>
                     <td>
@@ -3920,17 +3924,16 @@
                 `;
                 tbody.appendChild(tr);
 
-                // If expanded, render detailed guidance panel directly below the standard row
                 if(isExpanded) {
                     const guidanceTr = document.createElement('tr');
-                    guidanceTr.style.background = '#F8FAFC';
+                    guidanceTr.style.background = '#F0F7FF';
                     guidanceTr.innerHTML = `
-                        <td colspan="6" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--accent); background: #F0F7FF;">
+                        <td colspan="6" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--accent);">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                                <h4 style="color: var(--primary); font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
-                                    📘 Guidance for ${std.id} — ${std.title}
+                                <h4 style="color: var(--primary); font-size: 0.95rem; font-weight: 800;">
+                                    📘 Practical Data-Entry Guidance: ${std.id} — ${std.title}
                                 </h4>
-                                <span class="badge badge-blue">Form 3CD Clause 13</span>
+                                <span class="badge badge-blue">Clause 13 Standard</span>
                             </div>
 
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 10px; font-size: 0.82rem;">
@@ -4010,8 +4013,24 @@
         function recalculateIcdsTotals() {
             const client = getActiveClient();
             let tBook = 0, tTax = 0, tNet = 0;
-            icdsStandardsList.forEach(std => {
+            icdsStandardsDetailedList.forEach(std => {
                 const rec = (client.data.icds && client.data.icds[std.id]) || { status: "Applicable", book: 0, tax: 0 };
+                if(rec.status === "Applicable") {
+                    const b = Number(rec.book || 0);
+                    const t = Number(rec.tax || 0);
+                    tBook += b;
+                    tTax += t;
+                    tNet += (t - b);
+                }
+            });
+
+            const totBookEl = document.getElementById('icdsTotBook');
+            const totTaxEl = document.getElementById('icdsTotTax');
+            const totNetEl = document.getElementById('icdsTotNet');
+            if(totBookEl) totBookEl.innerText = "Rs " + tBook.toLocaleString('en-IN');
+            if(totTaxEl) totTaxEl.innerText = "Rs " + tTax.toLocaleString('en-IN');
+            if(totNetEl) totNetEl.innerText = "Rs " + tNet.toLocaleString('en-IN');
+        };
                 if(rec.status === "Applicable") {
                     const b = Number(rec.book || 0);
                     const t = Number(rec.tax || 0);
