@@ -2109,20 +2109,24 @@
 
         function switchWorkingTab(val) { loadWorking(val); }
 
-        function loadWorking(name) {
+                function loadWorking(name) {
             const container = document.getElementById('activeWorkingContainer');
 
-                        if(name === 'msme') {
+            if(name === 'msme') {
                 container.innerHTML = `
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
                                 <h3>⏳ 1. MSME Section 43B(h) Compliance Working (Clause 22)</h3>
-                                <p>Enter vendor invoices. Dues unpaid at year-end or paid in next FY are <strong>100% disallowed u/s 43B(h)</strong>. Delayed payments also compute <strong>Clause 22 MSMED Penal Interest</strong>.</p>
+                                <p>Download the clean template, enter your vendor aging offline, and upload it here to auto-populate all rows and calculations instantly.</p>
                             </div>
-                            <div style="display:flex; gap:6px;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Download MSME Template (.xlsx)</button>
-                                <button class="btn btn-primary btn-sm" onclick="addMsmeCleanRow()">➕ Add Vendor Invoice</button>
+                            <div style="display:flex; gap:6px; flex-wrap: wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Download Template (.xlsx)</button>
+                                <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
+                                    📤 Upload Filled Excel (.xlsx)
+                                    <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('msme', this)">
+                                </label>
+                                <button class="btn btn-ghost btn-sm" style="border: 1px solid var(--border);" onclick="addMsmeCleanRow()">➕ Add Row</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -2166,11 +2170,15 @@
                         <div class="card-header-flex">
                             <div>
                                 <h3>📑 2. Section 43B Statutory Liabilities Working (Clause 26)</h3>
-                                <p>Enter statutory dues incurred in FY 2025-26. Dues unpaid on or before Section 139(1) due date (31-Oct-2026) are automatically disallowed.</p>
+                                <p>Download the template, fill GST/PF/Bonus statutory dues, and upload to auto-populate and calculate 43B unpaid disallowances.</p>
                             </div>
-                            <div style="display:flex; gap:6px;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('sec43b')">📥 Download 43B Template (.xlsx)</button>
-                                <button class="btn btn-primary btn-sm" onclick="addSec43bCleanRow()">➕ Add Statutory Due</button>
+                            <div style="display:flex; gap:6px; flex-wrap: wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('sec43b')">📥 Download Template (.xlsx)</button>
+                                <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
+                                    📤 Upload Filled Excel (.xlsx)
+                                    <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('sec43b', this)">
+                                </label>
+                                <button class="btn btn-ghost btn-sm" style="border: 1px solid var(--border);" onclick="addSec43bCleanRow()">➕ Add Row</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -2210,9 +2218,15 @@
                         <div class="card-header-flex">
                             <div>
                                 <h3>👥 3. Employee PF & ESI Contribution Compliance (Clause 20(b))</h3>
-                                <p>Enter monthly employee share deducted and actual payment date. Late deposits past the 15th are strictly disallowed u/s 36(1)(va).</p>
+                                <p>Download the 12-month salary & challan deposit template, and upload to verify against the 15th statutory due date automatically.</p>
                             </div>
-                            <button class="btn btn-outline btn-sm" onclick="downloadTemplate('pf')">📥 Download PF/ESI Template (.xlsx)</button>
+                            <div style="display:flex; gap:6px; flex-wrap: wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('pf')">📥 Download Template (.xlsx)</button>
+                                <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
+                                    📤 Upload Filled Excel (.xlsx)
+                                    <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('pfesi', this)">
+                                </label>
+                            </div>
                         </div>
                         <div class="table-responsive">
                             <table>
@@ -2239,9 +2253,15 @@
                         <div class="card-header-flex">
                             <div>
                                 <h3>📉 4. Income-tax Depreciation Working (Clause 18 / Section 32)</h3>
-                                <p>Enter opening WDV, additions >=180 days and <180 days. Auto-calculates allowable IT block depreciation.</p>
+                                <p>Download the asset block schedule template, fill opening WDV & additions, and upload to compute block depreciation instantly.</p>
                             </div>
-                            <button class="btn btn-outline btn-sm" onclick="downloadTemplate('far')">📥 Download FAR Template (.xlsx)</button>
+                            <div style="display:flex; gap:6px; flex-wrap: wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('far')">📥 Download Template (.xlsx)</button>
+                                <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
+                                    📤 Upload Filled Excel (.xlsx)
+                                    <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('depreciation', this)">
+                                </label>
+                            </div>
                         </div>
                         <div class="table-responsive">
                             <table>
@@ -2268,11 +2288,15 @@
                         <div class="card-header-flex">
                             <div>
                                 <h3>⚖️ 5. TDS Compliance & 40(a)(ia) Reconciliation (Clauses 21(b) & 34)</h3>
-                                <p>Enter P&L expense ledgers and TDS deduction/deposit details. Auto-calculates 30% resident disallowance u/s 40(a)(ia) for non-deduction or late deposit.</p>
+                                <p>Download the TDS reconciliation template, and upload to auto-populate ledgers and calculate 30% / 100% disallowances u/s 40(a)(ia).</p>
                             </div>
-                            <div style="display:flex; gap:6px;">
-                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('tds')">📥 Download TDS Template (.xlsx)</button>
-                                <button class="btn btn-primary btn-sm" onclick="addTdsCleanRow()">➕ Add TDS Ledger Row</button>
+                            <div style="display:flex; gap:6px; flex-wrap: wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadTemplate('tds')">📥 Download Template (.xlsx)</button>
+                                <label class="btn btn-primary btn-sm" style="cursor: pointer; margin-bottom: 0;">
+                                    📤 Upload Filled Excel (.xlsx)
+                                    <input type="file" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleWorkingExcelUpload('tds', this)">
+                                </label>
+                                <button class="btn btn-ghost btn-sm" style="border: 1px solid var(--border);" onclick="addTdsCleanRow()">➕ Add Row</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -2314,7 +2338,214 @@
             }
         }
 
-                // ==================== 1. MSME WORKING LOGIC (AUTOMATIC 43B(h) & CLAUSE 22 INTEREST) ====================
+                        // ==================== UNIVERSAL EXCEL UPLOAD & AUTO-FEED ENGINE (SHEETJS) ====================
+        function formatExcelDateVal(val) {
+            if(!val && val !== 0) return "";
+            if(typeof val === 'number') {
+                // Handle Excel numeric serial date format (days since 1899-12-30)
+                const dateObj = new Date(Math.round((val - 25569) * 86400 * 1000));
+                return dateObj.toISOString().split('T')[0];
+            }
+            const str = String(val).trim();
+            if(str.match(/^\d{4}-\d{2}-\d{2}$/)) return str;
+            // Handle DD-MM-YYYY, DD/MM/YYYY, or MM/DD/YYYY
+            const parts = str.split(/[-/.]/);
+            if(parts.length === 3) {
+                if(parts[0].length === 4) return `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
+                if(parts[2].length === 4) return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+            }
+            return str;
+        }
+
+        function cleanExcelNum(val) {
+            if(val === undefined || val === null || val === '') return 0;
+            if(typeof val === 'number') return val;
+            const cleaned = String(val).replace(/[^0-9.-]+/g, '');
+            return Number(cleaned || 0);
+        }
+
+        function handleWorkingExcelUpload(workingType, fileInput) {
+            if(!fileInput.files || !fileInput.files.length) return;
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    if(typeof XLSX === 'undefined') {
+                        alert("Excel parsing library is loading. Please try again in 2 seconds.");
+                        return;
+                    }
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                    if(!rows || rows.length < 2) {
+                        alert("Uploaded Excel sheet appears to be empty or has no data rows.");
+                        return;
+                    }
+
+                    const client = getActiveClient();
+                    let importedCount = 0;
+
+                    if(workingType === 'msme') {
+                        if(!client.data.msme) client.data.msme = [];
+                        // Parse MSME Rows: Skip Header Row 0
+                        const newMsme = [];
+                        for(let i = 1; i < rows.length; i++) {
+                            const r = rows[i];
+                            if(!r || r.length === 0 || (r[0] === undefined && r[7] === undefined)) continue;
+                            
+                            const name = String(r[0] || '').trim();
+                            const cat = String(r[3] || 'Small').trim();
+                            const act = String(r[4] || 'Manufacturer').trim();
+                            const date = formatExcelDateVal(r[6]);
+                            const amt = cleanExcelNum(r[7]);
+                            const term = cleanExcelNum(r[8]) || 45;
+                            const payDate = formatExcelDateVal(r[9]);
+
+                            if(name || amt > 0 || date) {
+                                newMsme.push({
+                                    name: name || `Vendor ${i}`,
+                                    cat: (cat.includes('Micro') ? 'Micro' : (cat.includes('Medium') ? 'Medium' : 'Small')),
+                                    act: (act.includes('Trader') ? 'Trader' : (act.includes('Service') ? 'Service Provider' : 'Manufacturer')),
+                                    date: date,
+                                    amt: amt,
+                                    term: term,
+                                    payDate: payDate
+                                });
+                                importedCount++;
+                            }
+                        }
+                        if(newMsme.length > 0) {
+                            client.data.msme = newMsme;
+                            saveClientsToStorage();
+                            renderMsmeRows();
+                            alert(`✅ Successfully imported ${importedCount} MSME vendor invoices from Excel! All Section 43B(h) disallowances and delay calculations are live.`);
+                        }
+                    } else if(workingType === 'sec43b') {
+                        if(!client.data.sec43b) client.data.sec43b = [];
+                        const newSec43b = [];
+                        for(let i = 1; i < rows.length; i++) {
+                            const r = rows[i];
+                            if(!r || r.length === 0) continue;
+                            const nature = String(r[0] || '').trim();
+                            const head = String(r[1] || 'Taxes / Duty').trim();
+                            const incurred = cleanExcelNum(r[2]);
+                            const dueDate = formatExcelDateVal(r[3]) || '2026-10-31';
+                            const payDate = formatExcelDateVal(r[4]);
+                            const ref = String(r[5] || '').trim();
+                            const paid = cleanExcelNum(r[6]);
+
+                            if(nature || incurred > 0) {
+                                newSec43b.push({
+                                    nature: nature || `Statutory Liability ${i}`,
+                                    head: head,
+                                    incurred: incurred,
+                                    dueDate: dueDate,
+                                    payDate: payDate,
+                                    ref: ref,
+                                    paid: paid
+                                });
+                                importedCount++;
+                            }
+                        }
+                        if(newSec43b.length > 0) {
+                            client.data.sec43b = newSec43b;
+                            saveClientsToStorage();
+                            renderSec43bRows();
+                            alert(`✅ Successfully imported ${importedCount} Section 43B statutory dues from Excel!`);
+                        }
+                    } else if(workingType === 'pfesi') {
+                        if(!client.data.pf) client.data.pf = [];
+                        for(let i = 1; i < rows.length; i++) {
+                            const r = rows[i];
+                            if(!r || r.length === 0) continue;
+                            const month = String(r[0] || '').trim();
+                            const amt = cleanExcelNum(r[2]);
+                            const payDate = formatExcelDateVal(r[5]);
+
+                            const targetMonth = client.data.pf.find(p => p.m.toLowerCase().includes(month.toLowerCase().substring(0, 3)));
+                            if(targetMonth) {
+                                if(amt > 0) targetMonth.amt = amt;
+                                if(payDate) targetMonth.payDate = payDate;
+                                importedCount++;
+                            }
+                        }
+                        saveClientsToStorage();
+                        renderPfRows();
+                        alert(`✅ Successfully imported ${importedCount} PF/ESI monthly records from Excel!`);
+                    } else if(workingType === 'depreciation') {
+                        if(!client.data.dep) client.data.dep = [];
+                        for(let i = 1; i < rows.length; i++) {
+                            const r = rows[i];
+                            if(!r || r.length === 0) continue;
+                            const blockName = String(r[0] || '').trim();
+                            const op = cleanExcelNum(r[2]);
+                            const a180 = cleanExcelNum(r[3]);
+                            const aHalf = cleanExcelNum(r[4]);
+                            const del = cleanExcelNum(r[5]);
+
+                            const targetBlock = client.data.dep.find(b => b.name.toLowerCase().includes(blockName.toLowerCase().substring(0, 4)));
+                            if(targetBlock) {
+                                targetBlock.op = op;
+                                targetBlock.a180 = a180;
+                                targetBlock.aHalf = aHalf;
+                                targetBlock.del = del;
+                                importedCount++;
+                            }
+                        }
+                        saveClientsToStorage();
+                        renderDepRows();
+                        alert(`✅ Successfully imported Fixed Asset FAR schedule from Excel!`);
+                    } else if(workingType === 'tds') {
+                        if(!client.data.tds) client.data.tds = [];
+                        const newTds = [];
+                        for(let i = 1; i < rows.length; i++) {
+                            const r = rows[i];
+                            if(!r || r.length === 0) continue;
+                            const sec = String(r[0] || '194J').trim();
+                            const head = String(r[1] || '').trim();
+                            const exp = cleanExcelNum(r[2]);
+                            const base = cleanExcelNum(r[3]);
+                            const rate = String(r[4] || '10%').trim();
+                            const ded = cleanExcelNum(r[5]);
+                            const dep = cleanExcelNum(r[6]);
+                            const payDate = formatExcelDateVal(r[7]);
+                            const status = String(r[8] || 'No Default').trim();
+
+                            if(head || exp > 0) {
+                                newTds.push({
+                                    sec: sec,
+                                    head: head || `TDS Ledger ${i}`,
+                                    exp: exp,
+                                    base: base || exp,
+                                    rate: rate,
+                                    ded: ded,
+                                    dep: dep,
+                                    payDate: payDate,
+                                    status: status.includes('Not') ? (status.includes('Deposited') ? 'TDS Deducted but Not Deposited' : 'TDS Not Deducted') : 'No Default'
+                                });
+                                importedCount++;
+                            }
+                        }
+                        if(newTds.length > 0) {
+                            client.data.tds = newTds;
+                            saveClientsToStorage();
+                            renderTdsRows();
+                            alert(`✅ Successfully imported ${importedCount} TDS ledgers from Excel!`);
+                        }
+                    }
+                    fileInput.value = ''; // Reset input
+                } catch(err) {
+                    alert("Error parsing Excel file: " + err.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // ==================== 1. MSME WORKING LOGIC (AUTOMATIC 43B(h) & CLAUSE 22 INTEREST) ====================
         function calculateMsmeRowValues(item) {
             const amt = Number(item.amt || 0);
             let delay = 0, dis = 0, interest = 0;
