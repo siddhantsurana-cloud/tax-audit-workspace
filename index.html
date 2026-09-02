@@ -437,7 +437,7 @@
             background: var(--input-bg);
             color: var(--text-main);
             outline: none;
-            transition: all 0.2s;
+            transition: border-color 0.2s;
         }
         .form-control:focus { background: #FFFFFF; border-color: var(--input-focus-border); box-shadow: 0 0 0 2px rgba(27, 54, 93, 0.1); }
         .form-control:disabled {
@@ -2111,7 +2111,6 @@
 
         function loadWorking(name) {
             const container = document.getElementById('activeWorkingContainer');
-            const client = getActiveClient();
 
             if(name === 'msme') {
                 container.innerHTML = `
@@ -2119,7 +2118,7 @@
                         <div class="card-header-flex">
                             <div>
                                 <h3>⏳ 1. MSME Section 43B(h) Compliance Working (Clause 22)</h3>
-                                <p>Enter vendor invoices. Auto-calculates statutory 15/45-day delay, excludes wholesale/retail traders, and computes 43B(h) disallowance.</p>
+                                <p>Enter vendor invoices. Auto-calculates statutory 15/45-day delay, excludes wholesale/retail traders, and computes 43B(h) disallowance without losing focus.</p>
                             </div>
                             <div style="display:flex; gap:6px;">
                                 <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Download MSME Template (.xlsx)</button>
@@ -2311,14 +2310,75 @@
             }
         }
 
-        // 1. MSME Working Implementation with Robust Date Parsing & Reactive Handlers
+        // ==================== 1. MSME WORKING LOGIC (ZERO FOCUS LOSS) ====================
+        function calculateMsmeRowValues(item) {
+            const amt = Number(item.amt || 0);
+            let delay = 0, dis = 0;
+
+            if(item.date) {
+                const d1 = new Date(item.date);
+                const term = Math.min(Number(item.term || 45), 45);
+                const due = new Date(d1.getTime() + (term * 86400000));
+                const fyEnd = new Date("2026-03-31");
+
+                if(item.payDate) {
+                    const d2 = new Date(item.payDate);
+                    if(d2 > due) {
+                        delay = Math.round((d2 - due) / 86400000);
+                        if(d2 > fyEnd && item.cat !== "Medium" && item.act !== "Trader") {
+                            dis = amt;
+                        }
+                    }
+                } else {
+                    if(fyEnd > due) {
+                        delay = Math.round((fyEnd - due) / 86400000);
+                        if(item.cat !== "Medium" && item.act !== "Trader") {
+                            dis = amt;
+                        }
+                    }
+                }
+            }
+            return { delay, dis, amt };
+        }
+
         function updateMsmeField(idx, field, val) {
             const client = getActiveClient();
             if(!client.data.msme) client.data.msme = [];
             if(!client.data.msme[idx]) return;
+
             client.data.msme[idx][field] = (field === 'amt' || field === 'term') ? Number(val || 0) : val;
             saveClientsToStorage();
-            renderMsmeRows();
+
+            // Targeted in-place DOM update without re-rendering tbody (preserves keyboard cursor focus)
+            const item = client.data.msme[idx];
+            const { delay, dis } = calculateMsmeRowValues(item);
+
+            const delayEl = document.getElementById(`msme_delay_${idx}`);
+            const disEl = document.getElementById(`msme_dis_${idx}`);
+            if(delayEl) {
+                delayEl.innerText = `${delay} Days`;
+                delayEl.style.color = delay > 0 ? 'var(--danger)' : 'var(--success)';
+            }
+            if(disEl) {
+                disEl.innerText = `Rs ${dis.toLocaleString('en-IN')}`;
+                disEl.style.color = dis > 0 ? 'var(--danger)' : 'var(--success)';
+            }
+
+            // Recalculate Totals
+            let tAmt = 0, tDis = 0;
+            client.data.msme.forEach(m => {
+                const res = calculateMsmeRowValues(m);
+                tAmt += res.amt;
+                tDis += res.dis;
+            });
+
+            const totAmtEl = document.getElementById('msmeTotAmt');
+            const totDisEl = document.getElementById('msmeTotDis');
+            const ovDisEl = document.getElementById('ovMsmeDis');
+            if(totAmtEl) totAmtEl.innerText = "Rs " + tAmt.toLocaleString('en-IN');
+            if(totDisEl) totDisEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            if(ovDisEl) ovDisEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
         }
 
         function deleteMsmeRow(idx) {
@@ -2340,40 +2400,13 @@
             if(!client.data.msme) client.data.msme = [];
 
             client.data.msme.forEach((item, idx) => {
-                const amt = Number(item.amt || 0);
+                const { delay, dis, amt } = calculateMsmeRowValues(item);
                 tAmt += amt;
-                let delay = 0, dis = 0;
-
-                if(item.date) {
-                    const d1 = new Date(item.date);
-                    const term = Math.min(Number(item.term || 45), 45);
-                    const due = new Date(d1.getTime() + (term * 86400000));
-                    const fyEnd = new Date("2026-03-31");
-
-                    if(item.payDate) {
-                        const d2 = new Date(item.payDate);
-                        if(d2 > due) {
-                            delay = Math.round((d2 - due) / 86400000);
-                            // If paid after FY end (after 31-March-2026), it is disallowed u/s 43B(h) in FY 2025-26
-                            if(d2 > fyEnd && item.cat !== "Medium" && item.act !== "Trader") {
-                                dis = amt;
-                            }
-                        }
-                    } else {
-                        // Unpaid as on date
-                        if(fyEnd > due) {
-                            delay = Math.round((fyEnd - due) / 86400000);
-                            if(item.cat !== "Medium" && item.act !== "Trader") {
-                                dis = amt;
-                            }
-                        }
-                    }
-                }
                 tDis += dis;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><input type="text" class="form-control" value="${item.name || ''}" placeholder="Vendor Name" onchange="updateMsmeField(${idx}, 'name', this.value)"></td>
+                    <td><input type="text" class="form-control" value="${item.name || ''}" placeholder="Vendor Name" oninput="updateMsmeField(${idx}, 'name', this.value)"></td>
                     <td>
                         <select class="form-select" onchange="updateMsmeField(${idx}, 'cat', this.value)">
                             <option value="Micro" ${item.cat === 'Micro' ? 'selected' : ''}>Micro</option>
@@ -2389,11 +2422,11 @@
                         </select>
                     </td>
                     <td><input type="date" class="form-control" value="${item.date || ''}" onchange="updateMsmeField(${idx}, 'date', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" oninput="updateMsmeField(${idx}, 'amt', this.value)" onchange="updateMsmeField(${idx}, 'amt', this.value)"></td>
-                    <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" oninput="updateMsmeField(${idx}, 'term', this.value)" onchange="updateMsmeField(${idx}, 'term', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt !== undefined && item.amt !== null ? item.amt : ''}" placeholder="0" oninput="updateMsmeField(${idx}, 'amt', this.value)"></td>
+                    <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" oninput="updateMsmeField(${idx}, 'term', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateMsmeField(${idx}, 'payDate', this.value)"></td>
-                    <td style="text-align: center; font-weight: 700; color: ${delay > 0 ? 'var(--danger)' : 'var(--success)'};">${delay} Days</td>
-                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td id="msme_delay_${idx}" style="text-align: center; font-weight: 700; color: ${delay > 0 ? 'var(--danger)' : 'var(--success)'};">${delay} Days</td>
+                    <td id="msme_dis_${idx}" style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
                     <td><button class="btn btn-outline btn-sm" onclick="deleteMsmeRow(${idx})">🗑️</button></td>
                 `;
                 tbody.appendChild(tr);
@@ -2413,14 +2446,54 @@
             renderMsmeRows();
         }
 
-        // 2. Section 43B Working Implementation
+        // ==================== 2. SECTION 43B WORKING LOGIC (ZERO FOCUS LOSS) ====================
+        function calculateSec43bRowValues(item) {
+            const incurred = Number(item.incurred || 0);
+            const paid = Number(item.paid || 0);
+            let dis = 0;
+
+            if(incurred > 0) {
+                if(!item.payDate || item.payDate > (item.dueDate || '2026-10-31')) {
+                    dis = Math.max(0, incurred - paid);
+                }
+            }
+            return { incurred, paid, dis };
+        }
+
         function updateSec43bField(idx, field, val) {
             const client = getActiveClient();
             if(!client.data.sec43b) client.data.sec43b = [];
             if(!client.data.sec43b[idx]) return;
+
             client.data.sec43b[idx][field] = (field === 'incurred' || field === 'paid') ? Number(val || 0) : val;
             saveClientsToStorage();
-            renderSec43bRows();
+
+            const item = client.data.sec43b[idx];
+            const { dis } = calculateSec43bRowValues(item);
+
+            const disEl = document.getElementById(`sec43b_dis_${idx}`);
+            if(disEl) {
+                disEl.innerText = `Rs ${dis.toLocaleString('en-IN')}`;
+                disEl.style.color = dis > 0 ? 'var(--danger)' : 'var(--success)';
+            }
+
+            let tIncurred = 0, tPaid = 0, tDis = 0;
+            client.data.sec43b.forEach(r => {
+                const res = calculateSec43bRowValues(r);
+                tIncurred += res.incurred;
+                tPaid += res.paid;
+                tDis += res.dis;
+            });
+
+            const totIncEl = document.getElementById('sec43bTotIncurred');
+            const totPaidEl = document.getElementById('sec43bTotPaid');
+            const totDisEl = document.getElementById('sec43bTotDis');
+            const ovDisEl = document.getElementById('ov43bDis');
+            if(totIncEl) totIncEl.innerText = "Rs " + tIncurred.toLocaleString('en-IN');
+            if(totPaidEl) totPaidEl.innerText = "Rs " + tPaid.toLocaleString('en-IN');
+            if(totDisEl) totDisEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            if(ovDisEl) ovDisEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
         }
 
         function deleteSec43bRow(idx) {
@@ -2452,22 +2525,14 @@
             }
 
             client.data.sec43b.forEach((item, idx) => {
-                const incurred = Number(item.incurred || 0);
-                const paid = Number(item.paid || 0);
+                const { incurred, paid, dis } = calculateSec43bRowValues(item);
                 tIncurred += incurred;
                 tPaid += paid;
-                let dis = 0;
-
-                if(incurred > 0) {
-                    if(!item.payDate || item.payDate > item.dueDate) {
-                        dis = Math.max(0, incurred - paid);
-                    }
-                }
                 tDis += dis;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><input type="text" class="form-control" value="${item.nature || ''}" placeholder="Liability Description" onchange="updateSec43bField(${idx}, 'nature', this.value)"></td>
+                    <td><input type="text" class="form-control" value="${item.nature || ''}" placeholder="Liability Description" oninput="updateSec43bField(${idx}, 'nature', this.value)"></td>
                     <td>
                         <select class="form-select" onchange="updateSec43bField(${idx}, 'head', this.value)">
                             <option value="Taxes / Duty" ${item.head === 'Taxes / Duty' ? 'selected' : ''}>Taxes / Duty / Cess</option>
@@ -2478,12 +2543,12 @@
                             <option value="Railway Payable" ${item.head === 'Railway Payable' ? 'selected' : ''}>Railway Asset Usage</option>
                         </select>
                     </td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.incurred || ''}" placeholder="0" oninput="updateSec43bField(${idx}, 'incurred', this.value)" onchange="updateSec43bField(${idx}, 'incurred', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.incurred !== undefined && item.incurred !== null ? item.incurred : ''}" placeholder="0" oninput="updateSec43bField(${idx}, 'incurred', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.dueDate || '2026-10-31'}" onchange="updateSec43bField(${idx}, 'dueDate', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateSec43bField(${idx}, 'payDate', this.value)"></td>
-                    <td><input type="text" class="form-control" value="${item.ref || ''}" placeholder="Challan / BSR No." onchange="updateSec43bField(${idx}, 'ref', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.paid || ''}" placeholder="0" oninput="updateSec43bField(${idx}, 'paid', this.value)" onchange="updateSec43bField(${idx}, 'paid', this.value)"></td>
-                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td><input type="text" class="form-control" value="${item.ref || ''}" placeholder="Challan / BSR No." oninput="updateSec43bField(${idx}, 'ref', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.paid !== undefined && item.paid !== null ? item.paid : ''}" placeholder="0" oninput="updateSec43bField(${idx}, 'paid', this.value)"></td>
+                    <td id="sec43b_dis_${idx}" style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
                     <td><button class="btn btn-outline btn-sm" onclick="deleteSec43bRow(${idx})">🗑️</button></td>
                 `;
                 tbody.appendChild(tr);
@@ -2504,14 +2569,51 @@
             renderSec43bRows();
         }
 
-        // 3. PF / ESI Logic
+        // ==================== 3. PF / ESI LOGIC (ZERO FOCUS LOSS) ====================
+        function calculatePfRowValues(item) {
+            let statusHtml = '<span class="badge badge-gray">Enter Date</span>';
+            let dis = 0;
+            const amt = Number(item.amt || 0);
+
+            if(item.payDate) {
+                if(item.payDate <= item.due) {
+                    statusHtml = '<span class="badge badge-green">IN TIME</span>';
+                } else {
+                    statusHtml = '<span class="badge badge-red">LATE DEPOSIT</span>';
+                    dis = amt;
+                }
+            }
+            return { statusHtml, dis, amt };
+        }
+
         function updatePfField(idx, field, val) {
             const client = getActiveClient();
             if(!client.data.pf) client.data.pf = [];
             if(!client.data.pf[idx]) return;
+
             client.data.pf[idx][field] = field === 'amt' ? Number(val || 0) : val;
             saveClientsToStorage();
-            renderPfRows();
+
+            const item = client.data.pf[idx];
+            const { statusHtml, dis } = calculatePfRowValues(item);
+
+            const statusEl = document.getElementById(`pf_status_${idx}`);
+            const disEl = document.getElementById(`pf_dis_${idx}`);
+            if(statusEl) statusEl.innerHTML = statusHtml;
+            if(disEl) {
+                disEl.innerText = `Rs ${dis.toLocaleString('en-IN')}`;
+                disEl.style.color = dis > 0 ? 'var(--danger)' : 'var(--success)';
+            }
+
+            let tDis = 0;
+            client.data.pf.forEach(p => {
+                const res = calculatePfRowValues(p);
+                tDis += res.dis;
+            });
+
+            const ovPfEl = document.getElementById('ovPfDis');
+            if(ovPfEl) ovPfEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
         }
 
         const defaultPfMonths = [
@@ -2533,28 +2635,18 @@
             }
 
             client.data.pf.forEach((item, idx) => {
-                let status = '<span class="badge badge-gray">Enter Date</span>';
-                let dis = 0;
-
-                if(item.payDate) {
-                    if(item.payDate <= item.due) {
-                        status = '<span class="badge badge-green">IN TIME</span>';
-                    } else {
-                        status = '<span class="badge badge-red">LATE DEPOSIT</span>';
-                        dis = Number(item.amt || 0);
-                    }
-                }
+                const { statusHtml, dis } = calculatePfRowValues(item);
                 tDis += dis;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${item.m}</strong></td>
                     <td>Provident Fund (EPF)</td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt || ''}" placeholder="0" oninput="updatePfField(${idx}, 'amt', this.value)" onchange="updatePfField(${idx}, 'amt', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.amt !== undefined && item.amt !== null ? item.amt : ''}" placeholder="0" oninput="updatePfField(${idx}, 'amt', this.value)"></td>
                     <td>${item.due}</td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updatePfField(${idx}, 'payDate', this.value)"></td>
-                    <td style="text-align: center;">${status}</td>
-                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td id="pf_status_${idx}" style="text-align: center;">${statusHtml}</td>
+                    <td id="pf_dis_${idx}" style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -2563,14 +2655,32 @@
             recalculateOverview();
         }
 
-        // 4. Depreciation Clean Schedule
+        // ==================== 4. DEPRECIATION LOGIC (ZERO FOCUS LOSS) ====================
+        function calculateDepRowValues(b) {
+            const normalDep = Math.round(((Number(b.op || 0) + Number(b.a180 || 0) - Number(b.del || 0)) * b.rate) + (Number(b.aHalf || 0) * b.rate * 0.5));
+            return Math.max(0, normalDep);
+        }
+
         function updateDepField(idx, field, val) {
             const client = getActiveClient();
             if(!client.data.dep) client.data.dep = [];
             if(!client.data.dep[idx]) return;
+
             client.data.dep[idx][field] = Number(val || 0);
             saveClientsToStorage();
-            renderDepRows();
+
+            const allowable = calculateDepRowValues(client.data.dep[idx]);
+            const allowEl = document.getElementById(`dep_allow_${idx}`);
+            if(allowEl) allowEl.innerText = `Rs ${allowable.toLocaleString('en-IN')}`;
+
+            let tAllow = 0;
+            client.data.dep.forEach(b => {
+                tAllow += calculateDepRowValues(b);
+            });
+
+            const ovDepEl = document.getElementById('ovDepAllow');
+            if(ovDepEl) ovDepEl.innerText = "Rs " + tAllow.toLocaleString('en-IN') + " (Allowable)";
+            recalculateOverview();
         }
 
         const defaultDepBlocks = [
@@ -2592,19 +2702,18 @@
             }
 
             client.data.dep.forEach((b, idx) => {
-                const normalDep = Math.round(((b.op + b.a180 - b.del) * b.rate) + (b.aHalf * b.rate * 0.5));
-                const allowable = Math.max(0, normalDep);
+                const allowable = calculateDepRowValues(b);
                 tAllow += allowable;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${b.name}</strong></td>
                     <td style="text-align: center;">${(b.rate*100).toFixed(0)}%</td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.op || ''}" placeholder="0" oninput="updateDepField(${idx}, 'op', this.value)" onchange="updateDepField(${idx}, 'op', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.a180 || ''}" placeholder="0" oninput="updateDepField(${idx}, 'a180', this.value)" onchange="updateDepField(${idx}, 'a180', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.aHalf || ''}" placeholder="0" oninput="updateDepField(${idx}, 'aHalf', this.value)" onchange="updateDepField(${idx}, 'aHalf', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.del || ''}" placeholder="0" oninput="updateDepField(${idx}, 'del', this.value)" onchange="updateDepField(${idx}, 'del', this.value)"></td>
-                    <td style="text-align: right; font-weight: 700; color: var(--success);">Rs ${allowable.toLocaleString('en-IN')}</td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.op !== undefined && b.op !== null ? b.op : ''}" placeholder="0" oninput="updateDepField(${idx}, 'op', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.a180 !== undefined && b.a180 !== null ? b.a180 : ''}" placeholder="0" oninput="updateDepField(${idx}, 'a180', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.aHalf !== undefined && b.aHalf !== null ? b.aHalf : ''}" placeholder="0" oninput="updateDepField(${idx}, 'aHalf', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${b.del !== undefined && b.del !== null ? b.del : ''}" placeholder="0" oninput="updateDepField(${idx}, 'del', this.value)"></td>
+                    <td id="dep_allow_${idx}" style="text-align: right; font-weight: 700; color: var(--success);">Rs ${allowable.toLocaleString('en-IN')}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -2613,14 +2722,64 @@
             recalculateOverview();
         }
 
-        // 5. TDS Compliance & 40(a)(ia) Working Implementation
+        // ==================== 5. TDS WORKING LOGIC (ZERO FOCUS LOSS) ====================
+        function calculateTdsRowValues(item) {
+            const exp = Number(item.exp || 0);
+            const base = Number(item.base || 0);
+            const ded = Number(item.ded || 0);
+            const dep = Number(item.dep || 0);
+            let dis = 0;
+
+            if(item.status === "TDS Not Deducted" || item.status === "TDS Deducted but Not Deposited") {
+                if(item.sec === "195") {
+                    dis = exp;
+                } else {
+                    dis = Math.round(exp * 0.30);
+                }
+            }
+            return { exp, base, ded, dep, dis };
+        }
+
         function updateTdsField(idx, field, val) {
             const client = getActiveClient();
             if(!client.data.tds) client.data.tds = [];
             if(!client.data.tds[idx]) return;
+
             client.data.tds[idx][field] = (field === 'exp' || field === 'base' || field === 'ded' || field === 'dep') ? Number(val || 0) : val;
             saveClientsToStorage();
-            renderTdsRows();
+
+            const item = client.data.tds[idx];
+            const { dis } = calculateTdsRowValues(item);
+
+            const disEl = document.getElementById(`tds_dis_${idx}`);
+            if(disEl) {
+                disEl.innerText = `Rs ${dis.toLocaleString('en-IN')}`;
+                disEl.style.color = dis > 0 ? 'var(--danger)' : 'var(--success)';
+            }
+
+            let tExp = 0, tBase = 0, tDed = 0, tDep = 0, tDis = 0;
+            client.data.tds.forEach(t => {
+                const res = calculateTdsRowValues(t);
+                tExp += res.exp;
+                tBase += res.base;
+                tDed += res.ded;
+                tDep += res.dep;
+                tDis += res.dis;
+            });
+
+            const totExpEl = document.getElementById('tdsTotExp');
+            const totBaseEl = document.getElementById('tdsTotBase');
+            const totDedEl = document.getElementById('tdsTotDed');
+            const totDepEl = document.getElementById('tdsTotDep');
+            const totDisEl = document.getElementById('tdsTotDis');
+            const ovTdsEl = document.getElementById('ovTdsDis');
+            if(totExpEl) totExpEl.innerText = "Rs " + tExp.toLocaleString('en-IN');
+            if(totBaseEl) totBaseEl.innerText = "Rs " + tBase.toLocaleString('en-IN');
+            if(totDedEl) totDedEl.innerText = "Rs " + tDed.toLocaleString('en-IN');
+            if(totDepEl) totDepEl.innerText = "Rs " + tDep.toLocaleString('en-IN');
+            if(totDisEl) totDisEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            if(ovTdsEl) ovTdsEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            recalculateOverview();
         }
 
         function deleteTdsRow(idx) {
@@ -2652,23 +2811,11 @@
             }
 
             client.data.tds.forEach((item, idx) => {
-                const exp = Number(item.exp || 0);
-                const base = Number(item.base || 0);
-                const ded = Number(item.ded || 0);
-                const dep = Number(item.dep || 0);
+                const { exp, base, ded, dep, dis } = calculateTdsRowValues(item);
                 tExp += exp;
                 tBase += base;
                 tDed += ded;
                 tDep += dep;
-                let dis = 0;
-
-                if(item.status === "TDS Not Deducted" || item.status === "TDS Deducted but Not Deposited") {
-                    if(item.sec === "195") {
-                        dis = exp;
-                    } else {
-                        dis = Math.round(exp * 0.30);
-                    }
-                }
                 tDis += dis;
 
                 const tr = document.createElement('tr');
@@ -2685,12 +2832,12 @@
                             <option value="195" ${item.sec === '195' ? 'selected' : ''}>195 — Non-Resident Payment (100% Dis)</option>
                         </select>
                     </td>
-                    <td><input type="text" class="form-control" value="${item.head || ''}" placeholder="Expense Head in Books" onchange="updateTdsField(${idx}, 'head', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.exp || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'exp', this.value)" onchange="updateTdsField(${idx}, 'exp', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.base || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'base', this.value)" onchange="updateTdsField(${idx}, 'base', this.value)"></td>
-                    <td><input type="text" class="form-control" style="width: 60px; text-align: center;" value="${item.rate || '10%'}" onchange="updateTdsField(${idx}, 'rate', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.ded || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'ded', this.value)" onchange="updateTdsField(${idx}, 'ded', this.value)"></td>
-                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.dep || ''}" placeholder="0" oninput="updateTdsField(${idx}, 'dep', this.value)" onchange="updateTdsField(${idx}, 'dep', this.value)"></td>
+                    <td><input type="text" class="form-control" value="${item.head || ''}" placeholder="Expense Head in Books" oninput="updateTdsField(${idx}, 'head', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.exp !== undefined && item.exp !== null ? item.exp : ''}" placeholder="0" oninput="updateTdsField(${idx}, 'exp', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.base !== undefined && item.base !== null ? item.base : ''}" placeholder="0" oninput="updateTdsField(${idx}, 'base', this.value)"></td>
+                    <td><input type="text" class="form-control" style="width: 60px; text-align: center;" value="${item.rate || '10%'}" oninput="updateTdsField(${idx}, 'rate', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.ded !== undefined && item.ded !== null ? item.ded : ''}" placeholder="0" oninput="updateTdsField(${idx}, 'ded', this.value)"></td>
+                    <td><input type="number" class="form-control" style="text-align: right;" value="${item.dep !== undefined && item.dep !== null ? item.dep : ''}" placeholder="0" oninput="updateTdsField(${idx}, 'dep', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateTdsField(${idx}, 'payDate', this.value)"></td>
                     <td>
                         <select class="form-select" onchange="updateTdsField(${idx}, 'status', this.value)">
@@ -2700,7 +2847,7 @@
                             <option value="Rate Shortfall" ${item.status === 'Rate Shortfall' ? 'selected' : ''}>ℹ️ Rate Shortfall (Interest Only)</option>
                         </select>
                     </td>
-                    <td style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td id="tds_dis_${idx}" style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
                     <td><button class="btn btn-outline btn-sm" onclick="deleteTdsRow(${idx})">🗑️</button></td>
                 `;
                 tbody.appendChild(tr);
@@ -2723,7 +2870,7 @@
             renderTdsRows();
         }
 
-        // ICDS Clean & Reactive Table with Auto-Disable for Not Applicable
+        // ==================== 6. ICDS CENTRE LOGIC (ZERO FOCUS LOSS) ====================
         const icdsStandardsList = [
             { id: "ICDS I", title: "Accounting Policies" },
             { id: "ICDS II", title: "Valuation of Inventories" },
@@ -2737,6 +2884,8 @@
             { id: "ICDS X", title: "Provisions, Contingent Liabilities & Assets" }
         ];
 
+        function getSafeIcdsKey(stdId) { return stdId.replace(/\s+/g, '_'); }
+
         function renderIcdsTable() {
             const client = getActiveClient();
             const tbody = document.getElementById('icdsSummaryTableBody');
@@ -2748,6 +2897,7 @@
 
             icdsStandardsList.forEach(std => {
                 const stdKey = std.id;
+                const safeKey = getSafeIcdsKey(stdKey);
                 const rec = client.data.icds[stdKey] || { status: "Applicable", book: 0, tax: 0 };
                 const isApplicable = rec.status === "Applicable";
 
@@ -2770,12 +2920,12 @@
                         </select>
                     </td>
                     <td>
-                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.book || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} oninput="updateIcdsValue('${stdKey}', 'book', this.value)" onchange="updateIcdsValue('${stdKey}', 'book', this.value)">
+                        <input type="number" id="icds_book_${safeKey}" class="form-control" style="text-align: right;" value="${isApplicable && rec.book !== undefined && rec.book !== null ? rec.book : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} oninput="updateIcdsValue('${stdKey}', 'book', this.value)">
                     </td>
                     <td>
-                        <input type="number" class="form-control" style="text-align: right;" value="${isApplicable ? (rec.tax || '') : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} oninput="updateIcdsValue('${stdKey}', 'tax', this.value)" onchange="updateIcdsValue('${stdKey}', 'tax', this.value)">
+                        <input type="number" id="icds_tax_${safeKey}" class="form-control" style="text-align: right;" value="${isApplicable && rec.tax !== undefined && rec.tax !== null ? rec.tax : ''}" placeholder="${isApplicable ? '0' : 'N/A'}" ${!isApplicable ? 'disabled' : ''} oninput="updateIcdsValue('${stdKey}', 'tax', this.value)">
                     </td>
-                    <td style="text-align: right; font-weight: 700; color: ${isApplicable && netAdj !== 0 ? (netAdj > 0 ? 'var(--danger)' : 'var(--success)') : 'var(--text-muted)'};">
+                    <td id="icds_adj_${safeKey}" style="text-align: right; font-weight: 700; color: ${isApplicable && netAdj !== 0 ? (netAdj > 0 ? 'var(--danger)' : 'var(--success)') : 'var(--text-muted)'};">
                         ${isApplicable ? 'Rs ' + netAdj.toLocaleString('en-IN') : '<span style="color: var(--text-light); font-weight: 400;">— (N/A)</span>'}
                     </td>
                 `;
@@ -2792,12 +2942,25 @@
             if(!client.data.icds) client.data.icds = {};
             if(!client.data.icds[stdKey]) client.data.icds[stdKey] = { status: "Applicable", book: 0, tax: 0 };
             client.data.icds[stdKey].status = newStatus;
+            
+            const safeKey = getSafeIcdsKey(stdKey);
+            const bookEl = document.getElementById(`icds_book_${safeKey}`);
+            const taxEl = document.getElementById(`icds_tax_${safeKey}`);
+            const adjEl = document.getElementById(`icds_adj_${safeKey}`);
+
             if(newStatus === "Not Applicable") {
                 client.data.icds[stdKey].book = 0;
                 client.data.icds[stdKey].tax = 0;
+                if(bookEl) { bookEl.disabled = true; bookEl.value = ''; bookEl.placeholder = 'N/A'; }
+                if(taxEl) { taxEl.disabled = true; taxEl.value = ''; taxEl.placeholder = 'N/A'; }
+                if(adjEl) adjEl.innerHTML = '<span style="color: var(--text-light); font-weight: 400;">— (N/A)</span>';
+            } else {
+                if(bookEl) { bookEl.disabled = false; bookEl.placeholder = '0'; }
+                if(taxEl) { taxEl.disabled = false; taxEl.placeholder = '0'; }
+                if(adjEl) adjEl.innerText = 'Rs 0';
             }
             saveClientsToStorage();
-            renderIcdsTable();
+            recalculateIcdsTotals();
         }
 
         function updateIcdsValue(stdKey, field, val) {
@@ -2806,7 +2969,39 @@
             if(!client.data.icds[stdKey]) client.data.icds[stdKey] = { status: "Applicable", book: 0, tax: 0 };
             client.data.icds[stdKey][field] = Number(val || 0);
             saveClientsToStorage();
-            renderIcdsTable();
+
+            const safeKey = getSafeIcdsKey(stdKey);
+            const rec = client.data.icds[stdKey];
+            const netAdj = Number(rec.tax || 0) - Number(rec.book || 0);
+
+            const adjEl = document.getElementById(`icds_adj_${safeKey}`);
+            if(adjEl) {
+                adjEl.innerText = 'Rs ' + netAdj.toLocaleString('en-IN');
+                adjEl.style.color = netAdj !== 0 ? (netAdj > 0 ? 'var(--danger)' : 'var(--success)') : 'var(--text-muted)';
+            }
+            recalculateIcdsTotals();
+        }
+
+        function recalculateIcdsTotals() {
+            const client = getActiveClient();
+            let tBook = 0, tTax = 0, tNet = 0;
+            icdsStandardsList.forEach(std => {
+                const rec = (client.data.icds && client.data.icds[std.id]) || { status: "Applicable", book: 0, tax: 0 };
+                if(rec.status === "Applicable") {
+                    const b = Number(rec.book || 0);
+                    const t = Number(rec.tax || 0);
+                    tBook += b;
+                    tTax += t;
+                    tNet += (t - b);
+                }
+            });
+
+            const totBookEl = document.getElementById('icdsTotBook');
+            const totTaxEl = document.getElementById('icdsTotTax');
+            const totNetEl = document.getElementById('icdsTotNet');
+            if(totBookEl) totBookEl.innerText = "Rs " + tBook.toLocaleString('en-IN');
+            if(totTaxEl) totTaxEl.innerText = "Rs " + tTax.toLocaleString('en-IN');
+            if(totNetEl) totNetEl.innerText = "Rs " + tNet.toLocaleString('en-IN');
         }
 
         // Master Clause Hub Table
