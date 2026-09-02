@@ -1753,43 +1753,6 @@
     </div>
 
     
-    <!-- Active BRC AI Tax Audit Copilot Assistant -->
-    <div class="ai-copilot-bubble" onclick="toggleAiCopilot()">
-        <div class="ai-copilot-badge"></div>
-        <span style="font-weight: 700; font-size: 0.86rem; letter-spacing: 0.3px;">🤖 Tax Audit Copilot</span>
-    </div>
-
-    <div class="ai-copilot-panel" id="aiCopilotPanel">
-        <div class="ai-copilot-header">
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="ai-copilot-badge"></div>
-                <div>
-                    <strong style="font-size: 0.95rem; display: block;">BRC Tax Audit Assistant</strong>
-                    <span style="font-size: 0.7rem; color: #CBD5E1;">Active AI Agent | ICAI & IT-Act Knowledge</span>
-                </div>
-            </div>
-            <button style="background:none; border:none; color:#FFF; font-size:1.2rem; cursor:pointer;" onclick="toggleAiCopilot()">✕</button>
-        </div>
-        <div class="ai-copilot-messages" id="aiCopilotMessages">
-            <div class="ai-msg agent">
-                👋 <strong>Hello! I am your BRC Tax Audit Copilot.</strong><br>
-                I can help you analyze Form 3CD clauses, calculate Section 43B(h) delay days, check PF/ESI 15th due dates, evaluate ICDS adjustments, or run a live compliance health check on your active workspace numbers.
-            </div>
-        </div>
-        <div class="ai-copilot-quick-pills">
-            <button class="ai-quick-btn" onclick="sendQuickAiQuery('audit_health')">🩺 Health Check</button>
-            <button class="ai-quick-btn" onclick="sendQuickAiQuery('msme_rules')">⏳ MSME 43B(h)</button>
-            <button class="ai-quick-btn" onclick="sendQuickAiQuery('pf_rules')">👥 PF/ESI 15th</button>
-            <button class="ai-quick-btn" onclick="sendQuickAiQuery('tds_rules')">⚖️ TDS 40(a)(ia)</button>
-            <button class="ai-quick-btn" onclick="sendQuickAiQuery('icds_rules')">📊 ICDS Adjustments</button>
-        </div>
-        <div class="ai-copilot-input-row">
-            <input type="text" id="aiUserQueryInput" class="ai-input" placeholder="Ask any Tax Audit or 3CD question..." onkeyup="if(event.key==='Enter') handleAiUserMessage()">
-            <button class="btn btn-primary btn-sm" style="border-radius: 50%; width: 32px; height: 32px; padding: 0;" onclick="handleAiUserMessage()">➤</button>
-        </div>
-    </div>
-
-
     <!-- Footer -->
     <footer>
         <p>© 2026 Bihani Rashmi & Co., Chartered Accountants | BRC Tax Audit Digital Workspace | Direct Tax Engagement Team</p>
