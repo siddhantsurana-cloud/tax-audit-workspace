@@ -2112,13 +2112,13 @@
         function loadWorking(name) {
             const container = document.getElementById('activeWorkingContainer');
 
-            if(name === 'msme') {
+                        if(name === 'msme') {
                 container.innerHTML = `
                     <div class="app-card">
                         <div class="card-header-flex">
                             <div>
                                 <h3>⏳ 1. MSME Section 43B(h) Compliance Working (Clause 22)</h3>
-                                <p>Enter vendor invoices. Auto-calculates statutory 15/45-day delay, excludes wholesale/retail traders, and computes 43B(h) disallowance without losing focus.</p>
+                                <p>Enter vendor invoices. Dues unpaid at year-end or paid in next FY are <strong>100% disallowed u/s 43B(h)</strong>. Delayed payments also compute <strong>Clause 22 MSMED Penal Interest</strong>.</p>
                             </div>
                             <div style="display:flex; gap:6px;">
                                 <button class="btn btn-outline btn-sm" onclick="downloadTemplate('msme')">📥 Download MSME Template (.xlsx)</button>
@@ -2137,17 +2137,21 @@
                                         <th>Agreed Term</th>
                                         <th>Actual Pay Date</th>
                                         <th>Delay Days</th>
+                                        <th>Compliance Status</th>
                                         <th style="text-align: right;">Sec 43B(h) Disallowed</th>
+                                        <th style="text-align: right;">MSMED Sec 16 Interest</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="msmeTbody"></tbody>
                                 <tfoot>
                                     <tr style="font-weight: 800; background: #F1F5F9;">
-                                        <td colspan="4">TOTAL 43B(h) DISALLOWANCE:</td>
+                                        <td colspan="4">TOTAL 43B(h) & CLAUSE 22 SUMMARY:</td>
                                         <td id="msmeTotAmt" style="text-align: right;">Rs 0</td>
                                         <td colspan="3"></td>
+                                        <td></td>
                                         <td id="msmeTotDis" style="text-align: right; color: var(--danger);">Rs 0</td>
+                                        <td id="msmeTotInt" style="text-align: right; color: var(--warning-text);">Rs 0</td>
                                         <td></td>
                                     </tr>
                                 </tfoot>
@@ -2310,35 +2314,65 @@
             }
         }
 
-        // ==================== 1. MSME WORKING LOGIC (ZERO FOCUS LOSS) ====================
+                // ==================== 1. MSME WORKING LOGIC (AUTOMATIC 43B(h) & CLAUSE 22 INTEREST) ====================
         function calculateMsmeRowValues(item) {
             const amt = Number(item.amt || 0);
-            let delay = 0, dis = 0;
+            let delay = 0, dis = 0, interest = 0;
+            let statusHtml = '<span class="badge badge-gray">Enter Dates</span>';
+            const isExempt = (item.cat === "Medium" || item.act === "Trader");
 
             if(item.date) {
-                const d1 = new Date(item.date);
+                const invDate = new Date(item.date);
                 const term = Math.min(Number(item.term || 45), 45);
-                const due = new Date(d1.getTime() + (term * 86400000));
+                const dueDate = new Date(invDate.getTime() + (term * 86400000));
                 const fyEnd = new Date("2026-03-31");
 
                 if(item.payDate) {
-                    const d2 = new Date(item.payDate);
-                    if(d2 > due) {
-                        delay = Math.round((d2 - due) / 86400000);
-                        if(d2 > fyEnd && item.cat !== "Medium" && item.act !== "Trader") {
-                            dis = amt;
+                    const payDate = new Date(item.payDate);
+                    if(payDate <= dueDate) {
+                        statusHtml = '<span class="badge badge-green">✓ Paid in Time</span>';
+                    } else {
+                        delay = Math.round((payDate - dueDate) / 86400000);
+                        // Compound interest u/s 16 MSMED (3x RBI Bank Rate ~ 20.25% p.a.)
+                        interest = Math.round(amt * 0.2025 * (delay / 365.0));
+
+                        if(payDate > fyEnd) {
+                            if(isExempt) {
+                                statusHtml = '<span class="badge badge-gray">🛡️ Exempt (Medium/Trader)</span>';
+                                dis = 0;
+                            } else {
+                                statusHtml = '<span class="badge badge-red">❌ Paid in FY 26-27 (Disallowed)</span>';
+                                dis = amt;
+                            }
+                        } else {
+                            if(isExempt) {
+                                statusHtml = '<span class="badge badge-gray">🛡️ Exempt (Medium/Trader)</span>';
+                            } else {
+                                statusHtml = '<span class="badge badge-amber">⚠️ Paid in FY 25-26 (Interest applies)</span>';
+                            }
+                            dis = 0; // Allowed in current FY as payment was made before 31-March
                         }
                     }
                 } else {
-                    if(fyEnd > due) {
-                        delay = Math.round((fyEnd - due) / 86400000);
-                        if(item.cat !== "Medium" && item.act !== "Trader") {
+                    // Unpaid as of 31-March-2026
+                    if(fyEnd > dueDate) {
+                        delay = Math.round((fyEnd - dueDate) / 86400000);
+                        interest = Math.round(amt * 0.2025 * (delay / 365.0));
+
+                        if(isExempt) {
+                            statusHtml = '<span class="badge badge-gray">🛡️ Exempt (Medium/Trader)</span>';
+                            dis = 0;
+                        } else {
+                            statusHtml = '<span class="badge badge-red">❌ Overdue & Unpaid at 31-Mar (Disallowed)</span>';
                             dis = amt;
                         }
+                    } else {
+                        statusHtml = '<span class="badge badge-blue">⏳ Not Overdue (Due in Next FY)</span>';
+                        dis = 0;
                     }
                 }
             }
-            return { delay, dis, amt };
+            return { delay, dis, interest, amt, statusHtml };
         }
 
         function updateMsmeField(idx, field, val) {
@@ -2349,34 +2383,44 @@
             client.data.msme[idx][field] = (field === 'amt' || field === 'term') ? Number(val || 0) : val;
             saveClientsToStorage();
 
-            // Targeted in-place DOM update without re-rendering tbody (preserves keyboard cursor focus)
             const item = client.data.msme[idx];
-            const { delay, dis } = calculateMsmeRowValues(item);
+            const { delay, dis, interest, statusHtml } = calculateMsmeRowValues(item);
 
             const delayEl = document.getElementById(`msme_delay_${idx}`);
+            const statusEl = document.getElementById(`msme_status_${idx}`);
             const disEl = document.getElementById(`msme_dis_${idx}`);
+            const intEl = document.getElementById(`msme_int_${idx}`);
+
             if(delayEl) {
                 delayEl.innerText = `${delay} Days`;
                 delayEl.style.color = delay > 0 ? 'var(--danger)' : 'var(--success)';
             }
+            if(statusEl) statusEl.innerHTML = statusHtml;
             if(disEl) {
                 disEl.innerText = `Rs ${dis.toLocaleString('en-IN')}`;
                 disEl.style.color = dis > 0 ? 'var(--danger)' : 'var(--success)';
             }
+            if(intEl) {
+                intEl.innerText = `Rs ${interest.toLocaleString('en-IN')}`;
+            }
 
             // Recalculate Totals
-            let tAmt = 0, tDis = 0;
+            let tAmt = 0, tDis = 0, tInt = 0;
             client.data.msme.forEach(m => {
                 const res = calculateMsmeRowValues(m);
                 tAmt += res.amt;
                 tDis += res.dis;
+                tInt += res.interest;
             });
 
             const totAmtEl = document.getElementById('msmeTotAmt');
             const totDisEl = document.getElementById('msmeTotDis');
+            const totIntEl = document.getElementById('msmeTotInt');
             const ovDisEl = document.getElementById('ovMsmeDis');
+
             if(totAmtEl) totAmtEl.innerText = "Rs " + tAmt.toLocaleString('en-IN');
             if(totDisEl) totDisEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
+            if(totIntEl) totIntEl.innerText = "Rs " + tInt.toLocaleString('en-IN');
             if(ovDisEl) ovDisEl.innerText = "Rs " + tDis.toLocaleString('en-IN');
             recalculateOverview();
         }
@@ -2395,14 +2439,15 @@
             const tbody = document.getElementById('msmeTbody');
             if(!tbody) return;
             tbody.innerHTML = '';
-            let tAmt = 0, tDis = 0;
+            let tAmt = 0, tDis = 0, tInt = 0;
 
             if(!client.data.msme) client.data.msme = [];
 
             client.data.msme.forEach((item, idx) => {
-                const { delay, dis, amt } = calculateMsmeRowValues(item);
+                const { delay, dis, interest, amt, statusHtml } = calculateMsmeRowValues(item);
                 tAmt += amt;
                 tDis += dis;
+                tInt += interest;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -2426,7 +2471,9 @@
                     <td><input type="number" class="form-control" style="width: 70px;" value="${item.term || 45}" oninput="updateMsmeField(${idx}, 'term', this.value)"></td>
                     <td><input type="date" class="form-control" value="${item.payDate || ''}" onchange="updateMsmeField(${idx}, 'payDate', this.value)"></td>
                     <td id="msme_delay_${idx}" style="text-align: center; font-weight: 700; color: ${delay > 0 ? 'var(--danger)' : 'var(--success)'};">${delay} Days</td>
+                    <td id="msme_status_${idx}" style="text-align: center;">${statusHtml}</td>
                     <td id="msme_dis_${idx}" style="text-align: right; font-weight: 700; color: ${dis > 0 ? 'var(--danger)' : 'var(--success)'};">Rs ${dis.toLocaleString('en-IN')}</td>
+                    <td id="msme_int_${idx}" style="text-align: right; font-weight: 600; color: var(--warning-text);">Rs ${interest.toLocaleString('en-IN')}</td>
                     <td><button class="btn btn-outline btn-sm" onclick="deleteMsmeRow(${idx})">🗑️</button></td>
                 `;
                 tbody.appendChild(tr);
@@ -2434,6 +2481,8 @@
 
             document.getElementById('msmeTotAmt').innerText = "Rs " + tAmt.toLocaleString('en-IN');
             document.getElementById('msmeTotDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
+            const totIntEl = document.getElementById('msmeTotInt');
+            if(totIntEl) totIntEl.innerText = "Rs " + tInt.toLocaleString('en-IN');
             document.getElementById('ovMsmeDis').innerText = "Rs " + tDis.toLocaleString('en-IN');
             recalculateOverview();
         }
