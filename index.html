@@ -1105,37 +1105,141 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 10: HELP CENTRE ==================== -->
+                <!-- ==================== VIEW 10: HELP CENTRE & PREPARATION GUIDES ==================== -->
         <div id="view-help" class="view-pane">
             <div class="card-header-flex">
                 <div>
-                    <h2>📚 Help Centre & Preparation Guides</h2>
-                    <p>Step-by-step guidance for finance and accounts personnel.</p>
+                    <h2>📚 Help Centre & Statutory Preparation Guides</h2>
+                    <p>Comprehensive standard operating procedures, ICAI Guidance Note standards, and checklists for finance, tax, and accounts teams.</p>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-primary btn-sm" onclick="switchNav('view-initialreq')">📋 Section-Wise Requisitions →</button>
+                    <button class="btn btn-outline btn-sm" onclick="downloadTemplate('full_requisition')">📥 Master Requisition (.xlsx)</button>
                 </div>
             </div>
+
             <div class="grid-12">
+                <!-- Guide 1: MSME 43B(h) -->
                 <div class="col-4">
-                    <div class="app-card">
-                        <h3>⏳ MSME 43B(h) Preparation Guide</h3>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">How to verify Udyam registration and exclude retail/wholesale traders.</p>
-                        <button class="btn btn-outline btn-sm" onclick="alert('Viewing MSME 43B(h) Guide...')">Read Guide →</button>
+                    <div class="app-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span class="badge badge-amber">Clause 22 | Sec 43B(h)</span>
+                                <span class="badge badge-blue">Direct Tax</span>
+                            </div>
+                            <h3 style="color: var(--primary); font-size: 1.05rem; margin-bottom: 6px;">⏳ MSME Section 43B(h) & Clause 22 Guide</h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+                                Complete operational guide on identifying Micro/Small vendors, verifying Udyam registration, applying the 15/45-day credit limits, excluding wholesale/retail traders, and calculating MSMED Section 16/23 compound interest.
+                            </p>
+                        </div>
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">5 Min Read</span>
+                            <button class="btn btn-primary btn-sm" onclick="openGuideModal('guide_msme')">Read Guide →</button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Guide 2: PF/ESI -->
                 <div class="col-4">
-                    <div class="app-card">
-                        <h3>👥 PF/ESI 15th Due Date Guide</h3>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">Supreme Court ruling details and TRRN payment receipt extraction.</p>
-                        <button class="btn btn-outline btn-sm" onclick="alert('Viewing PF/ESI Guide...')">Read Guide →</button>
+                    <div class="app-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span class="badge badge-red">Clause 20(b) | Sec 36(1)(va)</span>
+                                <span class="badge badge-purple">Payroll Tax</span>
+                            </div>
+                            <h3 style="color: var(--primary); font-size: 1.05rem; margin-bottom: 6px;">👥 Employee PF & ESI 15th Due Date Guide</h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+                                Analysis of the landmark Supreme Court ruling in <em>Checkmate Services</em>. Distinguishes Employee share vs Employer share, due date rules, ECR extraction, and permanent disallowance risks.
+                            </p>
+                        </div>
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">4 Min Read</span>
+                            <button class="btn btn-primary btn-sm" onclick="openGuideModal('guide_pf')">Read Guide →</button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Guide 3: Depreciation -->
                 <div class="col-4">
-                    <div class="app-card">
-                        <h3>📉 Depreciation FAR Reconciliation</h3>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 12px 0;">180-day put-to-use splitting and factory log documentation.</p>
-                        <button class="btn btn-outline btn-sm" onclick="alert('Viewing Depreciation Guide...')">Read Guide →</button>
+                    <div class="app-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span class="badge badge-green">Clause 18 | Sec 32</span>
+                                <span class="badge badge-blue">Asset Accounts</span>
+                            </div>
+                            <h3 style="color: var(--primary); font-size: 1.05rem; margin-bottom: 6px;">📉 Income-tax Depreciation & FAR Guide</h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+                                Block-wise depreciation reconciliation, 180-day put-to-use cut-off rules (03-Oct-2025), claiming 20% Additional Depreciation on manufacturing assets, and Fixed Asset Register mapping.
+                            </p>
+                        </div>
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">5 Min Read</span>
+                            <button class="btn btn-primary btn-sm" onclick="openGuideModal('guide_dep')">Read Guide →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guide 4: TDS Compliance -->
+                <div class="col-4">
+                    <div class="app-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span class="badge badge-amber">Clauses 21(b) & 34 | Sec 40(a)</span>
+                                <span class="badge badge-blue">Withholding</span>
+                            </div>
+                            <h3 style="color: var(--primary); font-size: 1.05rem; margin-bottom: 6px;">⚖️ TDS / TCS Compliance & 40(a)(ia) Guide</h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+                                Practical procedure for reconciling P&L expenses with TDS returns (24Q/26Q), avoiding 30% Resident Disallowance u/s 40(a)(ia) and 100% Non-Resident Disallowance u/s 40(a)(i).
+                            </p>
+                        </div>
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">6 Min Read</span>
+                            <button class="btn btn-primary btn-sm" onclick="openGuideModal('guide_tds')">Read Guide →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guide 5: Section 43B -->
+                <div class="col-4">
+                    <div class="app-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span class="badge badge-blue">Clause 26 | Sec 43B</span>
+                                <span class="badge badge-gray">Statutory Dues</span>
+                            </div>
+                            <h3 style="color: var(--primary); font-size: 1.05rem; margin-bottom: 6px;">📑 Section 43B Statutory Liabilities Guide</h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+                                Step-by-step rules on taxes, duties, cesses, bonus, leave encashment, and interest payable to banks. Cut-off timing under Section 139(1) ITR deadline (31-Oct-2026).
+                            </p>
+                        </div>
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">4 Min Read</span>
+                            <button class="btn btn-primary btn-sm" onclick="openGuideModal('guide_sec43b')">Read Guide →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guide 6: ICDS Disclosures -->
+                <div class="col-4">
+                    <div class="app-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span class="badge badge-purple">Clause 13 | ICDS I-X</span>
+                                <span class="badge badge-gray">Accounting Standards</span>
+                            </div>
+                            <h3 style="color: var(--primary); font-size: 1.05rem; margin-bottom: 6px;">📊 ICDS Standards I to X Compliance Guide</h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+                                Comprehensive guide on revenue recognition cut-offs, inventory valuation under Section 145A, forex variations under ICDS VI, and mandatory reporting in Clause 13.
+                            </p>
+                        </div>
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">5 Min Read</span>
+                            <button class="btn btn-primary btn-sm" onclick="openGuideModal('guide_icds')">Read Guide →</button>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 
     </main>
@@ -1328,6 +1432,28 @@
         </div>
     </div>
 
+        <!-- 7. Comprehensive Statutory Guide Reader Modal -->
+    <div class="modal-overlay" id="modalGuideReader">
+        <div class="modal-card" style="max-width: 840px;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="guideModalBadge" class="badge badge-blue">Guide</span>
+                    <h3 id="guideModalTitle" style="font-size: 1.15rem; color: var(--primary); font-weight: 800; margin: 0;">Statutory Preparation Guide</h3>
+                </div>
+                <button class="modal-close-btn" onclick="closeModal('modalGuideReader')">✕</button>
+            </div>
+            <div class="modal-body" id="guideModalContent" style="padding: 1.75rem; line-height: 1.6; font-size: 0.88rem; color: var(--text-main);">
+                <!-- Dynamic Rich Guide Content Injected by JS -->
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn btn-outline" onclick="closeModal('modalGuideReader')">Close Guide</button>
+                <div style="display: flex; gap: 8px;" id="guideModalActions">
+                    <!-- Dynamic action buttons -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <p>© 2026 Bihani Rashmi & Co., Chartered Accountants | BRC Tax Audit Digital Workspace | Direct Tax Engagement Team</p>
@@ -1335,6 +1461,447 @@
 
     <!-- App Engine Script -->
     <script>
+                // ==================== COMPREHENSIVE STATUTORY PREPARATION GUIDES CATALOG ====================
+        const statutoryGuidesCatalog = {
+            guide_msme: {
+                title: "MSME Section 43B(h) & Form 3CD Clause 22 Compliance Guide",
+                clauseBadge: "Clause 22 | Section 43B(h)",
+                workingLink: "msme",
+                template: "msme",
+                content: `
+                    <div style="background: #EFF6FF; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+                        <strong style="color: var(--primary); font-size: 0.95rem;">📌 Executive Summary & Legal Provision:</strong>
+                        <p style="font-size: 0.84rem; color: #1E3A8A; margin-top: 4px;">
+                            Section 43B(h) of the Income-tax Act, 1961 (inserted by Finance Act 2023) mandates that any sum payable by an assessee to a <strong>Micro or Small Enterprise</strong> beyond the time limit specified in Section 15 of the MSMED Act, 2006 shall be allowed as a tax deduction <strong>only in the previous year in which such sum is actually paid</strong>.
+                        </p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">1. Who Qualifies as Micro & Small?</h4>
+                    <table style="margin-bottom: 14px; font-size: 0.82rem;">
+                        <thead>
+                            <tr>
+                                <th>Enterprise Classification</th>
+                                <th>Plant & Machinery / Equipment Investment</th>
+                                <th>Annual Turnover Limit</th>
+                                <th>Section 43B(h) Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Micro Enterprise</strong></td>
+                                <td>Not exceeding Rs 1 Crore</td>
+                                <td>Not exceeding Rs 5 Crore</td>
+                                <td><span class="badge badge-red">COVERED (Disallowance Applies)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Small Enterprise</strong></td>
+                                <td>Not exceeding Rs 10 Crore</td>
+                                <td>Not exceeding Rs 50 Crore</td>
+                                <td><span class="badge badge-red">COVERED (Disallowance Applies)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Medium Enterprise</strong></td>
+                                <td>Not exceeding Rs 50 Crore</td>
+                                <td>Not exceeding Rs 250 Crore</td>
+                                <td><span class="badge badge-green">EXEMPT (No 43B(h) Disallowance)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">2. Important Statutory Exemption for Traders:</h4>
+                    <p style="margin-bottom: 10px;">
+                        As per Ministry of MSME <strong>Office Memorandum No. 5/2(2)/2021-E/P&G/Policy dated 02-07-2021 & 01-09-2021</strong>, wholesale and retail traders registered under Udyam (NIC Codes 45, 46, and 47) are entitled to Udyam registration ONLY for Priority Sector Lending (PSL) purposes. The benefits of Chapter V of the MSMED Act (Sections 15 to 23) <strong>do not extend to Traders</strong>. Consequently, dues payable to Traders are <strong>NOT subject to Section 43B(h) disallowance</strong>.
+                    </p>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">3. Statutory Time Limits (Section 15 of MSMED Act):</h4>
+                    <ul style="margin-left: 20px; margin-bottom: 12px;">
+                        <li><strong>With Written Agreement:</strong> Payment must be made within the agreed period, which <strong>CANNOT exceed 45 days</strong> from the date of acceptance/deemed acceptance of goods or services.</li>
+                        <li><strong>Without Written Agreement:</strong> Payment must be made within <strong>15 days</strong> from the date of delivery/acceptance ("Appointed Day").</li>
+                    </ul>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">4. Tax Disallowance vs Financial Year Cut-Off:</h4>
+                    <ul style="margin-left: 20px; margin-bottom: 12px;">
+                        <li><strong>Paid within the same FY (on or before 31-March-2026):</strong> The deduction is allowed in FY 2025-26 under the plain wording of Section 43B(h). However, delay days must be tracked for Clause 22 interest reporting.</li>
+                        <li><strong>Unpaid as of 31-March-2026 (or paid in FY 2026-27):</strong> <strong>100% of the invoice amount is disallowed</strong> in the tax computation of FY 2025-26 and added back to taxable income. The assessee can claim this deduction in FY 2026-27 when actual payment is made.</li>
+                    </ul>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">5. Clause 22 MSMED Section 16/23 Penal Interest:</h4>
+                    <p style="margin-bottom: 10px;">
+                        Where payment to an MSME supplier is delayed beyond 15/45 days, the buyer is liable to pay <strong>compound interest with monthly rests at 3 times the RBI Bank Rate</strong> (Section 16 MSMED). Under <strong>Section 23 of the MSMED Act</strong>, this penal interest is strictly <strong>inadmissible as a tax deduction</strong> and must be reported under Clause 22 of Form 3CD.
+                    </p>
+
+                    <div style="background: #FFFBEB; border-left: 4px solid var(--warning); padding: 12px 16px; border-radius: 6px; margin-top: 14px;">
+                        <strong style="color: var(--warning-text);">📋 Action Steps for Finance & Accounts Team:</strong>
+                        <ol style="margin-left: 20px; margin-top: 4px; font-size: 0.82rem;">
+                            <li>Obtain active Udyam certificates from all trade creditors as of 31-March-2026.</li>
+                            <li>Extract the Trade Payables Aging Schedule and segregate Micro, Small, Medium, and Traders.</li>
+                            <li>Download the BRC MSME Excel Template, populate invoice dates, amounts, and payment dates, and upload to the Guided Working.</li>
+                        </ol>
+                    </div>
+                `
+            },
+            guide_pf: {
+                title: "Employee PF & ESI 15th Due Date Compliance Guide (Clause 20(b))",
+                clauseBadge: "Clause 20(b) | Section 36(1)(va)",
+                workingLink: "pfesi",
+                template: "pf",
+                content: `
+                    <div style="background: #FEF2F2; border-left: 4px solid var(--danger); padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+                        <strong style="color: var(--danger-text); font-size: 0.95rem;">🚨 Landmark Supreme Court Ruling (Checkmate Services):</strong>
+                        <p style="font-size: 0.84rem; color: #991B1B; margin-top: 4px;">
+                            The Hon'ble Supreme Court of India in <strong>Checkmate Services P. Ltd. vs CIT (2022) 448 ITR 518 (SC)</strong> held that employee contributions to PF and ESI deducted by the employer are held in trust. Under <strong>Section 36(1)(va) r.w.s. 2(24)(x)</strong>, if these sums are not deposited on or before the statutory due date (15th of the following month), they are <strong>PERMANENTLY DISALLOWED</strong> and cannot be claimed even if paid before the ITR deadline.
+                        </p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">1. Employee Share vs Employer Share Comparison:</h4>
+                    <table style="margin-bottom: 14px; font-size: 0.82rem;">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Employee Contribution Share</th>
+                                <th>Employer Contribution Share</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Governing Section</strong></td>
+                                <td>Section 36(1)(va) r.w.s. 2(24)(x)</td>
+                                <td>Section 43B(b) of Income-tax Act</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Statutory Due Date</strong></td>
+                                <td><strong>15th of following month</strong></td>
+                                <td>Due date of filing ITR u/s 139(1) (31-Oct-2026)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Late Deposit Impact</strong></td>
+                                <td><span class="badge badge-red">Permanent Disallowance (No relief)</span></td>
+                                <td><span class="badge badge-green">Allowed if paid on or before 139(1)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Reporting in Form 3CD</strong></td>
+                                <td><strong>Clause 20(b) Table</strong></td>
+                                <td><strong>Clause 26 Table</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">2. Statutory Due Date Calendar for FY 2025-26:</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 0.8rem; margin-bottom: 14px;">
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Apr-2025:</strong> 15-May-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>May-2025:</strong> 15-Jun-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Jun-2025:</strong> 15-Jul-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Jul-2025:</strong> 15-Aug-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Aug-2025:</strong> 15-Sep-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Sep-2025:</strong> 15-Oct-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Oct-2025:</strong> 15-Nov-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Nov-2025:</strong> 15-Dec-2025</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Dec-2025:</strong> 15-Jan-2026</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Jan-2026:</strong> 15-Feb-2026</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Feb-2026:</strong> 15-Mar-2026</div>
+                        <div style="background:#F8FAFC; padding:6px 10px; border:1px solid var(--border); border-radius:4px;"><strong>Mar-2026:</strong> 15-Apr-2026</div>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">3. Grace Period Clarification:</h4>
+                    <p style="margin-bottom: 10px;">
+                        The 5-day grace period under the Employees' Provident Funds Scheme was <strong>withdrawn by EPFO Circular dated 08-Jan-2016</strong>. Consequently, payments made between the 16th and 20th are legally late deposits and subject to disallowance under Section 36(1)(va).
+                    </p>
+
+                    <div style="background: #F0FDF4; border-left: 4px solid var(--success); padding: 12px 16px; border-radius: 6px; margin-top: 14px;">
+                        <strong style="color: var(--success-text);">📁 Documents Required from Payroll Team:</strong>
+                        <ul style="margin-left: 20px; margin-top: 4px; font-size: 0.82rem;">
+                            <li>12 Monthly Electronic Challan cum Return (ECR) receipts for EPF and ESIC.</li>
+                            <li>Payment Confirmation Slips showing the TRRN, Challan Reference, and Bank Debit Timestamp.</li>
+                            <li>Month-wise Salary Register reflecting Employee Contribution deducted vs Employer Contribution accrued.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            guide_dep: {
+                title: "Income-tax Depreciation & Fixed Asset FAR Guide (Clause 18 / Sec 32)",
+                clauseBadge: "Clause 18 | Section 32",
+                workingLink: "depreciation",
+                template: "far",
+                content: `
+                    <div style="background: #EFF6FF; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+                        <strong style="color: var(--primary); font-size: 0.95rem;">📌 Block Depreciation Methodology (Section 32):</strong>
+                        <p style="font-size: 0.84rem; color: #1E3A8A; margin-top: 4px;">
+                            Unlike Companies Act 2013 depreciation (which is asset-specific based on useful lives under Schedule II), Income-tax depreciation is computed strictly on <strong>Blocks of Assets</strong> on a Written Down Value (WDV) basis under Section 32 of the Income-tax Act.
+                        </p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">1. Standard Income-Tax Asset Blocks & Depreciation Rates:</h4>
+                    <table style="margin-bottom: 14px; font-size: 0.82rem;">
+                        <thead>
+                            <tr>
+                                <th>Asset Block Description</th>
+                                <th>Prescribed IT Rate</th>
+                                <th>Typical Assets Included</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Plant & Machinery (General / Mfg)</strong></td>
+                                <td><strong>15%</strong></td>
+                                <td>Factory machinery, material handling equipment, CNC routers, tools</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Computers & Computer Software</strong></td>
+                                <td><strong>40%</strong></td>
+                                <td>Laptops, desktop servers, routers, ERP software licenses</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Furniture & Fixtures</strong></td>
+                                <td><strong>10%</strong></td>
+                                <td>Office desks, ergonomic seating, partitions, interior fixtures</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Office Equipment</strong></td>
+                                <td><strong>15%</strong></td>
+                                <td>Air conditioners, CCTV systems, security systems, printers</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Commercial Buildings / Factory Sheds</strong></td>
+                                <td><strong>10%</strong></td>
+                                <td>Factory sheds, warehouses, office premises</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">2. The 180-Day "Put to Use" Cut-Off Rule:</h4>
+                    <p style="margin-bottom: 10px;">
+                        Under the second proviso to Section 32(1), if an asset is acquired during the previous year and <strong>put to use for less than 180 days</strong> (i.e. put to use on or after <strong>03-October-2025</strong> for FY 2025-26), depreciation is restricted to <strong>50% of the normal block rate</strong> (e.g. 7.5% for Plant & Machinery, 20% for Computers).
+                    </p>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">3. Additional Depreciation u/s 32(1)(iia):</h4>
+                    <ul style="margin-left: 20px; margin-bottom: 12px;">
+                        <li>An assessee engaged in the manufacture or production of any article or thing is entitled to <strong>20% Additional Depreciation</strong> on new plant & machinery acquired and installed.</li>
+                        <li>If the asset is put to use for < 180 days, 10% is allowed in FY 2025-26 and the remaining 10% is allowed in FY 2026-27.</li>
+                        <li><em>Note:</em> Additional Depreciation is NOT available if the entity elects the concessional tax regime under <strong>Section 115BAA</strong>.</li>
+                    </ul>
+
+                    <div style="background: #FFFBEB; border-left: 4px solid var(--warning); padding: 12px 16px; border-radius: 6px; margin-top: 14px;">
+                        <strong style="color: var(--warning-text);">🔍 Audit Verification Checklist:</strong>
+                        <ol style="margin-left: 20px; margin-top: 4px; font-size: 0.82rem;">
+                            <li>Verify purchase invoices, transport LR receipts, and factory commissioning logs for all capital additions > Rs 2.5 Crore.</li>
+                            <li>Reconcile Book Depreciation as per Audited Financial Statements with Allowable IT Depreciation under Clause 18.</li>
+                            <li>Ensure GST Input Tax Credit (ITC) claimed is excluded from the actual cost of capital assets as per Section 43(1).</li>
+                        </ol>
+                    </div>
+                `
+            },
+            guide_tds: {
+                title: "TDS / TCS Compliance & Section 40(a)(ia) Reconciliation Guide (Clauses 21(b) & 34)",
+                clauseBadge: "Clauses 21(b) & 34 | Section 40(a)(ia)",
+                workingLink: "tds",
+                template: "tds",
+                content: `
+                    <div style="background: #EFF6FF; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+                        <strong style="color: var(--primary); font-size: 0.95rem;">📌 Statutory Framework & Disallowance Rules:</strong>
+                        <p style="font-size: 0.84rem; color: #1E3A8A; margin-top: 4px;">
+                            Section 40(a)(ia) of the Income-tax Act provides that if tax deductible at source on any sum payable to a resident is <strong>not deducted</strong> or, after deduction, is <strong>not paid on or before the due date specified in Section 139(1)</strong>, <strong>30% of such expenditure</strong> shall be disallowed in computing business income.
+                        </p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">1. Core TDS Sections & Applicable Rates:</h4>
+                    <table style="margin-bottom: 14px; font-size: 0.82rem;">
+                        <thead>
+                            <tr>
+                                <th>Section</th>
+                                <th>Nature of Payment</th>
+                                <th>Standard TDS Rate</th>
+                                <th>Threshold Limit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>194J</strong></td>
+                                <td>Professional Fees / Director Fees</td>
+                                <td><strong>10%</strong> (2% for Technical Services)</td>
+                                <td>Rs 30,000 / year</td>
+                            </tr>
+                            <tr>
+                                <td><strong>194C</strong></td>
+                                <td>Contractor / Sub-contractor / Freight</td>
+                                <td><strong>1%</strong> (Indiv/HUF) / <strong>2%</strong> (Others)</td>
+                                <td>Rs 30,000 single / Rs 1,00,000 agg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>194I</strong></td>
+                                <td>Rent (Land / Building / Furniture)</td>
+                                <td><strong>10%</strong> (2% for Plant & Machinery)</td>
+                                <td>Rs 2,40,000 / year</td>
+                            </tr>
+                            <tr>
+                                <td><strong>194Q</strong></td>
+                                <td>Purchase of Goods (> Rs 50 Lakhs)</td>
+                                <td><strong>0.1%</strong></td>
+                                <td>Turnover > 10 Cr & Purchases > 50 Lakhs</td>
+                            </tr>
+                            <tr>
+                                <td><strong>195</strong></td>
+                                <td>Payments to Non-Residents (Foreign Remittances)</td>
+                                <td><strong>20% to 40%</strong> + Surcharge / Cess (or DTAA)</td>
+                                <td><span class="badge badge-red">100% Disallowed u/s 40(a)(i) on Default</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">2. Critical Deposit Cut-Off (Section 139(1)):</h4>
+                    <p style="margin-bottom: 10px;">
+                        TDS deducted on all expenses incurred during the previous year FY 2025-26 must be deposited into the government account on or before <strong>31-October-2026</strong> (the ITR deadline u/s 139(1)). If deposited on or before 31-Oct-2026, no disallowance arises in FY 2025-26 (interest u/s 201(1A) at 1.5% per month still applies for late monthly deposit).
+                    </p>
+
+                    <div style="background: #F0FDF4; border-left: 4px solid var(--success); padding: 12px 16px; border-radius: 6px; margin-top: 14px;">
+                        <strong style="color: var(--success-text);">📁 Reconciliation Steps for Form 3CD Clause 34:</strong>
+                        <ol style="margin-left: 20px; margin-top: 4px; font-size: 0.82rem;">
+                            <li>Download quarterly Form 24Q, 26Q, and 27Q filing token acknowledgements.</li>
+                            <li>Extract TRACES Justification Reports for all 4 quarters and reconcile short deduction / late deduction defaults.</li>
+                            <li>Reconcile total P&L debits (Legal, Professional, Rent, Freight, Commission) against TDS deduction base.</li>
+                        </ol>
+                    </div>
+                `
+            },
+            guide_sec43b: {
+                title: "Section 43B Statutory Liabilities & Year-End Cut-Off Guide (Clause 26)",
+                clauseBadge: "Clause 26 | Section 43B",
+                workingLink: "sec43b",
+                template: "sec43b",
+                content: `
+                    <div style="background: #EFF6FF; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+                        <strong style="color: var(--primary); font-size: 0.95rem;">📌 The Actual Payment Principle (Section 43B):</strong>
+                        <p style="font-size: 0.84rem; color: #1E3A8A; margin-top: 4px;">
+                            Section 43B overrides the mercantile system of accounting. Certain specified statutory liabilities and employee dues are deductible <strong>only in the previous year in which they are actually paid</strong>, irrespective of the previous year in which the liability was incurred.
+                        </p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">1. Covered Statutory Liabilities under Section 43B:</h4>
+                    <ul style="margin-left: 20px; margin-bottom: 12px;">
+                        <li><strong>Clause (a):</strong> Any tax, duty, cess, or fee payable under any law (e.g. GST, Customs, Property Tax, Municipal Taxes).</li>
+                        <li><strong>Clause (b):</strong> Employer contribution to Provident Fund, ESI, Gratuity Fund, Superannuation Fund.</li>
+                        <li><strong>Clause (c):</strong> Bonus or Commission payable to employees for services rendered.</li>
+                        <li><strong>Clause (d) & (e):</strong> Interest payable on loans/borrowings from Public Financial Institutions, State Financial Corporations, Scheduled Banks, or NBFCs.</li>
+                        <li><strong>Clause (f):</strong> Provision for Leave Encashment payable to employees.</li>
+                        <li><strong>Clause (g):</strong> Sum payable to Indian Railways for the use of railway assets.</li>
+                    </ul>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">2. The Proviso Relief — Payment before ITR Due Date (31-Oct-2026):</h4>
+                    <p style="margin-bottom: 10px;">
+                        Under the first proviso to Section 43B, if a liability incurred in FY 2025-26 is <strong>actually paid on or before the due date of furnishing the return of income under Section 139(1) (31-Oct-2026)</strong>, the deduction is allowed in FY 2025-26. Any sum unpaid by 31-Oct-2026 is disallowed in FY 2025-26 and allowed only in the year of actual payment.
+                    </p>
+
+                    <div style="background: #FFFBEB; border-left: 4px solid var(--warning); padding: 12px 16px; border-radius: 6px; margin-top: 14px;">
+                        <strong style="color: var(--warning-text);">⚠️ Conversion of Interest into Loan / Share Capital:</strong>
+                        <p style="font-size: 0.82rem; margin-top: 4px;">
+                            Under Explanations 3C, 3CA, and 3D to Section 43B, conversion of unpaid interest into a loan, borrowing, or equity share capital does <strong>NOT constitute actual payment</strong>. Such interest remains disallowed until cash repayment occurs.
+                        </p>
+                    </div>
+                `
+            },
+            guide_icds: {
+                title: "ICDS Standards I to X Compliance & Disclosure Guide (Clause 13)",
+                clauseBadge: "Clause 13 | ICDS I to X",
+                workingLink: "icds",
+                template: "tb",
+                content: `
+                    <div style="background: #EFF6FF; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+                        <strong style="color: var(--primary); font-size: 0.95rem;">📌 Overview of ICDS (Section 145(2)):</strong>
+                        <p style="font-size: 0.84rem; color: #1E3A8A; margin-top: 4px;">
+                            Income Computation and Disclosure Standards (ICDS) are notified under Section 145(2) of the Income-tax Act. All assessees following mercantile accounting and having income under "Profits and Gains of Business or Profession" or "Income from Other Sources" must comply with ICDS I to X.
+                        </p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 14px; margin-bottom: 6px;">1. Summary of All 10 ICDS Standards:</h4>
+                    <table style="margin-bottom: 14px; font-size: 0.82rem;">
+                        <thead>
+                            <tr>
+                                <th>Standard</th>
+                                <th>Subject Matter</th>
+                                <th>Key Tax vs Accounting Adjustment Area</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ICDS I</strong></td>
+                                <td>Accounting Policies</td>
+                                <td>Prudence concept modified; mark-to-market losses not recognized unless specifically permitted.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS II</strong></td>
+                                <td>Valuation of Inventories</td>
+                                <td>Section 145A requires grossing up of taxes, duties, and cesses in inventory valuation.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS III</strong></td>
+                                <td>Construction Contracts</td>
+                                <td>Mandatory Percentage of Completion Method (POCM); retention money included in revenue.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS IV</strong></td>
+                                <td>Revenue Recognition</td>
+                                <td>Service revenue recognized based on POCM; reasonable certainty threshold differs from Ind AS 115.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS V</strong></td>
+                                <td>Tangible Fixed Assets</td>
+                                <td>Machinery spares capitalized only when used in connection with tangible fixed assets.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS VI</strong></td>
+                                <td>Effects of Changes in Forex</td>
+                                <td>Monetary items translated at closing rate; forex variations on foreign borrowings u/s 43A.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS VII</strong></td>
+                                <td>Government Grants</td>
+                                <td>Recognition cannot be postponed beyond actual receipt; tied grants reduced from asset cost.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS VIII</strong></td>
+                                <td>Securities</td>
+                                <td>Valued at lower of actual cost or Net Realizable Value category-wise (not script-wise).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS IX</strong></td>
+                                <td>Borrowing Costs</td>
+                                <td>Capitalization period continues until asset is first put to use; specific vs general borrowings formula.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS X</strong></td>
+                                <td>Provisions, Contingent Liabilities</td>
+                                <td>Provision recognized only when outflow of resources is "reasonably certain" (higher threshold than Ind AS 37 "probable").</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="background: #F0FDF4; border-left: 4px solid var(--success); padding: 12px 16px; border-radius: 6px; margin-top: 14px;">
+                        <strong style="color: var(--success-text);">📋 Form 3CD Clause 13 Disclosures:</strong>
+                        <p style="font-size: 0.82rem; margin-top: 4px;">
+                            Clause 13 requires a specific disclosure of whether any adjustment is required in the profit or loss to comply with the provisions of ICDS, and disclosure of details where ICDS mandates specific disclosure paragraphs.
+                        </p>
+                    </div>
+                `
+            }
+        };
+
+        function openGuideModal(guideKey) {
+            const guide = statutoryGuidesCatalog[guideKey];
+            if(!guide) return;
+
+            document.getElementById('guideModalTitle').innerText = guide.title;
+            document.getElementById('guideModalBadge').innerText = guide.clauseBadge;
+            document.getElementById('guideModalContent').innerHTML = guide.content;
+
+            const actionsContainer = document.getElementById('guideModalActions');
+            actionsContainer.innerHTML = `
+                ${guide.template ? `<button class="btn btn-outline btn-sm" onclick="downloadTemplate('${guide.template}')">📥 Download Template (.xlsx)</button>` : ''}
+                ${guide.workingLink && guide.workingLink !== 'icds' ? `<button class="btn btn-primary btn-sm" onclick="closeModal('modalGuideReader'); openWorking('${guide.workingLink}');">Go to Guided Working →</button>` : ''}
+                ${guide.workingLink === 'icds' ? `<button class="btn btn-primary btn-sm" onclick="closeModal('modalGuideReader'); switchNav('view-icds');">Open ICDS Centre →</button>` : ''}
+            `;
+
+            document.getElementById('modalGuideReader').classList.add('active');
+        }
+
         // Multi-Client Isolated Database with Cloud Sync & OneDrive Support
         const defaultClients = [
             {
