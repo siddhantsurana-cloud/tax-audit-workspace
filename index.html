@@ -690,6 +690,10 @@
     <!-- App Sub-Navigation Bar -->
     <nav class="app-nav-bar">
         <div class="app-nav-inner" id="navTabsContainer">
+                        <button class="nav-item-btn" onclick="switchNav('view-preface', this)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                📖 Preface & User Guide
+            </button>
             <button class="nav-item-btn active" onclick="switchNav('view-overview', this)">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
                 Overview
@@ -735,6 +739,225 @@
 
     <!-- Main Workspace Container -->
     <main class="app-main">
+
+        <!-- ==================== VIEW 1: OVERVIEW ==================== -->
+                <!-- ==================== VIEW: PREFACE & USER GUIDE ==================== -->
+        <div id="view-preface" class="view-pane">
+            <div class="card-header-flex">
+                <div>
+                    <h2>📖 Digital Workspace Preface, Leadership & User Access Guide</h2>
+                    <p>Standard Operating Procedures, System Architecture, Leadership Attribution, and Reader's Manual for Corporate Clients and Audit Professionals.</p>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-primary btn-sm" onclick="switchNav('view-overview')">🚀 Go to Engagement Overview →</button>
+                    <button class="btn btn-outline btn-sm" onclick="downloadTemplate('full_requisition')">📥 Master Requisition (.xlsx)</button>
+                </div>
+            </div>
+
+            <!-- Leadership & Executive Attribution Card -->
+            <div class="app-card" style="border-left: 5px solid var(--primary); background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div>
+                        <span class="badge badge-blue" style="margin-bottom: 6px;">ICAI Compliant Audit Technology</span>
+                        <h3 style="font-size: 1.35rem; color: var(--primary); font-weight: 800; margin-top: 2px;">
+                            Bihani Rashmi & Co., Chartered Accountants
+                        </h3>
+                        <p style="font-size: 0.86rem; color: var(--text-muted); margin-top: 3px;">
+                            Tax Audit & Direct Tax Automation Practice | Form 3CA & Form 3CD Digital Suite
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="badge badge-green" style="font-size: 0.8rem; padding: 4px 10px;">AY 2026-27 (FY 2025-26)</span>
+                    </div>
+                </div>
+
+                <div class="grid-12" style="margin-top: 1rem;">
+                    <!-- Partner Profile 1 -->
+                    <div class="col-6">
+                        <div style="background: #FFFFFF; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-sm); height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                                <div style="width: 46px; height: 46px; border-radius: 10px; background: var(--primary); color: #FFF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+                                    RB
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--primary);">CA Rashmi Bihani, FCA</h4>
+                                    <p style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">Proprietor & Engagement Partner</p>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;">
+                                Fellow Chartered Accountant (FCA) with extensive practice in Statutory Audit, Corporate Taxation, ICAI Peer Review Standards, and Regulatory Assurance under the Companies Act 2013 and Income-tax Act 1961. Spearheads firm-wide audit quality control and statutory reporting integrity.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Partner Profile 2 -->
+                    <div class="col-6">
+                        <div style="background: #FFFFFF; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-sm); height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                                <div style="width: 46px; height: 46px; border-radius: 10px; background: var(--accent); color: #FFF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+                                    SS
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--primary);">CA Siddhant Surana, FCA</h4>
+                                    <p style="font-size: 0.78rem; font-weight: 700; color: var(--accent);">Lead Direct Tax & Audit Automation Specialist</p>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;">
+                                Fellow Chartered Accountant (FCA) specializing in Direct Tax Litigation, Section 43B(h) MSME Frameworks, Cross-Border Taxation, and Next-Generation Audit Automation. Lead Architect and Developer of the BRC Tax Audit Digital Workspace engine.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                    <strong>Design & Development Statement:</strong> Designed and developed in-house by the Direct Tax & Audit Technology Team of <strong>Bihani Rashmi & Co., Chartered Accountants</strong>. Engineered to eliminate fragmented email trails, manual spreadsheet formula errors, and latency between corporate finance departments and statutory audit engagement teams.
+                </div>
+            </div>
+
+            <!-- How to Access & User Guide -->
+            <div class="app-card">
+                <div class="card-header-flex">
+                    <div>
+                        <h3>📘 How to Access & Navigate This Digital Workspace (Step-by-Step Reader's Guide)</h3>
+                        <p>Complete user workflow for Corporate Finance Executives, Accounts Managers, and Audit Staff.</p>
+                    </div>
+                </div>
+
+                <div class="grid-12">
+                    <!-- Step 1 -->
+                    <div class="col-4">
+                        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: var(--primary); color: #FFF; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;">1</span>
+                                <h4 style="font-size: 0.92rem; color: var(--primary); font-weight: 700;">Secure Portal Authentication</h4>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                                Corporate clients access their isolated workspace using their assigned <strong>Company PAN</strong> and confidential <strong>Passcode</strong>, or directly via their encrypted invite URL (<code style="font-size:0.75rem;">?client=id&code=pass</code>) with 100% bank-grade client data isolation.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="col-4">
+                        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: var(--primary); color: #FFF; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;">2</span>
+                                <h4 style="font-size: 0.92rem; color: var(--primary); font-weight: 700;">Section-Wise Requisitions Hub</h4>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                                Navigate to the <strong>Initial Requisition</strong> tab to explore all 11 statutory sections. View exact document requirements, relevant Income Tax Act sections, and mandatory ICAI Guidance Note standards for each clause group.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="col-4">
+                        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: var(--primary); color: #FFF; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;">3</span>
+                                <h4 style="font-size: 0.92rem; color: var(--primary); font-weight: 700;">Smart PBC & OneDrive Sync</h4>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                                In <strong>My Requests</strong>, track 10 PBC cards. Click <strong>"☁️ Upload to OneDrive"</strong> to transmit audited financial statements, ledger dumps, and FAR registers directly to BRC's secure OneDrive repository.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="col-4">
+                        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: var(--accent); color: #FFF; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;">4</span>
+                                <h4 style="font-size: 0.92rem; color: var(--primary); font-weight: 700;">Interactive Guided Workings</h4>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                                Open <strong>Guided Workings</strong> to input data into 5 live working papers: MSME 43B(h), Sec 43B Dues, PF/ESI 15th cut-off, Depreciation blocks, and TDS 40(a)(ia). Statutory disallowances and delay days compute live with zero cursor loss.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="col-4">
+                        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: var(--accent); color: #FFF; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;">5</span>
+                                <h4 style="font-size: 0.92rem; color: var(--primary); font-weight: 700;">Universal Excel Auto-Feed</h4>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                                Click <strong>"📥 Download Template (.xlsx)"</strong> in any working paper to compile data in Excel. Then click <strong>"📤 Upload Filled Excel"</strong> to parse dates, amounts, and vendors and auto-feed the table instantly.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="col-4">
+                        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; height: 100%;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: var(--success); color: #FFF; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;">6</span>
+                                <h4 style="font-size: 0.92rem; color: var(--primary); font-weight: 700;">Zero-Download Cloud Sync</h4>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                                Click <strong>"☁️ Transmit Workings to CA"</strong> to securely push all prepared tables directly to Bihani Rashmi & Co.'s audit repository with zero popup downloads. The CA audit team in any city clicks <strong>"🔄 Fetch Remote Submission"</strong> to pull live data.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brief Features Matrix Card -->
+            <div class="app-card">
+                <div class="card-header-flex">
+                    <div>
+                        <h3>⚡ Core Architectural Features & Capabilities</h3>
+                        <p>High-performance client-side computation engine powered by modern web standards.</p>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Platform Feature</th>
+                                <th>Technical Implementation</th>
+                                <th>Statutory / Practical Benefit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Zero-Focus-Loss Engine</strong></td>
+                                <td>In-Place DOM node updates via targeted element IDs</td>
+                                <td>Enables continuous, smooth typing of multi-digit numbers without cursor jumping out.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Universal SheetJS Integration</strong></td>
+                                <td>Client-side binary ArrayBuffer XLSX parser & builder</td>
+                                <td>Two-way Excel compatibility — download clean blank templates and upload filled sheets.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Supreme Court Checkmate Logic</strong></td>
+                                <td>Automated monthly 15th statutory due date comparison</td>
+                                <td>Strict permanent disallowance of late employee PF/ESI contributions under Sec 36(1)(va).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MSME 43B(h) & MSMED Sec 16 Math</strong></td>
+                                <td>15/45-day calculation + 3x RBI bank rate compound interest</td>
+                                <td>Excludes retail/wholesale traders, disallows unpaid year-end balances, and reports Clause 22 interest.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ICDS I to X Guided Drawers</strong></td>
+                                <td>Contextual guidance expanders on all 10 standards</td>
+                                <td>Explains exact data required for Book vs Tax Valuations and mandatory Clause 13 disclosures.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cross-City Encrypted Sync</strong></td>
+                                <td>Restful KVDB channel & direct Power Automate webhooks</td>
+                                <td>Transmits audit workings remotely between client offices and CA audit teams with zero file downloads.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
         <!-- ==================== VIEW 1: OVERVIEW ==================== -->
         <div id="view-overview" class="view-pane active">
@@ -2135,19 +2358,78 @@
         ];
 
         // Master 61 Clauses Catalog
+                // ==================== MASTER FORM 3CD CLAUSE MATRIX (ALL 44 CLAUSES) ====================
         const masterClauseCatalog = [
-            { id: "1", title: "Name of Assessee", scope: "Verify legal name against PAN & MCA.", action: "Data Compilation Only", pbc: "PAN Card, Certificate of Incorporation" },
-            { id: "2", title: "Address of Assessee", scope: "Verify registered and communicating office.", action: "Data Compilation Only", pbc: "Latest ITR, Utility Bills, GST RCs" },
-            { id: "3", title: "PAN & Aadhaar", scope: "Verify corporate PAN and directors Aadhaar.", action: "Data Compilation Only", pbc: "PAN Card of Company & Directors" },
-            { id: "4", title: "Indirect Tax Registrations", scope: "Disclose all active State GSTINs & IEC.", action: "Document Verification", pbc: "List of all State GST Certificates (REG-06)" },
-            { id: "5", title: "Status of Assessee", scope: "Entity status (Company/Firm/Individual).", action: "Data Compilation Only", pbc: "MOA, AOA, Certificate of Incorporation" },
-            { id: "8", title: "Audit Clause u/s 44AB", scope: "Third Proviso: Accounts audited under Companies Act.", action: "Review & Computation Check", pbc: "Statutory Audit Report by Statutory Auditor" },
-            { id: "18", title: "Income Tax Depreciation", scope: "Block-wise schedule, 180-day put-to-use.", action: "Document Verification", pbc: "Fixed Asset Register (FAR), Addition Invoices" },
-            { id: "20(b)", title: "Employee PF/ESI Contributions", scope: "Month-wise testing: due vs actual deposit.", action: "Document Verification", pbc: "Monthly ECR Challans with timestamps" },
-            { id: "21(b)", title: "TDS Defaults u/s 40(a)(ia)", scope: "30% disallowance on professional fees default.", action: "Review & Computation Check", pbc: "TDS Returns (24Q/26Q), TRACES Defaults" },
-            { id: "22", title: "MSME Overdue u/s 43B(h)", scope: "Disallowance of overdue dues to Micro/Small.", action: "Review & Computation Check", pbc: "Trade Payables Aging, Udyam Certificates" },
-            { id: "26", title: "Section 43B Statutory Dues", scope: "Taxes, PF, Bonus, Leave paid by 139(1).", action: "Document Verification", pbc: "Payment challans for GST, PF, Bonus" },
-            { id: "40", title: "Financial Ratios (GP, NP, Stock)", scope: "GP%, NP%, Stock/Turnover ratios.", action: "Review & Computation Check", pbc: "Audited Financial Statements, Trial Balance" }
+            { id: "1", title: "Name of the Assessee", scope: "Verify legal entity name against Corporate PAN, MCA Certificate of Incorporation, and ITR records.", action: "Data Compilation Only", pbc: "PAN Card, Certificate of Incorporation" },
+            { id: "2", title: "Address of the Assessee", scope: "Verify registered office address, principal place of business, and communicating address.", action: "Data Compilation Only", pbc: "Latest ITR, Utility Bills, GST Registration RCs" },
+            { id: "3", title: "PAN & Aadhaar of Assessee", scope: "Verify corporate Permanent Account Number and Aadhaar numbers of managing directors/partners.", action: "Data Compilation Only", pbc: "PAN Card of Company & Directors" },
+            { id: "4", title: "Indirect Tax Registrations", scope: "Disclose all active State GSTINs (CGST/SGST/IGST), Customs IEC, Excise, Service Tax, and VAT numbers.", action: "Document Verification", pbc: "List of all State GST Registration Certificates (REG-06), IEC" },
+            { id: "5", title: "Status of the Assessee", scope: "Entity legal status (Company, Firm, LLP, Individual, HUF, AOP, BOI).", action: "Data Compilation Only", pbc: "MOA, AOA, Partnership Deed, LLP Agreement" },
+            { id: "6", title: "Previous Year Ended", scope: "Financial Year under audit (01-04-2025 to 31-03-2026 for FY 2025-26).", action: "Data Compilation Only", pbc: "Audited Financial Statements" },
+            { id: "7", title: "Assessment Year", scope: "Relevant Assessment Year (AY 2026-27).", action: "Data Compilation Only", pbc: "Engagement Letter" },
+            { id: "8", title: "Relevant Clause of Section 44AB", scope: "Statutory audit applicability: Clause (a) for turnover > Rs 10 Cr / Third Proviso for accounts audited under Companies Act.", action: "Review & Computation Check", pbc: "Statutory Audit Report under Companies Act 2013" },
+            { id: "8a", title: "Concessional Tax Regime (115BAA/BAC)", scope: "Whether assessee has opted for concessional taxation under Section 115BA, 115BAA (22%), 115BAB, 115BAC, 115BAD, 115BAE.", action: "Document Verification", pbc: "Form 10-IC / Form 10-IEA filing token, Board Resolution" },
+            { id: "9", title: "Partners / Members & Profit Sharing", scope: "In case of Firm/LLP/AOP: Names of all partners/members, profit sharing ratios, and changes during the year.", action: "Document Verification", pbc: "Partnership Deed, Supplementary Deeds, Form 4 LLP" },
+            { id: "10", title: "Nature of Business & Principal Code", scope: "Nature of business or profession and 5-digit Principal Business Activity Code (e.g. 04019 - Mfg furniture).", action: "Data Compilation Only", pbc: "Business Profile, MCA Annual Return MGT-7" },
+            { id: "11", title: "Books of Account Maintained & Location", scope: "Books prescribed u/s 44AA, books actually maintained (SAP/ERP), cloud server locations, and physical addresses.", action: "System Audit & Review", pbc: "ERP Audit Trail Log, Server Hosting Location, Branch Addresses" },
+            { id: "12", title: "Presumptive Taxation (44AD/AE/ADA)", scope: "Whether P&L includes profits computed on presumptive basis under Section 44AD, 44ADA, 44AE, 44BB, 44BBB, etc.", action: "Review & Computation Check", pbc: "Separate presumptive business P&L schedules" },
+            { id: "12a", title: "Presumptive Profit in Financials", scope: "Whether balance sheet and P&L includes profits of presumptive business (if any).", action: "Review & Computation Check", pbc: "Presumptive segment financials" },
+            { id: "13", title: "Method of Accounting & ICDS Compliance", scope: "Method of accounting (Mercantile/Cash), changes in method, and adjustment to P&L for compliance with ICDS I to X.", action: "Computation Check & Disclosures", pbc: "ICDS I to X Evaluation Model, Significant Accounting Policies" },
+            { id: "14", title: "Method of Valuation of Closing Stock", scope: "Valuation of inventory (Cost vs NRV under Ind AS 2) and mandatory adjustment under Section 145A (Inclusive Tax Method).", action: "Computation Check & Stock Audit", pbc: "Inventory Valuation Sheets, Section 145A GST Gross-up Model" },
+            { id: "15", title: "Capital Asset Converted into Stock-in-Trade", scope: "Particulars of capital assets converted into stock-in-trade under Section 45(2) and fair market value on date of conversion.", action: "Valuation Check & Review", pbc: "Conversion Board Resolution, Independent Valuation Report" },
+            { id: "16", title: "Amounts Not Credited to P&L", scope: "Items of income referred to in Section 28 (export incentives, subsidies, perquisites, non-compete fees) not credited to P&L.", action: "GL Scrutiny & Vouching", pbc: "Export Incentive Ledgers, Capital Subsidies, Escrow Statements" },
+            { id: "17", title: "Land / Building Consideration < Stamp Value", scope: "Transfer of land or building for consideration less than stamp duty value (Circle Rate) under Section 43CA / 50C.", action: "Document Verification", pbc: "Registered Sale Deeds, Stamp Valuation Certificates" },
+            { id: "18", title: "Income Tax Depreciation Allowable (Sec 32)", scope: "Block-wise schedule of assets, additions >=180 days & <180 days, deletions, 20% additional dep u/s 32(1)(iia).", action: "Document Verification & FAR Audit", pbc: "Fixed Asset Register (FAR), Addition Invoices > Rs 2.5 Cr, Put-to-use logs" },
+            { id: "19", title: "Special Deductions Allowable (32AC, 35, 35D)", scope: "Deductions for scientific research u/s 35, preliminary share issue expenses u/s 35D (1/5th amortization), 35E.", action: "Document Verification & Computation", pbc: "Form 3CL approval, ROC Fee Receipts, 35D Amortization Schedule" },
+            { id: "20(a)", title: "Bonus / Commission to Employees (36(1)(ii))", scope: "Sums paid to employees as bonus or commission which would not have been payable as profits/dividend.", action: "Document Verification & Payment Check", pbc: "Bonus Computation Register, Form C/D, Bank Payment Proofs" },
+            { id: "20(b)", title: "Employee PF & ESI Contributions (36(1)(va))", scope: "Month-wise testing of employee share deducted vs actual deposit date. Checkmate Services strict 15th disallowance.", action: "Document Verification & Date Matching", pbc: "12 Months Monthly ECR Challans, TRRN Receipts, Salary Registers" },
+            { id: "21(a)", title: "Inadmissible Debits (Penalties, CSR, Capital)", scope: "Disallowance of capital expenditure debited to P&L, personal expenses, CSR expenses (Sec 37(1) Exp 2), fines and penalties.", action: "GL Scrutiny & Vouching", pbc: "CSR Expense GL Dump (Rs 1.85 Cr), Legal Fees, Rates & Taxes Ledger" },
+            { id: "21(b)", title: "TDS Defaults u/s 40(a)(ia) & 40(a)(i)", scope: "30% Resident Disallowance for non-deduction or non-deposit by 139(1); 100% Non-Resident Disallowance u/s 40(a)(i).", action: "Review & Reconciliation", pbc: "Quarterly TDS Returns (24Q/26Q), TRACES Defaults Statements" },
+            { id: "21(c)", title: "Salary Payable Outside India without TDS (40(a)(iii))", scope: "Expenditure by way of salary payable outside India on which tax has not been deducted or paid.", action: "GL Scrutiny", pbc: "Expatriate Salary Ledgers, Form 15CA/CB" },
+            { id: "21(d)", title: "Payment to PF without TDS (40(a)(iv))", scope: "Payment to a provident fund or other fund established for employee benefit where tax has not been deducted.", action: "Document Verification", pbc: "Trust Payment Receipts, TDS Challans" },
+            { id: "21(e)", title: "Tax on Perquisites Borne by Employer (40(a)(v))", scope: "Tax paid by employer on non-monetary perquisites provided to employees u/s 10(10CC).", action: "GL Scrutiny", pbc: "Perquisite Tax Ledgers, Form 16 Part B" },
+            { id: "21(f)", title: "Wealth Tax Paid (40(a)(iib))", scope: "Any sum paid on account of wealth-tax (statutorily inadmissible).", action: "Data Compilation Only", pbc: "Tax Payment Ledgers" },
+            { id: "21(g)", title: "Excessive Payments to Related Persons (40A(2)(b))", scope: "Payment to directors, relatives, and associate entities (Triad Mobility) exceeding arm's length/fair market value.", action: "Benchmarking & Vouching", pbc: "Related Party Register, Form 3CEB Transfer Pricing Study" },
+            { id: "21(h)", title: "Cash Payments > Rs 10,000 (Sec 40A(3)/40A(3A))", scope: "Disallowance of expenditure paid in cash exceeding Rs 10,000 in a day (exceeding Rs 35,000 for transport).", action: "Cash Book Scrutiny & Rule 6DD Check", pbc: "Cash Book Day Book, Petty Cash Vouchers > Rs 10k" },
+            { id: "21(i)", title: "Provision for Gratuity (Sec 40A(7))", scope: "Disallowance of unapproved/unfunded gratuity provision; allowable only for approved gratuity fund or actual payment.", action: "Actuarial Report Review", pbc: "Actuarial Valuation Report, Approved Gratuity Trust Trust Deed" },
+            { id: "21(j)", title: "Payment to Non-Statutory Funds (Sec 40A(9))", scope: "Disallowance of sum paid to set up or contribute to non-statutory trusts, societies, or clubs.", action: "GL Scrutiny", pbc: "Staff Welfare Ledgers, Club Membership Vouchers" },
+            { id: "21(k)", title: "Contingent Liabilities Debited to P&L", scope: "Disallowance of provisions made for contingent liabilities (not crystallized obligations).", action: "Financial Statement Notes Review", pbc: "Notes to Financial Statements (Contingent Liabilities Schedule)" },
+            { id: "22", title: "MSME Overdue u/s 43B(h) & Clause 22 Interest", scope: "100% Disallowance of overdue dues to Micro & Small units unpaid at year-end; Clause 22 MSMED Sec 16 penal interest.", action: "Aging Audit & Formula Verification", pbc: "Trade Payables Aging Schedule, MSME Udyam Certificates, Vendor Master" },
+            { id: "23", title: "Payments to Specified Persons u/s 40A(2)(b)", scope: "Full particulars of all payments made to specified persons / directors / group companies with PAN and nature.", action: "Review & Benchmarking", pbc: "Related Party Transaction Register, MCA Form AOC-2" },
+            { id: "24", title: "Deemed Profits u/s 32AC, 33AB, 33ABA", scope: "Amounts deemed to be profits and gains under special industrial development / reinvestment reserve sections.", action: "Review & Computation", pbc: "Reserve Accounts, Asset Utilization Proofs" },
+            { id: "25", title: "Profit Chargeable to Tax u/s 41 (Remission)", scope: "Balancing charge, recovery of bad debts allowed earlier, or remission/cessation of trade liabilities.", action: "Creditors Confirmation & Write-back Audit", pbc: "Sundry Creditors Write-back Ledgers, Bad Debt Recovery Register" },
+            { id: "26", title: "Section 43B Statutory Liabilities (Taxes, PF, Bonus)", scope: "Taxes, duties, cesses, employer welfare funds, bonus, leave encashment paid on or before 139(1) due date (31-Oct-2026).", action: "Document Verification & Date Matching", pbc: "Payment Challans for GST, Customs, PF, Bonus, Leave Encashment" },
+            { id: "27(a)", title: "GST Input Tax Credit (ITC) Availed & Utilized", scope: "Amount of GST ITC availed, utilized, and closing balance; reconciliation with GSTR-3B and GSTR-2B.", action: "Reconciliation & Returns Verification", pbc: "Annual GSTR-9, GSTR-3B vs 2B Electronic Credit Ledger Dump" },
+            { id: "27(b)", title: "Prior Period Income / Expenditure Debited to P&L", scope: "Particulars of income or expenditure of prior years debited or credited to Profit and Loss Account.", action: "GL Scrutiny & Vouching", pbc: "Prior Period Items Ledger Dump, Notes to Accounts" },
+            { id: "28", title: "Unlisted Shares Received < FMV (56(2)(viia))", scope: "Property being shares of unlisted company received without consideration or for consideration less than Rule 11UA FMV.", action: "Valuation Check", pbc: "Share Purchase Agreements, Merchant Banker Valuation Report" },
+            { id: "29", title: "Fresh Shares Issued > FMV (56(2)(viib) Angel Tax)", scope: "Consideration received for issue of unlisted shares exceeding Fair Market Value under Rule 11UA (DCF/NAV method).", action: "DCF Valuation & PAS-3 Verification", pbc: "Merchant Banker DCF Valuation Report, ROC Form PAS-3, Bank Statement" },
+            { id: "29A", title: "Forfeited Advance on Capital Asset (56(2)(ix))", scope: "Any sum received as advance in negotiations for transfer of capital asset forfeited upon failure of transaction.", action: "GL Scrutiny", pbc: "Forfeited Advance Agreements, Bank Inflow Proofs" },
+            { id: "29B", title: "Income of Nature Referred to in 56(2)(x)", scope: "Any sum of money or movable/immovable property received without consideration or for inadequate consideration.", action: "Review & Valuation Check", pbc: "Gift Deeds, Settlement Agreements, Valuation Reports" },
+            { id: "30", title: "Hundi Borrowings & Repayments (Sec 69D)", scope: "Amount borrowed or repaid on hundi otherwise than through account payee cheque.", action: "Data Compilation Only", pbc: "Bills Payable Registers, Bank Statements" },
+            { id: "30A", title: "Primary & Secondary Transfer Pricing Adjustments", scope: "Primary transfer pricing adjustments exceeding Rs 1 Crore and repatriation of secondary adjustments u/s 92CE.", action: "TP Report Review", pbc: "Form 3CEB, Transfer Pricing Study, Safe Harbour Form 3CEFA" },
+            { id: "30B", title: "Thin Capitalization Interest Limitation (Sec 94B)", scope: "Interest paid to foreign Associated Enterprises exceeding Rs 1 Crore (capped at 30% of EBITDA).", action: "Computation Check & EBITDA Model", pbc: "Foreign Loan Agreements, Form 15CA/CB, EBITDA Calculation" },
+            { id: "30C", title: "General Anti-Avoidance Rules (GAAR) Arrangements", scope: "Whether assessee has entered into an Impermissible Avoidance Arrangement (IAA) as defined u/s 96.", action: "Legal & Structure Review", pbc: "Corporate Restructuring Schemes, Tax Opinions" },
+            { id: "31(a)", title: "Loans / Deposits Accepted > Rs 20,000 (Sec 269SS)", scope: "Loans or deposits taken/accepted in excess of Rs 20,000 via account payee cheque/RTGS/NEFT/ECS.", action: "Banking Channel Verification", pbc: "Unsecured Loans Ledger, Bank Statements, Journal Entry Codes" },
+            { id: "31(b)", title: "Specified Advance Received for Immovable Property", scope: "Specified sum received in relation to transfer of immovable property exceeding Rs 20,000 u/s 269SS.", action: "Document Verification", pbc: "Property Sale Agreements, Bank Statements" },
+            { id: "31(ba)", title: "Cash Receipts Aggregate > Rs 2 Lakh (Sec 269ST)", scope: "Receipt of amount exceeding Rs 2 Lakh in aggregate from a person in a day otherwise than banking channel.", action: "Receipts Audit", pbc: "Customer Ledger Dump, Bank Deposit Slips" },
+            { id: "31(bb)", title: "Cash Receipts Single Transaction > Rs 2 Lakh", scope: "Receipt of amount exceeding Rs 2 Lakh in respect of a single transaction otherwise than banking channel.", action: "Sales Invoice Scrutiny", pbc: "Sales Register, Invoice-wise Receipt Ledgers" },
+            { id: "31(bc)", title: "Cash Receipts Event / Occasion > Rs 2 Lakh", scope: "Receipt of amount exceeding Rs 2 Lakh relating to one event or occasion otherwise than banking channel.", action: "Event Accounts Scrutiny", pbc: "Event Sponsorship & Promotion Accounts" },
+            { id: "31(bd)", title: "Cash Payments Aggregate > Rs 2 Lakh (Sec 269ST)", scope: "Payment of amount exceeding Rs 2 Lakh in aggregate to a person in a day otherwise than banking channel.", action: "Payments Audit", pbc: "Vendor Ledger Dump, Bank Payment Vouchers" },
+            { id: "31(c)", title: "Repayment of Loan / Deposit > Rs 20,000 (Sec 269T)", scope: "Repayment of loan, deposit, or specified advance exceeding Rs 20,000 via account payee banking channels.", action: "Banking Channel Verification", pbc: "Loan Repayment Schedules, Bank Advice, Confirmation Letters" },
+            { id: "32(a)", title: "Brought Forward Losses & Unabsorbed Depreciation", scope: "Details of business loss, unabsorbed depreciation, speculation loss, and expiry periods (Section 72 / 32(2)).", action: "Assessment History & ITR Audit", pbc: "Historical ITR-6 Acknowledgements (AY 18-19 to AY 25-26), Assessment Orders" },
+            { id: "32(b)", title: "Change in Shareholding Continuity (Section 79)", scope: "Whether change in shareholding of unlisted company exceeds 49% resulting in loss carry forward lapse.", action: "Shareholding Continuity Audit", pbc: "Annual Return MGT-7, Share Register, 51% Voting Power Schedule" },
+            { id: "33", title: "Chapter VI-A Deductions (80-IA, 80-JJAA, 80M)", scope: "Deductions claimed under Chapter VI-A (e.g. 80-JJAA for new employee employment, 80M for inter-corporate dividend).", action: "Computation Check & Audit Forms", pbc: "Form 10DA / Form 10DAA, Employee Addition Register for 80-JJAA" },
+            { id: "34(a)", title: "TDS / TCS Compliance Summary Table", scope: "Comprehensive section-wise breakup of total expense, base subject to TDS, deducted, and deposited.", action: "Reconciliation & Returns Verification", pbc: "TDS Reconciliation Model, Form 24Q/26Q/27Q Returns" },
+            { id: "34(b)", title: "TDS / TCS Returns Filing Tokens & Late Fees", scope: "Token numbers, filing dates, and late filing fee u/s 234E for quarterly withholding tax returns.", action: "Filing Acknowledgment Verification", pbc: "TRACES Token Receipts, Late Fee Payment Challans" },
+            { id: "34(c)", title: "Interest Payable u/s 201(1A) / 206C(7)", scope: "Interest payable for delay in deduction (1% p.m.) or delay in deposit (1.5% p.m.) of TDS/TCS.", action: "Computation Check & TRACES Audit", pbc: "TRACES Defaults Statement, Interest Payment Challans" },
+            { id: "35(a)", title: "Quantitative Inventory Details (Manufacturing)", scope: "Raw materials, finished goods, scrap generated, opening stock, purchases, consumption, sales, closing stock, and yield %.", action: "Stock Audit & Production Reconcile", pbc: "ERP Material Balance Report, Bill of Materials (BOM), Yield Sheets" },
+            { id: "35(b)", title: "Quantitative Inventory Details (Trading)", scope: "Opening stock, purchases, sales, and closing stock in units of measure for trading entities.", action: "Stock Audit", pbc: "Trading Stock Ledger Dump, Physical Verification Sheets" },
+            { id: "36A", title: "Deemed Dividend Received u/s 2(22)(e)", scope: "Any loan or advance received from a closely held company in which the assessee holds > 10% voting power.", action: "Review & Shareholding Check", pbc: "Inter-Corporate Deposit Ledgers, Shareholding Patterns" },
+            { id: "40", title: "Financial & Accounting Ratios (GP, NP, Stock)", scope: "Gross Profit %, Net Profit %, Stock-in-Trade to Turnover %, and Material Consumed to Finished Goods % with previous year comparative.", action: "Ratio Analysis & Variance Check", pbc: "Audited Financial Statements, Comparative Financial Summary" },
+            { id: "41", title: "Demands Raised / Refunds Issued under Other Tax Laws", scope: "Particulars of demand raised or refund issued under GST, Customs, Central Excise, Service Tax, and VAT.", action: "Document Verification", pbc: "GST Show Cause Notices (DRC-01), Order-in-Original (DRC-07), Refund Orders" },
+            { id: "42", title: "Statement of Financial Transactions (SFT) Form 61/61A", scope: "Whether assessee is required to furnish Statement of Financial Transactions (SFT) in Form 61, 61A, 61B.", action: "SFT Filing Verification", pbc: "SFT Acknowledgement Tokens, Form 61A Copy" },
+            { id: "43", title: "Country-by-Country Report (CbCR u/s 286)", scope: "Whether parent entity / constituent entity of international group is required to furnish Form 3CEAD.", action: "International Tax Review", pbc: "Form 3CEAD / Form 3CEAC filing acknowledgement" },
+            { id: "44", title: "GST Expenditure Breakup (Clause 44 Table)", scope: "Total expenditure breakup: Exempt goods/services, Composition taxpayers, Registered entities, and Unregistered entities.", action: "P&L GST Ledger Reconciliation", pbc: "P&L GL Dump mapped with Supplier GSTINs, GSTR-9 Reconciliation" }
         ];
 
                 function showAuthGate() {
