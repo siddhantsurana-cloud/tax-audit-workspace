@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>BRC Tax Audit Digital Workspace | Bihani Rashmi & Co.</title>
     <!-- SheetJS for Client-Side Dynamic Excel (.xlsx) Generation -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -507,41 +510,19 @@
             top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             z-index: 9999;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             padding: 2rem;
         }
-
-        .auth-card {
-            background: #FFFFFF;
-            border-radius: var(--radius-xl);
-            max-width: 440px;
-            width: 100%;
-            padding: 2.5rem 2rem;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .secure-auth-overlay.active {
+            display: flex !important;
+        }
+        .secure-auth-overlay:not(.active) {
+            display: none !important;
+            pointer-events: none !important;
         }
 
-        .auth-logo {
-            width: 52px; height: 52px; border-radius: 12px; background: var(--primary);
-            color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 800; margin: 0 auto 1rem auto;
-        }
-
-        .auth-input {
-            width: 100%; padding: 11px 14px; font-size: 0.95rem; border: 1.5px solid var(--border);
-            border-radius: var(--radius-md); margin-top: 5px; outline: none; transition: all 0.2s;
-        }
-        .auth-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.12); }
-
-        .auth-tab-row { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
-        .auth-tab-btn {
-            flex: 1; padding: 8px; background: transparent; border: none; font-size: 0.85rem; font-weight: 700;
-            color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
-        }
-        .auth-tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
-
-        /* Modal Overlay */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -553,7 +534,14 @@
             z-index: 2000;
             padding: 1.5rem;
         }
-        .modal-overlay.active { display: flex; animation: modalFadeIn 0.2s ease-out; }
+        .modal-overlay.active {
+            display: flex !important;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        .modal-overlay:not(.active) {
+            display: none !important;
+            pointer-events: none !important;
+        }
 
         @keyframes modalFadeIn {
             from { opacity: 0; transform: scale(0.98); }
@@ -1248,7 +1236,6 @@
                     </div>
                 </div>
             </div>
-        </div>
         </div>
 
     </main>
@@ -2163,16 +2150,33 @@
             { id: "40", title: "Financial Ratios (GP, NP, Stock)", scope: "GP%, NP%, Stock/Turnover ratios.", action: "Review & Computation Check", pbc: "Audited Financial Statements, Trial Balance" }
         ];
 
+                function showAuthGate() {
+            const gate = document.getElementById('authGate');
+            if(gate) {
+                gate.classList.add('active');
+                gate.style.display = 'flex';
+            }
+        }
+
+        function hideAuthGate() {
+            const gate = document.getElementById('authGate');
+            if(gate) {
+                gate.classList.remove('active');
+                gate.style.display = 'none';
+            }
+        }
+
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const tokenClient = urlParams.get('client');
             const tokenCode = urlParams.get('code');
 
             if(tokenClient && tokenCode) {
-                const target = clientsList.find(c => c.id === tokenClient && c.passcode.toUpperCase() === tokenCode.toUpperCase());
+                const target = clientsList.find(c => c.id.toLowerCase() === tokenClient.toLowerCase() && c.passcode.toUpperCase() === tokenCode.toUpperCase());
                 if(target) {
                     activeClientId = target.id;
                     currentSessionRole = 'client';
+                    hideAuthGate();
                     initClientWorkspace();
                     return;
                 }
@@ -2180,9 +2184,6 @@
 
             showAuthGate();
         };
-
-        function showAuthGate() { document.getElementById('authGate').style.display = 'flex'; }
-        function hideAuthGate() { document.getElementById('authGate').style.display = 'none'; }
 
         function switchAuthTab(type) {
             document.getElementById('tabBtnClientAuth').classList.toggle('active', type === 'client');
