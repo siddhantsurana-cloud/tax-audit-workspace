@@ -2845,14 +2845,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${defaultIcdsList.map(ic => {
-                                        const rec = (client.data.icds && client.data.icds[ic.name]) || { status: 'Applicable', book: 0, tax: 0 };
+                                    ${icdsStandardsDetailedList.map(ic => {
+                                        const rec = (client.data.icds && client.data.icds[ic.id]) || { status: 'Applicable', book: 0, tax: 0 };
                                         const b = Number(rec.book || 0);
                                         const t = Number(rec.tax || 0);
                                         const diff = (t - b);
                                         return `
                                             <tr>
-                                                <td><strong>${ic.name}</strong> — ${ic.title}</td>
+                                                <td><strong>${ic.id}</strong> — ${ic.title}</td>
                                                 <td><span class="badge ${rec.status === 'Applicable' ? 'badge-green' : 'badge-gray'}">${rec.status}</span></td>
                                                 <td style="text-align: right;">Rs ${b.toLocaleString('en-IN')}</td>
                                                 <td style="text-align: right;">Rs ${t.toLocaleString('en-IN')}</td>
@@ -3572,17 +3572,345 @@
         ];
 
         // 10 Master Requisitions for PBC
+                // ==================== 30 STANDARDIZED TAX AUDIT REQUISITIONS (SECTIONS A, B, C, D) ====================
         const pbcMasterRequirements = [
-            { req: 1, title: "Signed Audited Financial Statements with Notes", dept: "Finance & Accounts", clause: "All", template: "financials" },
-            { req: 2, title: "Annual Trial Balance mapped with Financials", dept: "Finance & Accounts", clause: "All", template: "tb" },
-            { req: 3, title: "Fixed Asset Register (FAR) with Put-to-Use Proof", dept: "Asset Management", clause: "18", template: "far" },
-            { req: 4, title: "MSME Vendor Master with Udyam Certificates & Aging", dept: "Accounts Payable", clause: "22 / 43B(h)", template: "msme" },
-            { req: 5, title: "Monthly PF & ESI Challans with ECR Confirmation", dept: "HR & Payroll", clause: "20(b)", template: "pf" },
-            { req: 6, title: "Quarterly TDS Returns (24Q/26Q) & TRACES Defaults", dept: "Taxation", clause: "21(b), 34", template: "tds" },
-            { req: 7, title: "GSTR-1, GSTR-3B & GSTR-2B ITC Reconciliation", dept: "Indirect Tax", clause: "4, 27, 44", template: "gst" },
-            { req: 8, title: "Related Party Register & Form 3CEB TP Study", dept: "Finance & Accounts", clause: "23", template: "rpt" },
-            { req: 9, title: "Rule 11UA Valuation Report for Fresh Share Issue", dept: "Finance & Accounts", clause: "28-29", template: "valuation" },
-            { req: 10, title: "Inventory Valuation Policy & Physical Stock Sheets", dept: "Supply Chain", clause: "14, 35", template: "stock" }
+            // Category A: Financial Information & General Ledger
+            {
+                req: "REQ-A1",
+                cat: "A. Financial Information & General Ledger",
+                catCode: "cat_a",
+                title: "Editable Excel version of Trial Balance",
+                clause: "Clauses 11, 13 & Final Accounts",
+                due: "15-Aug-2026",
+                desc: "Final grouping-level Trial Balance for FY 2025-26 in editable Excel format with mapping to Schedule III Financials.",
+                format: "Excel (.xlsx)",
+                template: "tb_template"
+            },
+            {
+                req: "REQ-A2",
+                cat: "A. Financial Information & General Ledger",
+                catCode: "cat_a",
+                title: "Complete General Ledger (GL) / Account Ledgers",
+                clause: "Clause 11 (ERP Dump)",
+                due: "15-Aug-2026",
+                desc: "Detailed transaction-level General Ledger dump for all P&L and Balance Sheet accounts for the period 01-Apr-2025 to 31-Mar-2026.",
+                format: "ERP Export / Excel",
+                template: "gl_dump"
+            },
+            {
+                req: "REQ-A3",
+                cat: "A. Financial Information & General Ledger",
+                catCode: "cat_a",
+                title: "Chart of Accounts / Account Master",
+                clause: "Clause 11",
+                due: "15-Aug-2026",
+                desc: "Complete Chart of Accounts with account codes, parent account hierarchies, and cost center mappings.",
+                format: "Excel / PDF",
+                template: "coa_master"
+            },
+            {
+                req: "REQ-A4",
+                cat: "A. Financial Information & General Ledger",
+                catCode: "cat_a",
+                title: "Previous Year Audited Financials & Tax Audit Report",
+                clause: "Clauses 6, 7 & 32(a)",
+                due: "10-Aug-2026",
+                desc: "Signed copy of FY 2024-25 Audited Financial Statements, Form 3CA/3CD Tax Audit Report, and historical working papers.",
+                format: "Signed PDF",
+                template: "prior_tax_audit"
+            },
+            {
+                req: "REQ-A5",
+                cat: "A. Financial Information & General Ledger",
+                catCode: "cat_a",
+                title: "Accounting Policy Changes & Significant Adjustments",
+                clause: "Clause 13 (ICDS)",
+                due: "20-Aug-2026",
+                desc: "Management note explaining any changes in accounting policies, depreciation methods, revenue recognition, or significant prior period adjustments.",
+                format: "Word / PDF Note",
+                template: "policy_changes"
+            },
+
+            // Category B: Statutory Compliance & Reconciliations
+            {
+                req: "REQ-B1",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "TDS Returns with Workings & Reconciliations",
+                clause: "Clauses 21(b) & 34",
+                due: "25-Aug-2026",
+                desc: "Filed quarterly TDS returns (Form 24Q, 26Q, 27Q) with provisional tokens, TRACES justification reports, and GL expense reconciliations.",
+                format: "Excel & Filing Tokens",
+                template: "tds"
+            },
+            {
+                req: "REQ-B2",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "Statutory GL Ledgers (TDS, GST, PF, ESI, P-Tax)",
+                clause: "Clauses 20(b), 26 & 34",
+                due: "20-Aug-2026",
+                desc: "Monthly account ledgers for all statutory withholding taxes, indirect taxes, employee welfare funds, and professional tax accounts.",
+                format: "Excel GL Export",
+                template: "statutory_ledgers"
+            },
+            {
+                req: "REQ-B3",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "PF, ESI & Professional Tax Returns and Challans",
+                clause: "Clause 20(b)",
+                due: "20-Aug-2026",
+                desc: "12 months Electronic Challan-cum-Returns (ECR), payment challans, TRRN receipts, and salary reconciliation sheets for PF, ESI, and P-Tax.",
+                format: "PDF Challans & Excel",
+                template: "pf"
+            },
+            {
+                req: "REQ-B4",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "GST Returns with Workings & Reconciliations",
+                clause: "Clauses 4 & 27(a)",
+                due: "25-Aug-2026",
+                desc: "Monthly GSTR-1, GSTR-3B filed returns, annual GSTR-9/9C (if applicable), and electronic cash/credit ledger summary statements.",
+                format: "PDF & Excel Summary",
+                template: "gst_returns"
+            },
+            {
+                req: "REQ-B5",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "Expense-wise GST Reconciliation (Clause 44 Table)",
+                clause: "Clause 44",
+                due: "28-Aug-2026",
+                desc: "Complete breakup of total P&L expenditure into: exempt supplies, composition scheme, registered entities, and unregistered entities.",
+                format: "Excel Model (.xlsx)",
+                template: "clause_44_model"
+            },
+            {
+                req: "REQ-B6",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "Reconciliation of GST Turnover with Books of Account",
+                clause: "Clauses 4 & 40",
+                due: "25-Aug-2026",
+                desc: "Comprehensive reconciliation between revenue in Audited P&L vs aggregate taxable turnover declared across all State GSTINs.",
+                format: "Excel Reconciliation",
+                template: "turnover_reconciliation"
+            },
+            {
+                req: "REQ-B7",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "GST ITC / GSTR-2B Reconciliation Schedule",
+                clause: "Clause 27(a)",
+                due: "25-Aug-2026",
+                desc: "Annual GSTR-2B vs purchase ledger ITC reconciliation report with aging of unmatched credits and reversal schedules u/s 16(2)(c).",
+                format: "Excel (.xlsx)",
+                template: "itc_2b_reconciliation"
+            },
+            {
+                req: "REQ-B8",
+                cat: "B. Statutory Compliance & Reconciliations",
+                catCode: "cat_b",
+                title: "Year-End Statutory Dues Outstanding & Payment Proofs",
+                clause: "Clause 26 (Sec 43B)",
+                due: "30-Aug-2026",
+                desc: "Schedule of all statutory liabilities outstanding as on 31-March-2026 with payment challans for payments made on or before 31-Oct-2026.",
+                format: "Excel Schedule & Challans",
+                template: "sec43b"
+            },
+
+            // Category C: Tax Audit Specific Information
+            {
+                req: "REQ-C1",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Income-tax Depreciation Workings (Section 32)",
+                clause: "Clause 18",
+                due: "20-Aug-2026",
+                desc: "Block-wise depreciation computation under Section 32 with additions >= 180 days, additions < 180 days, and additional depreciation claims.",
+                format: "Excel Model (.xlsx)",
+                template: "far"
+            },
+            {
+                req: "REQ-C2",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Fixed Asset Register (FAR) with Additions & Deletions",
+                clause: "Clause 18",
+                due: "20-Aug-2026",
+                desc: "Detailed Fixed Asset Register showing asset descriptions, purchase dates, put-to-use dates, capitalization vouchers, and deletion proofs.",
+                format: "Excel FAR (.xlsx)",
+                template: "far"
+            },
+            {
+                req: "REQ-C3",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Loans, Advances, Deposits & Specified Payments",
+                clause: "Clauses 31(a), (b), (c)",
+                due: "25-Aug-2026",
+                desc: "Particulars of loans/deposits accepted or repaid exceeding Rs 20,000 u/s 269SS/269T with banking mode, PAN, and address of parties.",
+                format: "Excel Schedule",
+                template: "loans_advances"
+            },
+            {
+                req: "REQ-C4",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Interest Expenditure, Borrowings & Bank Loan Statements",
+                clause: "Clauses 26 & 30B",
+                due: "22-Aug-2026",
+                desc: "Sanction letters, bank loan statements, interest calculation schedules, and Thin Capitalization (Sec 94B) 30% EBITDA evaluation.",
+                format: "PDF Sanctions & Excel",
+                template: "interest_borrowings"
+            },
+            {
+                req: "REQ-C5",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Expenses Liable for TDS & TDS Returns Reconciliation",
+                clause: "Clause 21(b) / 34",
+                due: "25-Aug-2026",
+                desc: "Detailed ledger-wise mapping of contractual, rent, professional, and commission expenses with Section 40(a)(ia) disallowance analysis.",
+                format: "Excel (.xlsx)",
+                template: "tds"
+            },
+            {
+                req: "REQ-C6",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Section 43B Payments & Subsequent Settlement Details",
+                clause: "Clause 26",
+                due: "30-Aug-2026",
+                desc: "Item-wise schedule of employer welfare, bonus, leave encashment, and interest dues paid on or before 139(1) due date (31-Oct-2026).",
+                format: "Excel Working",
+                template: "sec43b"
+            },
+            {
+                req: "REQ-C7",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Provisions & Outstanding Expenses at Year-End",
+                clause: "Clauses 21(k) & 40A(7)",
+                due: "22-Aug-2026",
+                desc: "Breakup of outstanding expenses, provisions for expenses, contingent liabilities, and unapproved gratuity provisions.",
+                format: "Excel Schedule",
+                template: "provisions_schedule"
+            },
+            {
+                req: "REQ-C8",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Cash Payments (>Rs 10k) & Cash Receipts (>Rs 2L)",
+                clause: "Clauses 21(h) & 31(ba)-(bd)",
+                due: "25-Aug-2026",
+                desc: "Cash book daybook scrutiny for payments exceeding Rs 10,000 (Sec 40A(3)) and receipts/payments exceeding Rs 2 Lakh (Sec 269ST).",
+                format: "Excel Daybook Dump",
+                template: "cash_transactions"
+            },
+            {
+                req: "REQ-C9",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Related-Party Transactions (Sec 40A(2)(b)) & Ledgers",
+                clause: "Clause 23",
+                due: "25-Aug-2026",
+                desc: "Full particulars of all payments made to specified persons / directors / group entities with PAN, nature of service, and market valuation proof.",
+                format: "Excel Schedule & Agreements",
+                template: "related_parties"
+            },
+            {
+                req: "REQ-C10",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Donations, CSR Expenditure & Political Contributions",
+                clause: "Clause 21(a) (Sec 37(1))",
+                due: "20-Aug-2026",
+                desc: "GL dumps, 80G donation receipts, CSR project expenditure proofs, and Section 37(1) Explanation 2 disallowance schedule.",
+                format: "Excel & Receipts",
+                template: "csr_donations"
+            },
+            {
+                req: "REQ-C11",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "Penalties, Fines & Other Non-Business Expenses",
+                clause: "Clause 21(a)",
+                due: "20-Aug-2026",
+                desc: "Particulars of any penalties, fines, compounding fees, or damages paid under Income Tax, GST, MCA, FEMA, or other statutory authorities.",
+                format: "Excel & Challans",
+                template: "penalties_fines"
+            },
+            {
+                req: "REQ-C12",
+                cat: "C. Tax Audit Specific Information",
+                catCode: "cat_c",
+                title: "MSME Section 43B(h) Dues & Clause 22 Penal Interest",
+                clause: "Clause 22 / 43B(h)",
+                due: "28-Aug-2026",
+                desc: "Vendor-wise trade payables aging, Udyam registration certificates, 15/45-day delay computation, and Section 16 MSMED interest schedule.",
+                format: "Excel Model (.xlsx)",
+                template: "msme"
+            },
+
+            // Category D: Other Relevant Information
+            {
+                req: "REQ-D1",
+                cat: "D. Other Relevant Information",
+                catCode: "cat_d",
+                title: "Contingent Liabilities, Commitments & Guarantees",
+                clause: "Clause 21(k) & Notes",
+                due: "28-Aug-2026",
+                desc: "Corporate guarantees given, bank guarantees outstanding, litigations in progress, and notes to accounts on contingent liabilities.",
+                format: "Management Letter / PDF",
+                template: "contingent_liabilities"
+            },
+            {
+                req: "REQ-D2",
+                cat: "D. Other Relevant Information",
+                catCode: "cat_d",
+                title: "New Loans, Investments & Major Capital Transactions",
+                clause: "Clauses 18, 28, 29 & 31",
+                due: "25-Aug-2026",
+                desc: "Share subscription agreements, valuation reports under Rule 11UA (Angel Tax / Sec 56(2)(viib)), and investment schedules.",
+                format: "Valuation Reports & Agreements",
+                template: "capital_transactions"
+            },
+            {
+                req: "REQ-D3",
+                cat: "D. Other Relevant Information",
+                catCode: "cat_d",
+                title: "Corporate Restructuring, Merger & Acquisitions",
+                clause: "Clauses 30C, 32(b) & Notes",
+                due: "25-Aug-2026",
+                desc: "NCLT orders, business transfer agreements, slump sale agreements, and Section 79 shareholding continuity schedules.",
+                format: "Legal Orders & Agreements",
+                template: "restructuring_docs"
+            },
+            {
+                req: "REQ-D4",
+                cat: "D. Other Relevant Information",
+                catCode: "cat_d",
+                title: "Notices, Scrutiny Assessments & Tax Orders",
+                clause: "Clause 41",
+                due: "20-Aug-2026",
+                desc: "Copies of all assessment orders, scrutiny notices (u/s 143(2)/148), GST demand notices (DRC-01/07), and tax appeal filings during the year.",
+                format: "PDF Notices & Orders",
+                template: "tax_notices"
+            },
+            {
+                req: "REQ-D5",
+                cat: "D. Other Relevant Information",
+                catCode: "cat_d",
+                title: "Management Tax Workings & Reconciliation Schedules",
+                clause: "All Form 3CD Clauses",
+                due: "30-Aug-2026",
+                desc: "Any other tax computation models, deferred tax schedules, advance tax challans, or specific management representations.",
+                format: "Excel / PDF Workings",
+                template: "full_requisition"
+            }
         ];
 
         // Master 61 Clauses Catalog
@@ -3789,8 +4117,23 @@
             updateInvitationText(client);
         }
 
-        function getActiveClient() {
-            return clientsList.find(c => c.id === activeClientId) || clientsList[0];
+                function getActiveClient() {
+            let client = clientsList.find(c => c.id === activeClientId) || clientsList[0];
+            if(!client) {
+                client = defaultClients[0];
+                clientsList = [client];
+            }
+            if(!client.data || typeof client.data !== 'object') client.data = {};
+            if(!Array.isArray(client.data.msme)) client.data.msme = [];
+            if(!Array.isArray(client.data.sec43b)) client.data.sec43b = [];
+            if(!Array.isArray(client.data.pf)) client.data.pf = [];
+            if(!Array.isArray(client.data.dep)) client.data.dep = [];
+            if(!Array.isArray(client.data.tds)) client.data.tds = [];
+            if(!client.data.icds || typeof client.data.icds !== 'object') client.data.icds = {};
+            if(!client.data.pbcStatus || typeof client.data.pbcStatus !== 'object') client.data.pbcStatus = {};
+            if(!client.data.pbcUploads || typeof client.data.pbcUploads !== 'object') client.data.pbcUploads = {};
+            if(!client.data.clauseSignOffs || typeof client.data.clauseSignOffs !== 'object') client.data.clauseSignOffs = {};
+            return client;
         }
 
         function logoutSession() {
