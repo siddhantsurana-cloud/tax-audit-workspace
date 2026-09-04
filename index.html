@@ -2016,31 +2016,64 @@
         </div>
     </div>
 
-    <!-- 5. Upload File to OneDrive Modal (Client Facing) -->
+        <!-- 5. Upload File to OneDrive / Direct Cloud Modal (Client Facing) -->
     <div class="modal-overlay" id="modalUploadToCloud">
-        <div class="modal-card">
+        <div class="modal-card" style="max-width: 640px;">
             <div class="modal-header">
-                <h3 id="cloudUploadTitle">📤 Transmit File to BRC Audit OneDrive</h3>
+                <div>
+                    <span class="badge badge-blue" id="cloudUploadReqBadge" style="margin-bottom: 4px;">REQ-A1</span>
+                    <h3 id="cloudUploadTitle" style="margin-top: 2px;">📁 Transmit Schedule to Audit Workspace</h3>
+                </div>
                 <button class="modal-close-btn" onclick="closeModal('modalUploadToCloud')">✕</button>
             </div>
             <div class="modal-body">
-                <p style="font-size: 0.85rem; color: var(--text-muted);" id="cloudUploadSubtitle">
-                    Transmit requested schedule or documents directly to Bihani Rashmi & Co.'s secure audit cloud.
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;" id="cloudUploadSubtitle">
+                    Upload requested schedules, Excel models, or scanned PDFs directly into this digital audit workspace.
                 </p>
-                <div class="onedrive-box">
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="#0078D4"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                    <h4 style="color: var(--primary); margin: 8px 0 4px 0;">Microsoft OneDrive Secure Audit Channel</h4>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
-                        Click below to open your company's dedicated BRC upload portal:
+
+                <!-- Primary Direct In-App Upload Dropzone (Zero Login Required) -->
+                <div style="margin: 1.25rem 0; border: 2px dashed #3B82F6; background: #EFF6FF; border-radius: var(--radius-lg); padding: 1.75rem 1.25rem; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="document.getElementById('modalDirectFileInput').click()">
+                    <input type="file" id="modalDirectFileInput" multiple style="display: none;" onchange="handleModalDirectFileUpload(this)">
+                    <div style="width: 52px; height: 52px; border-radius: 50%; background: #DBEAFE; color: #1D4ED8; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 1.5rem;">
+                        📤
+                    </div>
+                    <h4 style="color: var(--primary); font-size: 1rem; font-weight: 800; margin-bottom: 4px;">
+                        Click to Browse or Drag & Drop Files Here
+                    </h4>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">
+                        Zero Microsoft / Google login required! Accepts <strong>.xlsx, .pdf, .csv, .zip</strong> or ERP ledger dumps.
                     </p>
-                    <button class="btn btn-onedrive" id="btnLaunchOnedrive" onclick="launchClientOnedriveUpload()">
-                        ☁️ Upload File via OneDrive (Instant Sync)
+                    <button class="btn btn-primary btn-sm" style="margin-top: 10px; pointer-events: none;">
+                        📁 Select Files from Device
                     </button>
+                </div>
+
+                <!-- Uploaded Files List for This Specific Requisition Item -->
+                <div id="modalUploadedFilesContainer" style="margin-bottom: 1.25rem;">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Secondary Option: External OneDrive / SharePoint Folder Link -->
+                <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                        <div>
+                            <strong style="font-size: 0.82rem; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#0078D4"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                                Optional: External Microsoft OneDrive Repository
+                            </strong>
+                            <p style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+                                If your audit team shared a dedicated OneDrive folder link.
+                            </p>
+                        </div>
+                        <button class="btn btn-onedrive btn-sm" onclick="launchClientOnedriveUpload()">
+                            Open OneDrive Folder ↗
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeModal('modalUploadToCloud')">Close</button>
-                <button class="btn btn-primary" onclick="confirmCloudSubmission()">Mark Upload Complete</button>
+                <button class="btn btn-primary" onclick="confirmModalSubmission()">✓ Mark Requisition Complete</button>
             </div>
         </div>
     </div>
