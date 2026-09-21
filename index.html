@@ -1413,12 +1413,19 @@
                     <p>Enter data into the light yellow cells below. All calculations and disallowances execute automatically.</p>
                 </div>
                 <div style="display: flex; gap: 8px;">
-                    <select id="workingSelectDropdown" class="form-select" onchange="switchWorkingTab(this.value)">
-                        <option value="msme">1. MSME Section 43B(h) Compliance Working (Clause 22)</option>
-                        <option value="sec43b">2. Section 43B Statutory Liabilities Working (Clause 26)</option>
-                        <option value="pfesi">3. Employee Contribution Compliance Working (PF/ESI) (Clause 20(b))</option>
-                        <option value="depreciation">4. Income-tax Depreciation Working (Section 32 / Clause 18)</option>
-                        <option value="tds">5. TDS Compliance & Reconciliation (Sec 40a/34)</option>
+                    <select id="workingSelectDropdown" class="form-select" onchange="switchWorkingTab(this.value)" style="font-size: 0.85rem; font-weight: 700; color: #1B365D; max-width: 440px;">
+                        <option value="cl44">1. Clause 44: Break-up of Total Expenditure under GST (FS Reco)</option>
+                        <option value="cl4">2. Clause 4: 22-State Indirect Tax Registrations (GSTIN & IEC)</option>
+                        <option value="sec43b">3. Clause 26: Section 43B Statutory Liabilities & Challans (30-Sep)</option>
+                        <option value="msme">4. Clause 22: MSME Section 43B(h) Compliance & Sec 16/23 Interest</option>
+                        <option value="cl35">5. Clause 35: Quantitative Inventory & Stock Register Reconciliation</option>
+                        <option value="cl23">6. Clause 23: Related Party Payments & KMP Remuneration u/s 40A(2)(b)</option>
+                        <option value="pfesi">7. Clause 20(b): Employee PF / ESI / PT 15th Cut-Off Working</option>
+                        <option value="depreciation">8. Clause 18: Depreciation Schedule u/s 32 & FAR Gross Block Reco</option>
+                        <option value="tds">9. Clause 34: TDS / TCS Chapter XVII-B Compliance & 40(a)(ia)</option>
+                        <option value="loans">10. Clause 31: Acceptance & Repayment of Loans/Deposits u/s 269SS/T</option>
+                        <option value="ratios">11. Clause 40: Turnover & Accounting Ratios (GP/NP/Turnover)</option>
+                        <option value="cl14">12. Clause 14: Method of Stock Valuation u/s 145A</option>
                     </select>
                     <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Transmit to CA</button>
                 </div>
@@ -5854,6 +5861,419 @@
 
                         function loadWorking(name) {
             const container = document.getElementById('activeWorkingContainer');
+
+            if(name === 'cl44') {
+                container.innerHTML = `
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Total FS Expenditure</div>
+                            <div class="kpi-chip-val">₹ 1,443.29 Cr</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Clause 44 In-Scope Spend</div>
+                            <div class="kpi-chip-val">₹ 1,193.74 Cr</div>
+                        </div>
+                        <div class="kpi-chip primary">
+                            <div class="kpi-chip-label">Registered Vendors (73.1%)</div>
+                            <div class="kpi-chip-val">₹ 872.86 Cr</div>
+                        </div>
+                        <div class="kpi-chip warning">
+                            <div class="kpi-chip-label">Unregistered Vendors (25.4%)</div>
+                            <div class="kpi-chip-val">₹ 303.15 Cr</div>
+                        </div>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>📊 Clause 44: Break-up of Total Expenditure under GST (FS Reconciliation & Vendor Matrix)</h3>
+                                <p>Reconcile Total P&L debits with GST inward supplies, Capex additions, Schedule III employee exclusions, and non-cash debits.</p>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-primary btn-sm" onclick="openClauseDataFeederModal('44')">✏️ Edit in Master Feeder</button>
+                                <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Transmit to CA</button>
+                            </div>
+                        </div>
+
+                        <!-- PART A: FS RECONCILIATION -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="font-size: 0.9rem; font-weight: 800; color: #1B365D; margin-bottom: 8px;">PART A: RECONCILIATION OF TOTAL EXPENDITURE AS PER FS TO CLAUSE 44 SCOPE</h4>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr style="background: #1B365D; color: #FFFFFF;">
+                                            <th style="padding: 8px 10px; text-align: left;">Particulars</th>
+                                            <th style="padding: 8px 10px; text-align: right; width: 220px;">Amount (INR)</th>
+                                            <th style="padding: 8px 10px; text-align: left;">Remarks / Audit Working Reference</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="font-weight: 700;">Total Expenditure as per FS:</td>
+                                            <td style="text-align: right; font-weight: 700; font-size: 0.95rem;">₹ 14,43,28,69,425</td>
+                                            <td style="color: #64748B;">Audited Statement of Profit and Loss (FY 2025-26)</td>
+                                        </tr>
+                                        <tr style="background: #F8FAFC;">
+                                            <td style="color: #166534; font-weight: 700;">Add: Capital Expenditure not included in P&L:</td>
+                                            <td style="text-align: right; font-weight: 700; color: #166534;">₹ 26,91,44,936</td>
+                                            <td style="color: #64748B;">Additions to PPE & Intangibles / FAR</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #991B1B; font-weight: 700;">Less: Non-cash charges considered as expenditure:</td>
+                                            <td style="text-align: right; font-weight: 700; color: #991B1B;">-₹ 1,45,68,90,911</td>
+                                            <td style="color: #64748B;">Refer Note 1 (Depreciation Rs 104.45 Cr + Lease Int Rs 27.09 Cr + Non-cash Rs 14.14 Cr)</td>
+                                        </tr>
+                                        <tr style="background: #F8FAFC;">
+                                            <td style="color: #991B1B; font-weight: 700;">Less: Transactions in securities and transactions in money:</td>
+                                            <td style="text-align: right; font-weight: 700; color: #991B1B;">-</td>
+                                            <td style="color: #64748B;">Excluded from definition of Goods & Services</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #991B1B; font-weight: 700;">Less: Excluded by virtue of Schedule III to CGST Act:</td>
+                                            <td style="text-align: right; font-weight: 700; color: #991B1B;">-₹ 1,64,69,58,538</td>
+                                            <td style="color: #64748B;">Refer Note 2 (Employee Benefit Expenses - Exempt u/s Sch III)</td>
+                                        </tr>
+                                        <tr style="background: #F8FAFC;">
+                                            <td style="color: #1E40AF; font-weight: 700;">COGS to be excluded and Actual purchases to be included:</td>
+                                            <td style="text-align: right; font-weight: 700; color: #1E40AF;">₹ 33,92,37,705</td>
+                                            <td style="color: #64748B;">Linked to TB (Raw Material & Traded Goods Purchases)</td>
+                                        </tr>
+                                        <tr style="background: #E2E8F0; font-weight: 800;">
+                                            <td style="font-size: 0.9rem; color: #1B365D;">BALANCE BEING VALUE OF EXPENDITURE FOR CLAUSE 44:</td>
+                                            <td style="text-align: right; font-size: 1rem; color: #1B365D;">₹ 11,93,74,02,616</td>
+                                            <td style="color: #166534;">✓ Reconciled with Statutory Disclosure Grid</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- PART B: STATUTORY DISCLOSURE GRID -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="font-size: 0.9rem; font-weight: 800; color: #1B365D; margin-bottom: 8px;">PART B: STATUTORY DISCLOSURE GRID (PURCHASES, CAPEX & OTHER EXPENSES)</h4>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr style="background: #1B365D; color: #FFFFFF;">
+                                            <th>Particulars</th>
+                                            <th style="text-align: right;">Total Amount</th>
+                                            <th style="text-align: right; background: #6B21A8;">Registered - Exempt</th>
+                                            <th style="text-align: right; background: #1E3A8A;">Registered Vendors</th>
+                                            <th style="text-align: right; background: #9A3412;">Unregistered Vendors</th>
+                                            <th style="text-align: right; background: #15803D;">Difference</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="font-weight: 700;">Purchases</td>
+                                            <td style="text-align: right; font-weight: 700;">₹ 6,92,69,97,273</td>
+                                            <td style="text-align: right; color: #64748B;">-</td>
+                                            <td style="text-align: right; font-weight: 700; color: #1E3A8A;">₹ 4,25,27,78,830</td>
+                                            <td style="text-align: right; font-weight: 700; color: #9A3412;">₹ 2,66,91,76,272</td>
+                                            <td style="text-align: right; font-weight: 700; color: #B45309;">₹ 50,42,172</td>
+                                        </tr>
+                                        <tr style="background: #F8FAFC;">
+                                            <td style="font-weight: 700;">Capex</td>
+                                            <td style="text-align: right; font-weight: 700;">₹ 26,91,44,936</td>
+                                            <td style="text-align: right; color: #64748B;">-</td>
+                                            <td style="text-align: right; font-weight: 700; color: #1E3A8A;">₹ 24,83,67,115</td>
+                                            <td style="text-align: right; font-weight: 700; color: #9A3412;">₹ 2,07,77,821</td>
+                                            <td style="text-align: right; font-weight: 700; color: #166534;">₹ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700;">Other expense</td>
+                                            <td style="text-align: right; font-weight: 700;">₹ 4,74,12,60,407</td>
+                                            <td style="text-align: right; font-weight: 700; color: #6B21A8;">₹ 17,23,15,649</td>
+                                            <td style="text-align: right; font-weight: 700; color: #1E3A8A;">₹ 4,22,74,19,150</td>
+                                            <td style="text-align: right; font-weight: 700; color: #9A3412;">₹ 34,15,37,746</td>
+                                            <td style="text-align: right; font-weight: 700; color: #B45309;">-₹ 12,138</td>
+                                        </tr>
+                                        <tr style="background: #E2E8F0; font-weight: 800;">
+                                            <td style="color: #1B365D;">TOTAL CLAUSE 44:</td>
+                                            <td style="text-align: right; font-size: 0.95rem; color: #1B365D;">₹ 11,93,74,02,616</td>
+                                            <td style="text-align: right; color: #6B21A8;">₹ 17,23,15,649 (1.4%)</td>
+                                            <td style="text-align: right; color: #1E3A8A;">₹ 8,72,85,65,094 (73.1%)</td>
+                                            <td style="text-align: right; color: #9A3412;">₹ 3,03,14,91,839 (25.4%)</td>
+                                            <td style="text-align: right; color: #B45309;">₹ 50,30,034</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- PART C: AUDITOR NOTES -->
+                        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 14px; font-size: 0.82rem; line-height: 1.6; color: #334155;">
+                            <div style="margin-bottom: 8px;">
+                                <strong style="color: #1B365D;">Note 1: Non-Cash Charges Excluded (₹ 1,45,68,90,911.36):</strong><br>
+                                • Depreciation & Amortization: ₹ 104,45,37,134.33 (Note 28) | Interest on Lease Liabilities (Ind AS 116): ₹ 27,09,11,853.66 (Note 29) | Other Non-cash items: ₹ 14,14,41,923.37
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <strong style="color: #1B365D;">Note 2: Schedule III to the CGST Act Exclusions (₹ 1,64,69,58,538.12):</strong><br>
+                                • Employee Benefit Expenses (Salaries, wages, bonus, PF/ESI) excluded under Schedule III, Clause 1.
+                            </div>
+                            <div>
+                                <strong style="color: #1B365D;">Note 3: Purchases as per FS (₹ 6,92,69,97,273.33):</strong><br>
+                                • Raw Material purchases (₹ 686.11 Cr based on COGS + Closing Stock - Opening Stock) + Traded Goods purchases (₹ 6.59 Cr).
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            if(name === 'cl4') {
+                container.innerHTML = `
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Active State GSTINs</div>
+                            <div class="kpi-chip-val">22 States</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">March 2026 GSTR-1 Filings</div>
+                            <div class="kpi-chip-val">22 / 22 Filed ✓</div>
+                        </div>
+                        <div class="kpi-chip primary">
+                            <div class="kpi-chip-label">Customs IEC Code</div>
+                            <div class="kpi-chip-val">0716900654</div>
+                        </div>
+                        <div class="kpi-chip warning">
+                            <div class="kpi-chip-label">Head Office State</div>
+                            <div class="kpi-chip-val">29 (Karnataka)</div>
+                        </div>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>🏛️ Clause 4: 22-State Indirect Tax Registrations & Customs IEC Schedule</h3>
+                                <p>Complete statutory schedule of 22 active State GST registrations across India with filing verification.</p>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-primary btn-sm" onclick="openClauseDataFeederModal('4')">✏️ Edit in Master Feeder</button>
+                                <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Transmit to CA</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr style="background: #1B365D; color: #FFFFFF;">
+                                        <th style="text-align: center; width: 60px;">State Code</th>
+                                        <th>State / Union Territory</th>
+                                        <th>15-Digit GSTIN Number</th>
+                                        <th style="text-align: center;">Registration Type</th>
+                                        <th style="text-align: center;">FY 25-26 GSTR-1 Status</th>
+                                        <th style="text-align: center;">Compliance Standing</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${gstinSchedule22.map((g, idx) => `
+                                        <tr style="${idx % 2 === 1 ? 'background: #F8FAFC;' : ''}">
+                                            <td style="text-align: center; font-weight: 700; color: #1B365D;">${g.code}</td>
+                                            <td style="font-weight: 600;">${g.state}</td>
+                                            <td style="font-family: monospace; font-weight: 700; color: #1E40AF;">${g.gstin}</td>
+                                            <td style="text-align: center;">Regular Taxpayer</td>
+                                            <td style="text-align: center;"><span class="badge badge-green">GSTR-1 MAR-26 FILED (11-APR-26)</span></td>
+                                            <td style="text-align: center;"><span class="badge badge-blue">ACTIVE & AUDITED ✓</span></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            if(name === 'cl35') {
+                container.innerHTML = `
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Finished Mattresses Produced</div>
+                            <div class="kpi-chip-val">3,85,420 Nos</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Mattress Sales in FY</div>
+                            <div class="kpi-chip-val">3,76,190 Nos</div>
+                        </div>
+                        <div class="kpi-chip primary">
+                            <div class="kpi-chip-label">Closing Mattress Stock</div>
+                            <div class="kpi-chip-val">50,940 Nos</div>
+                        </div>
+                        <div class="kpi-chip warning">
+                            <div class="kpi-chip-label">Avg Process Wastage</div>
+                            <div class="kpi-chip-val">< 0.8% (Normal)</div>
+                        </div>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>📦 Clause 35: Quantitative Inventory Movement (Stock Register Working)</h3>
+                                <p>Reconciliation of principal raw materials and finished goods quantities manufactured and traded.</p>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-primary btn-sm" onclick="openClauseDataFeederModal('35')">✏️ Edit in Master Feeder</button>
+                                <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Transmit to CA</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr style="background: #1B365D; color: #FFFFFF;">
+                                        <th>Principal Item / Classification</th>
+                                        <th style="text-align: center;">UOM</th>
+                                        <th style="text-align: right;">Opening Stock</th>
+                                        <th style="text-align: right;">Purchases / Prod</th>
+                                        <th style="text-align: right;">Sales / Issued</th>
+                                        <th style="text-align: right;">Shortage / Wastage</th>
+                                        <th style="text-align: right;">Closing Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background: #F1F5F9; font-weight: 700; color: #1E3A8A;">
+                                        <td colspan="7">A. FINISHED GOODS MANUFACTURED (CLAUSE 35(b)):</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">1. Finished Mattresses (Orthopedic, Dual Comfort, Latex)</td>
+                                        <td style="text-align: center;">Nos</td>
+                                        <td style="text-align: right;">42,850</td>
+                                        <td style="text-align: right;">3,85,420</td>
+                                        <td style="text-align: right;">3,76,190</td>
+                                        <td style="text-align: right; color: #B45309;">1,140 (0.28%)</td>
+                                        <td style="text-align: right; font-weight: 700;">50,940</td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td style="font-weight: 600;">2. Wooden Beds, Sofas & Engineered Furniture</td>
+                                        <td style="text-align: center;">Nos</td>
+                                        <td style="text-align: right;">18,240</td>
+                                        <td style="text-align: right;">1,42,800</td>
+                                        <td style="text-align: right;">1,39,150</td>
+                                        <td style="text-align: right; color: #B45309;">410 (0.26%)</td>
+                                        <td style="text-align: right; font-weight: 700;">21,480</td>
+                                    </tr>
+                                    <tr style="background: #F1F5F9; font-weight: 700; color: #1E3A8A;">
+                                        <td colspan="7">B. RAW MATERIALS & COMPONENTS (CLAUSE 35(a)):</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">1. Polyurethane Foam, TDI & Polyol Chemicals</td>
+                                        <td style="text-align: center;">Kgs</td>
+                                        <td style="text-align: right;">1,85,400</td>
+                                        <td style="text-align: right;">24,18,500</td>
+                                        <td style="text-align: right;">23,90,100</td>
+                                        <td style="text-align: right; color: #B45309;">21,450 (0.83%)</td>
+                                        <td style="text-align: right; font-weight: 700;">1,92,350</td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td style="font-weight: 600;">2. Fabric, Jacquard Weave & Zipper Covers</td>
+                                        <td style="text-align: center;">Meters</td>
+                                        <td style="text-align: right;">3,12,000</td>
+                                        <td style="text-align: right;">32,50,000</td>
+                                        <td style="text-align: right;">32,10,000</td>
+                                        <td style="text-align: right; color: #B45309;">34,800 (0.98%)</td>
+                                        <td style="text-align: right; font-weight: 700;">3,17,200</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            if(name === 'cl23') {
+                container.innerHTML = `
+                    <div class="kpi-row-grid">
+                        <div class="kpi-chip info">
+                            <div class="kpi-chip-label">Total KMP Remuneration</div>
+                            <div class="kpi-chip-val">₹ 7.02 Cr</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Arm's Length Status</div>
+                            <div class="kpi-chip-val">100% Benchmarked</div>
+                        </div>
+                        <div class="kpi-chip success">
+                            <div class="kpi-chip-label">Disallowance u/s 40A(2)(b)</div>
+                            <div class="kpi-chip-val">NIL (₹ 0)</div>
+                        </div>
+                        <div class="kpi-chip primary">
+                            <div class="kpi-chip-label">Audit Basis</div>
+                            <div class="kpi-chip-val">Note 39 / NRC Approval</div>
+                        </div>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3>👥 Clause 23: Related Party Transactions u/s 40A(2)(b) (KMP Working)</h3>
+                                <p>Review and benchmark payments made to specified persons against market standards and NRC approvals.</p>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-primary btn-sm" onclick="openClauseDataFeederModal('23')">✏️ Edit in Master Feeder</button>
+                                <button class="btn btn-cloud-sync btn-sm" onclick="triggerCloudSync()">☁️ Transmit to CA</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr style="background: #1B365D; color: #FFFFFF;">
+                                        <th>Name of Related Party / KMP</th>
+                                        <th>Relationship u/s 40A(2)(b)</th>
+                                        <th>Nature of Consideration / Payment</th>
+                                        <th style="text-align: right;">Amount Paid (INR)</th>
+                                        <th style="text-align: center;">Arm's Length Status</th>
+                                        <th style="text-align: right;">Excess / Disallowance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 700;">Ankit Garg</td>
+                                        <td>Chairperson, CEO & Executive Director</td>
+                                        <td>Managerial Remuneration & Benefits</td>
+                                        <td style="text-align: right; font-weight: 700; color: #1B365D;">₹ 3,25,00,000</td>
+                                        <td style="text-align: center;"><span class="badge badge-green">ARM'S LENGTH ✓</span></td>
+                                        <td style="text-align: right; font-weight: 700; color: #166534;">₹ 0</td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td style="font-weight: 700;">Chaitanya Ramalingegowda</td>
+                                        <td>Executive Director</td>
+                                        <td>Managerial Remuneration & Benefits</td>
+                                        <td style="text-align: right; font-weight: 700; color: #1B365D;">₹ 3,25,00,000</td>
+                                        <td style="text-align: center;"><span class="badge badge-green">ARM'S LENGTH ✓</span></td>
+                                        <td style="text-align: right; font-weight: 700; color: #166534;">₹ 0</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700;">Parul Gupta</td>
+                                        <td>Chief Financial Officer (CFO)</td>
+                                        <td>Professional Salary & Allowances</td>
+                                        <td style="text-align: right; font-weight: 700; color: #1B365D;">₹ 48,50,000</td>
+                                        <td style="text-align: center;"><span class="badge badge-green">COMMENSURATE ✓</span></td>
+                                        <td style="text-align: right; font-weight: 700; color: #166534;">₹ 0</td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td style="font-weight: 700;">Sakshi Vijay Chopra</td>
+                                        <td>Non-Executive Nominee Director</td>
+                                        <td>Sitting Fees for Board Meetings</td>
+                                        <td style="text-align: right; font-weight: 700; color: #1B365D;">₹ 3,50,000</td>
+                                        <td style="text-align: center;"><span class="badge badge-green">STATUTORY ✓</span></td>
+                                        <td style="text-align: right; font-weight: 700; color: #166534;">₹ 0</td>
+                                    </tr>
+                                    <tr style="background: #E2E8F0; font-weight: 800;">
+                                        <td colspan="3">TOTAL RELATED PARTY PAYMENTS U/S 40A(2)(b):</td>
+                                        <td style="text-align: right; color: #1B365D; font-size: 0.95rem;">₹ 7,02,00,000</td>
+                                        <td style="text-align: center; color: #166534;">100% IN ORDER</td>
+                                        <td style="text-align: right; color: #166534;">₹ 0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
 
             if(name === 'msme') {
                 container.innerHTML = `
