@@ -1622,7 +1622,7 @@
             </div>
 
             <!-- Printable Official Statutory Container -->
-            <div class="report-paper-container" id="printableReportContainer">
+            <div class="report-paper-container" id="dynamicReportContent">
                 <!-- Injected Dynamically via JS -->
             </div>
         </div>
@@ -2838,6 +2838,124 @@
             if(repClientEl) repClientEl.innerText = client.name;
             if(repDisEl) repDisEl.innerText = "Rs " + totalDisallowances.toLocaleString('en-IN');
             if(repIcdsEl) repIcdsEl.innerText = "Rs " + icdsNet.toLocaleString('en-IN');
+
+            
+            // Check if Form 3CA or Form 3CD is selected
+            if(activeReportDoc === '3ca') {
+                container.innerHTML = `
+                    <div id="doc-3ca" class="report-official-header" style="text-align: center; border-bottom: 2px solid #1B365D; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.35rem; font-weight: 800; color: #1B365D; text-transform: uppercase; letter-spacing: 0.5px;">FORM NO. 3CA</h2>
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #475569; margin: 4px 0;">[See rule 6G(1)(a)]</div>
+                        <h3 style="font-size: 1.05rem; font-weight: 700; color: #0F172A; max-width: 820px; margin: 8px auto 0 auto; line-height: 1.5;">
+                            Audit report under section 44AB of the Income-tax Act, 1961, in a case where the accounts of the business or profession of a person have been audited under any other law
+                        </h3>
+                    </div>
+
+                    <div style="font-size: 0.88rem; line-height: 1.7; color: #0F172A; margin-bottom: 1.5rem;">
+                        <p style="margin-bottom: 1rem;">
+                            1. We have examined the balance sheet as at <strong>31st March 2026</strong>, and the statement of profit and loss for the year ended on that date, attached herewith, of <strong>${client.name}</strong> (Permanent Account Number: <strong>${client.pan}</strong> | CIN: <strong>L52590KA2016PLC086582</strong>), having registered office at <strong>Corporate HQ, Bengaluru, Karnataka 560100</strong>.
+                        </p>
+                        <p style="margin-bottom: 1rem;">
+                            2. We certify that the balance sheet and the statement of profit and loss are in agreement with the books of account maintained at the corporate head office in Bengaluru and manufacturing/warehouse hubs across 22 registered States in India.
+                        </p>
+                        <p style="margin-bottom: 1rem;">
+                            3. (a) We report the following observations / comments / discrepancies / inconsistencies; if any:
+                        </p>
+
+                        <!-- Statutory Observations / Qualifications Schedule Table -->
+                        <div class="table-responsive" style="margin: 1rem 0 1.5rem 0;">
+                            <table>
+                                <thead>
+                                    <tr style="background: #1B365D; color: #FFFFFF;">
+                                        <th style="width: 50px; text-align: center;">Sl.</th>
+                                        <th style="width: 130px;">Form 3CD Clause</th>
+                                        <th>Statutory Subject / Audit Matter</th>
+                                        <th style="text-align: right; width: 150px;">Amount (INR)</th>
+                                        <th>Auditor Observation & Reporting Basis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: 700;">1</td>
+                                        <td><strong>Clause 18 & 21(a)</strong></td>
+                                        <td><strong>FAR vs IT Depreciation Block Roll-Forward</strong></td>
+                                        <td style="text-align: right; font-weight: 700; color: #1E3A8A;">₹ 1,14,75,820</td>
+                                        <td>Discrepancy of Rs 1.15 Cr between Gross Block in FAR (Rs 275.35 Cr) vs Trial Balance (Rs 276.50 Cr) on Leasehold Improvements; verified and reconciled for tax depreciation u/s 32.</td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td style="text-align: center; font-weight: 700;">2</td>
+                                        <td><strong>Clause 18 & FAR</strong></td>
+                                        <td><strong>Delayed CWIP-to-PPE Capitalization</strong></td>
+                                        <td style="text-align: right; font-weight: 700; color: #1E3A8A;">₹ 1,10,00,000</td>
+                                        <td>Plant assets put to use during Q3 but capitalized late in FAR in Q4; proportionate 50% / 180-day depreciation allowable u/s 32(1) correctly claimed.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: 700;">3</td>
+                                        <td><strong>Clause 18 & 21(a)</strong></td>
+                                        <td><strong>Fixed Asset Write-Off Loss in P&L</strong></td>
+                                        <td style="text-align: right; font-weight: 700; color: #DC2626;">₹ 1,84,33,180</td>
+                                        <td>Scrapped/discarded assets written off in P&L (Rs 1.84 Cr) added back in tax computation and deducted from respective asset block WDV u/s 32(1)(iii)/50.</td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td style="text-align: center; font-weight: 700;">4</td>
+                                        <td><strong>Clause 22</strong></td>
+                                        <td><strong>MSME Section 43B(h) Overdue > 45 Days</strong></td>
+                                        <td style="text-align: right; font-weight: 700; color: #DC2626;">₹ 3,56,37,891</td>
+                                        <td>Outstanding micro and small enterprise dues unpaid beyond 45 days disallowed under Section 43B(h); Section 16 MSMED penal interest of Rs 42,23,221 disallowed.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: 700;">5</td>
+                                        <td><strong>Clause 26</strong></td>
+                                        <td><strong>Section 43B Unpaid Statutory Dues</strong></td>
+                                        <td style="text-align: right; font-weight: 700; color: #DC2626;">₹ 2,04,83,841</td>
+                                        <td>Provision for bonus (Rs 1.96 Cr), ESI dues (Rs 8.39 L), and PF dues (Rs 94.9 k) unpaid as of year-end disallowed under Section 43B; allowable upon actual discharge by 139(1).</td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td style="text-align: center; font-weight: 700;">6</td>
+                                        <td><strong>Clause 21(b)</strong></td>
+                                        <td><strong>TDS Default u/s 40(a)(ia) (Legal Fees)</strong></td>
+                                        <td style="text-align: right; font-weight: 700; color: #DC2626;">₹ 6,00,000</td>
+                                        <td>30% disallowance on Rs 20,00,000 legal retainership due to short TDS deduction under Section 194J.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p style="margin-bottom: 1rem;">
+                            3. (b) Subject to above, in our opinion and to the best of our information and according to the explanations given to us, the said accounts give a <strong>true and correct view</strong>:
+                        </p>
+                        <ul style="margin-left: 2rem; margin-bottom: 1.5rem;">
+                            <li>(i) in the case of the Balance Sheet, of the state of affairs of the assessee as at <strong>31st March 2026</strong>; and</li>
+                            <li>(ii) in the case of the Statement of Profit and Loss, of the profit of the assessee for the financial year ended on that date.</li>
+                        </ul>
+
+                        <p style="margin-bottom: 1.5rem;">
+                            4. The statement of particulars required to be furnished under section 44AB is given in the annexed <strong>Form No. 3CD</strong>. In our opinion and to the best of our information and according to explanations given to us, the particulars given in the said Form No. 3CD and the annexures thereto are <strong>true and correct</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Statutory Signature Block -->
+                    <div style="border-top: 2px solid #1B365D; padding-top: 1.5rem; margin-top: 2rem;">
+                        <div class="grid-12">
+                            <div class="col-6">
+                                <p><strong>Place:</strong> Bengaluru</p>
+                                <p><strong>Date:</strong> 15th September 2026</p>
+                                <p><strong>UDIN:</strong> <span style="font-family: monospace; font-weight: 700; color: #1E3A8A;">26064298BGTRWA2026</span></p>
+                            </div>
+                            <div class="col-6" style="text-align: right;">
+                                <p><strong>For Bihani Rashmi & Co.</strong></p>
+                                <p style="color: #64748B;">Chartered Accountants (FRN: 0328508E)</p>
+                                <div style="margin-top: 20px;">
+                                    <p style="font-size: 1.05rem; font-weight: 800; color: #1B365D;">CA Rashmi Bihani, FCA</p>
+                                    <p style="font-size: 0.82rem; color: #475569;">Proprietor | Membership No. 064298</p>
+                                    <p style="font-size: 0.75rem; color: #94A3B8; margin-top: 4px;">Direct Tax Automation Lead: CA Siddhant Surana, FCA</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
 
             let htmlContent = `
                 <!-- PART A: GENERAL INFORMATION -->
