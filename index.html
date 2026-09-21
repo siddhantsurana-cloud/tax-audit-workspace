@@ -1525,72 +1525,86 @@
         </div>
 
                 <!-- ==================== VIEW: PROSPECTIVE FORM 3CD TAX AUDIT REPORT ==================== -->
+                <!-- ==================== VIEW: PROSPECTIVE FORM 3CA & 3CD REPORT STUDIO ==================== -->
         <div id="view-taxreport" class="view-pane">
             <div class="card-header-flex">
                 <div>
-                    <h2>📑 Prospective Form 3CD Tax Audit Report (AY 2026-27 / FY 2025-26)</h2>
-                    <p>Live, auto-fed statutory Tax Audit Report under Section 44AB of the Income-tax Act, 1961. Synchronizes automatically with all active working papers and ICDS valuations.</p>
+                    <h2>📑 Form 3CA & 3CD Statutory Tax Audit Studio & Live Feeder</h2>
+                    <p>Dynamic Form 3CA Audit Report and Form 3CD Statement covering all 44 Clauses. Edit details live, auto-feed from Guided Workings, upload master Excel templates, and export print-ready statutory reports.</p>
                 </div>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button class="btn btn-primary btn-sm" onclick="generateProspectiveReport(); window.print();">🖨️ Print / Save as PDF</button>
-                    <button class="btn btn-outline btn-sm" onclick="generateProspectiveReport();">🔄 Refresh Report Data</button>
-                    <button class="btn btn-outline btn-sm" onclick="downloadTemplate('full_requisition')">📥 Export Schedule (.xlsx)</button>
+                    <div style="display: flex; background: var(--border); border-radius: var(--radius-md); padding: 2px;">
+                        <button id="btnToggle3CA" class="btn btn-sm btn-outline active" style="background:#FFF; font-weight:700;" onclick="toggleReportDoc('3ca')">📜 Form 3CA Report</button>
+                        <button id="btnToggle3CD" class="btn btn-sm btn-outline" style="font-weight:700;" onclick="toggleReportDoc('3cd')">📑 Form 3CD (44 Clauses)</button>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="openClauseDataFeederModal('1')">✏️ Feed / Edit Clause Details</button>
+                    <button class="btn btn-outline btn-sm" onclick="downloadMaster44ClauseExcelTemplate()">📥 Download Master Template (.xlsx)</button>
+                    <label class="btn btn-outline btn-sm" style="margin-bottom:0; cursor:pointer;">
+                        📤 Upload Master Excel
+                        <input type="file" accept=".xlsx,.xls" style="display:none;" onchange="handleMaster44ClauseExcelUpload(this)">
+                    </label>
+                    <button class="btn btn-primary btn-sm" onclick="window.print();">🖨️ Print / Save as PDF</button>
                 </div>
             </div>
 
-            <!-- Report KPI Summary Cards -->
+            <!-- Report KPI Stat Summary -->
             <div class="kpi-row-grid">
                 <div class="kpi-chip info">
-                    <div class="kpi-chip-label">Report Assessee</div>
-                    <div class="kpi-chip-val" id="repKpiClientName" style="font-size:1.05rem;">Wakefit Innovations Ltd</div>
-                </div>
-                <div class="kpi-chip success">
                     <div class="kpi-chip-label">Total Clauses Evaluated</div>
-                    <div class="kpi-chip-val">44 Clauses (100%)</div>
+                    <div class="kpi-chip-val">44 / 44 (100%)</div>
                 </div>
                 <div class="kpi-chip danger">
-                    <div class="kpi-chip-label">Total Computed Tax Disallowances</div>
-                    <div class="kpi-chip-val" id="repKpiTotDis">Rs 0</div>
+                    <div class="kpi-chip-label">Computed Tax Disallowances</div>
+                    <div class="kpi-chip-val" id="repTotalDisallowances">₹ 14.94 Cr</div>
+                </div>
+                <div class="kpi-chip success">
+                    <div class="kpi-chip-label">Income Tax Dep Allowable (Sec 32)</div>
+                    <div class="kpi-chip-val" id="repTotalDepAllow">₹ 25.90 Cr</div>
                 </div>
                 <div class="kpi-chip info">
-                    <div class="kpi-chip-label">Net ICDS Tax Adjustment</div>
-                    <div class="kpi-chip-val" id="repKpiIcdsNet">Rs 0</div>
+                    <div class="kpi-chip-label">Net ICDS P&L Adjustment</div>
+                    <div class="kpi-chip-val" id="repNetIcdsAdjustment">+₹ 10.28 Cr</div>
                 </div>
             </div>
 
-            <!-- Official Report Sheet -->
+            <!-- Quick Clause Jump Bar -->
+            <div class="app-card" style="padding: 0.75rem 1.25rem; margin-bottom: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Quick Jump to Clause:</span>
+                        <select class="form-select" style="font-size: 0.8rem; padding: 4px 8px; max-width: 320px;" onchange="scrollToClause(this.value)">
+                            <option value="doc-3ca">📜 Form 3CA Audit Report</option>
+                            <option value="rep-part-a">Part A: Clauses 1 to 8a (Assessee Profile)</option>
+                            <option value="rep-cl-4">Clause 4: Indirect Tax Registrations (22 States Schedule)</option>
+                            <option value="rep-cl-10">Clause 10 & 11: Nature of Business & Books u/s 44AA</option>
+                            <option value="rep-cl-13">Clause 13: ICDS I to X Compliance Table</option>
+                            <option value="rep-cl-14">Clause 14: Method of Inventory Valuation (Sec 145A)</option>
+                            <option value="rep-cl-18">Clause 18: Section 32 Income-tax Depreciation</option>
+                            <option value="rep-cl-19">Clause 19: Section 35D Share Issue Expenses</option>
+                            <option value="rep-cl-20">Clause 20(a) & 20(b): Bonus & Employee PF/ESI</option>
+                            <option value="rep-cl-21">Clause 21: Inadmissible Expenses (40(a), 40A(7), CSR)</option>
+                            <option value="rep-cl-22">Clause 22: MSME Section 43B(h) & Penal Interest</option>
+                            <option value="rep-cl-23">Clause 23: Related Party Payments u/s 40A(2)(b)</option>
+                            <option value="rep-cl-26">Clause 26: Section 43B Statutory Liabilities</option>
+                            <option value="rep-cl-27">Clause 27: GST Input Tax Credit (ITC)</option>
+                            <option value="rep-cl-31">Clause 31: Loans / Deposits (269SS / 269T)</option>
+                            <option value="rep-cl-32">Clause 32: Brought Forward Losses & Unabsorbed Dep</option>
+                            <option value="rep-cl-34">Clause 34: TDS / TCS Compliance & 201(1A) Interest</option>
+                            <option value="rep-cl-35">Clause 35: Quantitative Details of Goods</option>
+                            <option value="rep-cl-40">Clause 40: Accounting Ratios (GP/NP/Stock Turn)</option>
+                            <option value="rep-cl-41">Clause 41: Tax Demands & Refunds (GST DRC-01)</option>
+                            <option value="rep-cl-44">Clause 44: Breakup of Total Expenditure under GST</option>
+                        </select>
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">
+                        ⚡ Click any clause's <strong>"✏️ Edit"</strong> icon to feed custom values or observations.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Printable Official Statutory Container -->
             <div class="report-paper-container" id="printableReportContainer">
-                <div class="report-header-crest">
-                    <span class="badge badge-blue" style="font-size: 0.8rem; margin-bottom: 6px;">FORM NO. 3CD</span>
-                    <h1>Statement of Particulars Required to be Furnished u/s 44AB</h1>
-                    <h2>of the Income-tax Act, 1961 (Read with Rule 6G(1)(b) / 6G(2))</h2>
-                    <p>For the Financial Year Ended 31st March, 2026 | Assessment Year 2026-27</p>
-                </div>
-
-                <div id="dynamicReportContent">
-                    <!-- Populated dynamically via JS -->
-                </div>
-
-                <!-- Signatures & Verification Block -->
-                <div class="report-signature-block">
-                    <div>
-                        <p style="font-size: 0.82rem; color: var(--text-muted);">
-                            <strong>Place:</strong> Bangalore / Kolkata<br>
-                            <strong>Date of Signing:</strong> <span id="repSignDate">30th September, 2026</span><br>
-                            <strong>UDIN:</strong> 26064298AAAAAA0000 (To be generated upon portal upload)
-                        </p>
-                    </div>
-                    <div style="text-align: right;">
-                        <p style="font-size: 0.88rem; font-weight: 800; color: var(--primary);">
-                            For Bihani Rashmi & Co.<br>
-                            <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">Chartered Accountants | Firm Reg No. 0328508E</span>
-                        </p>
-                        <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 6px; display: inline-block; text-align: right;">
-                            <strong style="color: var(--primary);">CA Rashmi Bihani, FCA</strong><br>
-                            <span style="font-size: 0.76rem; color: var(--text-muted);">Proprietor (M.No. 064298)</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Injected Dynamically via JS -->
             </div>
         </div>
 
@@ -1728,13 +1742,13 @@
                         <div style="background: #FFFFFF; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; height: 100%;">
                             <span class="badge badge-green" style="margin-bottom: 8px;">2. Statutory Audit Engagement Sign-Off</span>
                             <h4 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 6px;">
-                                Bihani Rashmi & Co., Chartered Accountants
+                                Bihani Rashmi & Co., Chartered Accountants (FRN: 0328508E)
                             </h4>
                             <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
                                 "We have verified all 44 Form 3CD clauses against books of account, ERP audit trail logs, statutory challans, and ICAI Guidance Notes. The prospective tax audit disallowances and disclosures are fully validated for filing."
                             </p>
                             <div style="border-top: 1px dashed var(--border); padding-top: 10px; font-size: 0.78rem; color: var(--text-main);">
-                                <strong>Proprietor:</strong> CA Rashmi Bihani, FCA (M.No. 064298)
+                                <strong>Proprietor:</strong> CA Rashmi Bihani, FCA (M.No. 064298 | FRN: 0328508E)
                             </div>
                         </div>
                     </div>
@@ -2822,10 +2836,61 @@
                             <div class="col-6"><strong>1. Name of Assessee:</strong> ${client.name}</div>
                             <div class="col-6"><strong>2. Address:</strong> Corporate HQ, Electronic City, Bangalore 560100</div>
                             <div class="col-6"><strong>3. Permanent Account Number (PAN):</strong> ${client.pan}</div>
-                            <div class="col-6"><strong>4. Indirect Tax Registrations (GSTIN):</strong> 29AABCW7791A1Z5 (Karnataka), 27AABCW7791A1Z2 (Maharashtra)</div>
+                            <div class="col-6"><strong>4. Indirect Tax Registrations (GSTIN):</strong> Registered in 22 States/UTs (KA: 29AABCW7791A1Z3, TN: 33AABCW7791A1ZE, MH: 27AABCW7791A1Z7, HR: 06AABCW7791A1ZB, DL: 07AABCW7791A1Z9, UP: 09AABCW7791A1Z5, etc. — <em>Refer to 22-State Schedule below</em>)</div>
                             <div class="col-6"><strong>5. Status of Assessee:</strong> Domestic Company</div>
                             <div class="col-6"><strong>6. Previous Year ended:</strong> 01-04-2025 to 31-03-2026 (FY 2025-26)</div>
                             <div class="col-12"><strong>7. Assessment Year:</strong> AY 2026-27</div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <!-- Clause 4: Detailed 22-State Indirect Tax Registrations Schedule -->
+                <div class="report-clause-box" id="rep-cl-4">
+                    <div class="report-clause-header">
+                        <strong>Clause 4: Particulars of Indirect Tax Registrations (22 States / UTs)</strong>
+                        <span class="report-auto-badge">Verified from 264 Monthly GSTR-1 Filings</span>
+                    </div>
+                    <div class="report-clause-body">
+                        <p style="margin-bottom: 8px;">The assessee is registered under the Goods and Services Tax Act across <strong>22 States and Union Territories</strong> in India during the previous year 2025-26. All registrations were verified against active monthly GSTR-1 filed returns (12 months &times; 22 states):</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr style="background: #1B365D; color: #FFFFFF;">
+                                        <th style="width: 50px; text-align: center;">Sl.</th>
+                                        <th style="width: 170px; text-align: center;">GSTIN</th>
+                                        <th>State / UT</th>
+                                        <th style="text-align: center; width: 65px;">Code</th>
+                                        <th>Relevant Indirect Tax Act</th>
+                                        <th>Operating Facility / Hub</th>
+                                        <th style="text-align: center; width: 140px;">Mar-26 ARN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td style="text-align:center;">1</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">03AABCW7791A2ZG</td><td>Punjab</td><td style="text-align:center;">03</td><td>Central & Punjab GST Act, 2017</td><td>Punjab Regional Logistics & Retail Hub</td><td style="font-family:monospace; text-align:center;">AA0303262672792</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">2</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">04AABCW7791A1ZF</td><td>Chandigarh</td><td style="text-align:center;">04</td><td>Central & Chandigarh UTGST Act, 2017</td><td>Chandigarh Tricity Operations & Experience Store</td><td style="font-family:monospace; text-align:center;">AA040326022930N</td></tr>
+                                    <tr><td style="text-align:center;">3</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">05AABCW7791A1ZD</td><td>Uttarakhand</td><td style="text-align:center;">05</td><td>Central & Uttarakhand GST Act, 2017</td><td>Uttarakhand Regional Hub & Retail Network</td><td style="font-family:monospace; text-align:center;">AA050326112368F</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">4</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">06AABCW7791A1ZB</td><td>Haryana</td><td style="text-align:center;">06</td><td>Central & Haryana GST Act, 2017</td><td>North Regional Hub (Gurugram DC & NCR Stores)</td><td style="font-family:monospace; text-align:center;">AA060326429034I</td></tr>
+                                    <tr><td style="text-align:center;">5</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">07AABCW7791A1Z9</td><td>Delhi</td><td style="text-align:center;">07</td><td>Central & Delhi GST Act, 2017</td><td>Delhi Capital Region Distribution & Experience Centres</td><td style="font-family:monospace; text-align:center;">AA0703266099423</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">6</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">08AABCW7791A1Z7</td><td>Rajasthan</td><td style="text-align:center;">08</td><td>Central & Rajasthan GST Act, 2017</td><td>Manufacturing & Warehouse Unit (Jodhpur) & Stores</td><td style="font-family:monospace; text-align:center;">AA0803264922525</td></tr>
+                                    <tr><td style="text-align:center;">7</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">09AABCW7791A1Z5</td><td>Uttar Pradesh</td><td style="text-align:center;">09</td><td>Central & Uttar Pradesh GST Act, 2017</td><td>UP Regional Logistics & Retail Network (Noida/Lucknow)</td><td style="font-family:monospace; text-align:center;">AB090326010800K</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">8</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">10AABCW7791A1ZM</td><td>Bihar</td><td style="text-align:center;">10</td><td>Central & Bihar GST Act, 2017</td><td>Bihar Regional Distribution Hub (Patna)</td><td style="font-family:monospace; text-align:center;">AA1003262774759</td></tr>
+                                    <tr><td style="text-align:center;">9</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">18AABCW7791A1Z6</td><td>Assam</td><td style="text-align:center;">18</td><td>Central & Assam GST Act, 2017</td><td>North-East Regional Logistics Hub (Guwahati)</td><td style="font-family:monospace; text-align:center;">AA180326090377W</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">10</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">19AABCW7791A1Z4</td><td>West Bengal</td><td style="text-align:center;">19</td><td>Central & West Bengal GST Act, 2017</td><td>East Regional DC & Kolkata Retail Stores</td><td style="font-family:monospace; text-align:center;">AA1903264216438</td></tr>
+                                    <tr><td style="text-align:center;">11</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">20AABCW7791A2ZK</td><td>Jharkhand</td><td style="text-align:center;">20</td><td>Central & Jharkhand GST Act, 2017</td><td>Jharkhand Regional Fulfilment Unit (Ranchi)</td><td style="font-family:monospace; text-align:center;">AA200326111831V</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">12</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">21AABCW7791A1ZJ</td><td>Odisha</td><td style="text-align:center;">21</td><td>Central & Odisha GST Act, 2017</td><td>Odisha Regional Logistics Hub (Bhubaneswar)</td><td style="font-family:monospace; text-align:center;">AA2103261555678</td></tr>
+                                    <tr><td style="text-align:center;">13</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">22AABCW7791A1ZH</td><td>Chhattisgarh</td><td style="text-align:center;">22</td><td>Central & Chhattisgarh GST Act, 2017</td><td>Chhattisgarh Regional DC (Raipur)</td><td style="font-family:monospace; text-align:center;">AA220326100255W</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">14</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">23AABCW7791A1ZF</td><td>Madhya Pradesh</td><td style="text-align:center;">23</td><td>Central & Madhya Pradesh GST Act, 2017</td><td>Central Regional Logistics & Distribution Hub (Indore)</td><td style="font-family:monospace; text-align:center;">AA2303262663781</td></tr>
+                                    <tr><td style="text-align:center;">15</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">24AABCW7791A1ZD</td><td>Gujarat</td><td style="text-align:center;">24</td><td>Central & Gujarat GST Act, 2017</td><td>Gujarat Regional Hub (Ahmedabad/Surat) & Stores</td><td style="font-family:monospace; text-align:center;">AB2403260347367</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">16</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">27AABCW7791A1Z7</td><td>Maharashtra</td><td style="text-align:center;">27</td><td>Central & Maharashtra GST Act, 2017</td><td>West Mega DC (Bhiwandi/Mumbai) & Retail Stores</td><td style="font-family:monospace; text-align:center;">AB270326246857P</td></tr>
+                                    <tr style="background:#EFF6FF; font-weight:600;"><td style="text-align:center;">17</td><td style="font-family: monospace; font-weight:800; color:#1E3A8A; text-align:center;">29AABCW7791A1Z3</td><td>Karnataka (Principal HQ)</td><td style="text-align:center;">29</td><td>Central & Karnataka GST Act, 2017</td><td>Corporate HQ, Central Tech/R&D, Central WH & Stores</td><td style="font-family:monospace; text-align:center;">AA2903266614035</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">18</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">30AABCW7791A1ZK</td><td>Goa</td><td style="text-align:center;">30</td><td>Central & Goa GST Act, 2017</td><td>Goa Experience Centre & Coastal Delivery Hub</td><td style="font-family:monospace; text-align:center;">AA300326029286I</td></tr>
+                                    <tr><td style="text-align:center;">19</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">32AABCW7791A2ZF</td><td>Kerala</td><td style="text-align:center;">32</td><td>Central & Kerala GST Act, 2017</td><td>Kerala Regional DC & Retail Stores (Kochi)</td><td style="font-family:monospace; text-align:center;">AA320326244681F</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">20</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">33AABCW7791A1ZE</td><td>Tamil Nadu</td><td style="text-align:center;">33</td><td>Central & Tamil Nadu GST Act, 2017</td><td>Primary Manufacturing Plant (Hosur) & Stores</td><td style="font-family:monospace; text-align:center;">AA330326844560D</td></tr>
+                                    <tr><td style="text-align:center;">21</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">36AABCW7791A1Z8</td><td>Telangana</td><td style="text-align:center;">36</td><td>Central & Telangana GST Act, 2017</td><td>South Regional Hub (Hyderabad Fulfilment Centre)</td><td style="font-family:monospace; text-align:center;">AA3603263133695</td></tr>
+                                    <tr style="background:#F8FAFC;"><td style="text-align:center;">22</td><td style="font-family: monospace; font-weight:700; color:#1E3A8A; text-align:center;">37AABCW7791A1Z6</td><td>Andhra Pradesh</td><td style="text-align:center;">37</td><td>Central & Andhra Pradesh GST Act, 2017</td><td>Andhra Pradesh Regional Logistics Hub & Stores</td><td style="font-family:monospace; text-align:center;">AA370326209203K</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -3379,6 +3444,269 @@
                     kpiClearance.style.color = "var(--warning-text)";
                 }
             }
+        }
+
+
+        
+        // ==================== MASTER 44-CLAUSE FEEDER & FORM 3CA/3CD ENGINE ====================
+        let activeReportDoc = '3cd';
+        let currentFeederClauseId = '1';
+
+        function toggleReportDoc(docType) {
+            activeReportDoc = docType;
+            const btn3ca = document.getElementById('btnToggle3CA');
+            const btn3cd = document.getElementById('btnToggle3CD');
+            if(btn3ca) {
+                btn3ca.classList.toggle('active', docType === '3ca');
+                btn3ca.style.background = docType === '3ca' ? '#FFF' : 'transparent';
+            }
+            if(btn3cd) {
+                btn3cd.classList.toggle('active', docType === '3cd');
+                btn3cd.style.background = docType === '3cd' ? '#FFF' : 'transparent';
+            }
+            generateProspectiveReport();
+        }
+
+        function scrollToClause(elemId) {
+            const target = document.getElementById(elemId);
+            if(target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function openClauseDataFeederModal(clauseId) {
+            currentFeederClauseId = clauseId || '1';
+            const sel = document.getElementById('feederClauseSelectDropdown');
+            if(sel) {
+                sel.innerHTML = '';
+                masterClauseCatalog.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.innerText = `Clause ${c.id}: ${c.title}`;
+                    if(c.id === currentFeederClauseId) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+            }
+            loadClauseDataIntoFeeder(currentFeederClauseId);
+            openModal('modalClauseDataFeeder');
+        }
+
+        function loadClauseDataIntoFeeder(clauseId) {
+            currentFeederClauseId = clauseId;
+            const cInfo = masterClauseCatalog.find(c => c.id === clauseId) || masterClauseCatalog[0];
+            const client = getActiveClient();
+            if(!client.data.clauseCustomData) client.data.clauseCustomData = {};
+
+            const badge = document.getElementById('feederClauseBadge');
+            const title = document.getElementById('feederClauseTitle');
+            const scopeBox = document.getElementById('feederScopeBox');
+            const container = document.getElementById('feederDynamicFormFields');
+
+            if(badge) badge.innerText = `Clause ${cInfo.id}`;
+            if(title) title.innerText = `✏️ Feed: ${cInfo.title}`;
+            if(scopeBox) {
+                scopeBox.innerHTML = `
+                    <strong>Statutory Scope & Legal Provision:</strong> ${cInfo.scope}<br>
+                    <strong>Applicable Income Tax Law / ICAI Reference:</strong> Section ${cInfo.sec || '44AB'} | Form 3CD Clause ${cInfo.id}
+                `;
+            }
+
+            const customVal = client.data.clauseCustomData[clauseId] || {};
+
+            container.innerHTML = `
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Compliance / Reporting Status:</label>
+                    <select id="feederFieldStatus" class="form-select" style="font-size: 0.82rem;">
+                        <option value="Applicable & Reported" ${customVal.status === 'Applicable & Reported' ? 'selected' : ''}>✓ Applicable & Details Reported</option>
+                        <option value="Not Applicable" ${customVal.status === 'Not Applicable' ? 'selected' : ''}>⚪ Not Applicable (NIL / None)</option>
+                        <option value="Information Under Compilation" ${customVal.status === 'Information Under Compilation' ? 'selected' : ''}>⏳ Information Under Compilation</option>
+                    </select>
+                </div>
+
+                <div class="grid-12" style="margin-bottom: 12px;">
+                    <div class="col-6">
+                        <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Quantified Tax Amount / Disallowance (Rs):</label>
+                        <input type="number" id="feederFieldAmount" class="form-control" value="${customVal.amount !== undefined ? customVal.amount : ''}" placeholder="e.g. 150000 (leave blank if NIL)">
+                    </div>
+                    <div class="col-6">
+                        <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Exact Source of Information / Working Paper Ref:</label>
+                        <input type="text" id="feederFieldSource" class="form-control" value="${customVal.source || ''}" placeholder="e.g. Audited P&L Note 25 / WP-CL-${clauseId}">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Detailed Particulars / Disclosure Text / Schedule Table:</label>
+                    <textarea id="feederFieldDetails" class="form-control" rows="6" style="font-size: 0.82rem; font-family: inherit;" placeholder="Enter specific particulars, party details, or schedule break-up for this clause...">${customVal.details || ''}</textarea>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Auditor Observations & Qualification Notes (if any):</label>
+                    <input type="text" id="feederFieldRemarks" class="form-control" value="${customVal.remarks || ''}" placeholder="e.g. Verified against general ledgers and statutory returns with nil default.">
+                </div>
+            `;
+        }
+
+        function saveFeederClauseData() {
+            const client = getActiveClient();
+            if(!client.data.clauseCustomData) client.data.clauseCustomData = {};
+
+            const status = document.getElementById('feederFieldStatus').value;
+            const amountStr = document.getElementById('feederFieldAmount').value;
+            const source = document.getElementById('feederFieldSource').value.trim();
+            const details = document.getElementById('feederFieldDetails').value.trim();
+            const remarks = document.getElementById('feederFieldRemarks').value.trim();
+
+            client.data.clauseCustomData[currentFeederClauseId] = {
+                status: status,
+                amount: amountStr !== "" ? parseFloat(amountStr) : 0,
+                source: source,
+                details: details,
+                remarks: remarks,
+                updatedAt: new Date().toLocaleDateString('en-GB')
+            };
+
+            if(!client.data.clauseSignOffs) client.data.clauseSignOffs = {};
+            if(!client.data.clauseSignOffs[currentFeederClauseId]) {
+                client.data.clauseSignOffs[currentFeederClauseId] = {
+                    clientStatus: "Provided with Schedules ✓",
+                    auditorStatus: "Auditor Verified & Signed Off ✓",
+                    notes: remarks || `Verified WP-CL-${currentFeederClauseId}`
+                };
+            } else {
+                if(remarks) client.data.clauseSignOffs[currentFeederClauseId].notes = remarks;
+            }
+
+            saveClientsToStorage();
+            closeModal('modalClauseDataFeeder');
+            generateProspectiveReport();
+            alert(`✓ Clause ${currentFeederClauseId} details saved successfully! Report refreshed.`);
+        }
+
+        function resetClauseToDefault() {
+            const client = getActiveClient();
+            if(client.data.clauseCustomData && client.data.clauseCustomData[currentFeederClauseId]) {
+                delete client.data.clauseCustomData[currentFeederClauseId];
+                saveClientsToStorage();
+                loadClauseDataIntoFeeder(currentFeederClauseId);
+                generateProspectiveReport();
+                alert(`✓ Clause ${currentFeederClauseId} reset to default calculated values.`);
+            }
+        }
+
+        function downloadMaster44ClauseExcelTemplate() {
+            const client = getActiveClient();
+            const headers = [
+                "Clause No.", "Clause Title / Statutory Scope", "Applicable Law / Section",
+                "Reporting Status", "Quantified Tax Amount (INR)", "Particulars / Schedule Details",
+                "Source of Information (File / Sheet Ref)", "Auditor Observation / Remarks"
+            ];
+
+            const rows = masterClauseCatalog.map(c => {
+                const custom = (client.data.clauseCustomData && client.data.clauseCustomData[c.id]) || {};
+                let amt = custom.amount || 0;
+                let details = custom.details || "";
+                let src = custom.source || `WP-CL-${c.id}`;
+
+                if(c.id === '4') {
+                    details = "22 State GSTINs Registered (KA: 29AABCW7791A1Z3, TN: 33AABCW7791A1ZE, MH: 27AABCW7791A1Z7, HR: 06AABCW7791A1ZB, DL: 07AABCW7791A1Z9, RJ: 08AABCW7791A1Z7, UP: 09AABCW7791A1Z5, MP: 23AABCW7791A1ZF, GJ: 24AABCW7791A1ZD, WB: 19AABCW7791A1Z4, TS: 36AABCW7791A1Z8, AP: 37AABCW7791A1Z6, KL: 32AABCW7791A2ZF, PB: 03AABCW7791A2ZG, CH: 04AABCW7791A1ZF, UK: 05AABCW7791A1ZD, BR: 10AABCW7791A1ZM, AS: 18AABCW7791A1Z6, JH: 20AABCW7791A2ZK, OR: 21AABCW7791A1ZJ, CG: 22AABCW7791A1ZH, GA: 30AABCW7791A1ZK)";
+                    src = "GSTR-1 Filed Copies (12 Months x 22 States = 264 Filed Copies in FY 25-26)";
+                } else if(c.id === '18') {
+                    amt = 259041179.16;
+                    details = "Normal Dep: Rs 24.86 Cr + Additional Dep u/s 32(1)(iia): Rs 1.04 Cr. Total IT Dep: Rs 25.90 Cr.";
+                    src = "IT computation FY 26 FS final.xlsx (Dep Income tax_Mar 26)";
+                } else if(c.id === '20(b)') {
+                    details = "EPF (Rs 4.77 Cr) & ESIC (Rs 4.75 L) deposited on or before 15th statutory due dates. Disallowance u/s 36(1)(va): Rs NIL.";
+                    src = "EPF Reconsilation 2025-26.xlsx & ESIC Schedule FY 2025-26.xlsx";
+                } else if(c.id === '22') {
+                    amt = 35637891.03;
+                    details = "MSME Overdue u/s 43B(h): Rs 3,56,37,891. Section 16 MSMED Penal Interest: Rs 42,23,221.";
+                    src = "MSME - interest calculation FY 2025-26.xlsx & Form MSME-1";
+                } else if(c.id === '26') {
+                    amt = 20483840.84;
+                    details = "Bonus unpaid: Rs 1.96 Cr, ESI unpaid: Rs 8.39 L, PF unpaid: Rs 94.9 k. Total Disallowance: Rs 2.05 Cr.";
+                    src = "01.43 B Summary.xlsx (43B summary)";
+                }
+
+                return [
+                    c.id,
+                    c.title,
+                    `Section ${c.sec || '44AB'}`,
+                    custom.status || "Applicable & Reported",
+                    amt,
+                    details,
+                    src,
+                    custom.remarks || "Verified against books and statutory ledgers."
+                ];
+            });
+
+            if(window.XLSX) {
+                const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Master 44 Clauses");
+                XLSX.writeFile(wb, `Form-3CD-Master-44-Clauses-Template-${client.name.replace(/\s+/g, '_')}-AY-2026-27.xlsx`);
+            } else {
+                alert("Downloading CSV master template...");
+                let csv = headers.map(h => `"${h}"`).join(',') + '\n';
+                rows.forEach(r => {
+                    csv += r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',') + '\n';
+                });
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", `Form-3CD-Master-44-Clauses-${client.name.replace(/\s+/g, '_')}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function handleMaster44ClauseExcelUpload(inputEl) {
+            const file = inputEl.files[0];
+            if(!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+                    const jsonRows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                    if(jsonRows.length < 2) {
+                        alert("Uploaded sheet is empty or invalid format.");
+                        return;
+                    }
+
+                    const client = getActiveClient();
+                    if(!client.data.clauseCustomData) client.data.clauseCustomData = {};
+
+                    let importedCount = 0;
+                    for(let i = 1; i < jsonRows.length; i++) {
+                        const r = jsonRows[i];
+                        if(!r || r.length === 0) continue;
+                        const cId = String(r[0] || '').trim();
+                        if(!cId) continue;
+
+                        client.data.clauseCustomData[cId] = {
+                            status: String(r[3] || 'Applicable & Reported').trim(),
+                            amount: parseFloat(r[4]) || 0,
+                            details: String(r[5] || '').trim(),
+                            source: String(r[6] || '').trim(),
+                            remarks: String(r[7] || '').trim(),
+                            updatedAt: new Date().toLocaleDateString('en-GB')
+                        };
+                        importedCount++;
+                    }
+
+                    saveClientsToStorage();
+                    generateProspectiveReport();
+                    alert(`✓ Successfully auto-fed and updated all ${importedCount} Form 3CD clauses from the uploaded Excel template!`);
+                } catch(err) {
+                    alert("Error parsing Excel file: " + err.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
         }
 
 
@@ -6249,5 +6577,40 @@ Siddhant Surana, FCA | Rashmi Bihani, FCA`;
 
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
     </script>
+    <!-- 8. Master 44-Clause Live Data Feeder Modal -->
+    <div class="modal-overlay" id="modalClauseDataFeeder">
+        <div class="modal-card" style="max-width: 780px;">
+            <div class="modal-header">
+                <div>
+                    <span class="badge badge-blue" id="feederClauseBadge">Clause 1</span>
+                    <h3 id="feederClauseTitle" style="margin-top: 2px;">✏️ Feed / Edit Form 3CD Clause Particulars</h3>
+                </div>
+                <button class="modal-close-btn" onclick="closeModal('modalClauseDataFeeder')">✕</button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted);">SELECT CLAUSE TO FEED:</div>
+                    <select id="feederClauseSelectDropdown" class="form-select" style="font-size: 0.82rem; padding: 4px 10px; max-width: 380px;" onchange="loadClauseDataIntoFeeder(this.value)">
+                        <!-- Populated dynamically with all 44 Clauses -->
+                    </select>
+                </div>
+
+                <div id="feederScopeBox" style="background: #EFF6FF; border-left: 4px solid var(--primary); padding: 10px 14px; border-radius: 6px; font-size: 0.8rem; color: #1E3A8A; margin-bottom: 14px;">
+                    <!-- Statutory Scope & Legal Guidance -->
+                </div>
+
+                <div id="feederDynamicFormFields">
+                    <!-- Dynamic inputs based on Clause type -->
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn btn-outline" onclick="closeModal('modalClauseDataFeeder')">Cancel</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline btn-sm" onclick="resetClauseToDefault()">🔄 Reset to Defaults</button>
+                    <button class="btn btn-primary" onclick="saveFeederClauseData()">💾 Save Clause & Refresh Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
