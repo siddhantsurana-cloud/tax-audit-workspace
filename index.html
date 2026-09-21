@@ -3422,68 +3422,278 @@
                             </div>
                         </div>
                     `;
-                } else if(c.id === '44') {
-                    htmlContent += `
-                        <div class="report-clause-box" id="rep-cl-44">
-                            <div class="report-clause-header">
-                                <strong>Clause 44: Break-up of Total Expenditure in respect of Entities Registered/Not Registered under GST</strong>
-                                <div style="display:flex; gap:6px; align-items:center;">
-                                    <button class="btn btn-sm btn-outline" style="padding:2px 8px; font-size:0.75rem; background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF; font-weight:700; cursor:pointer;" onclick="openClauseDataFeederModal('44')">✏️ Edit Clause 44</button>
-                                    <span class="report-auto-badge">Form 3CD Clause 44</span>
+                } else if(c.id === '35') {
+                        htmlContent += `<div class="report-clause-box" id="rep-cl-35">
+                            <div class="report-clause-header" style="background: #1B365D; color: #FFFFFF; padding: 10px 14px; border-radius: 6px 6px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                                <strong style="font-size: 0.95rem;">Clause 35: Quantitative Details of Principal Items of Goods (Stock Register)</strong>
+                                <div style="display:flex; gap:8px; align-items:center;">
+                                    <button class="btn btn-sm btn-outline" style="padding:3px 10px; font-size:0.75rem; background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF; font-weight:700; cursor:pointer;" onclick="openClauseDataFeederModal('35')">✏️ Edit Clause 35</button>
+                                    <span class="report-auto-badge" style="background: #10B981; color: #FFF; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">Stock Register Verified</span>
                                 </div>
                             </div>
-                            <div class="report-clause-body">
-                                <p>Total expenditure in P&L categorized by GST registration profile under Clause 44 guidelines:</p>
-                                <div class="table-responsive">
-                                    <table>
+                            <div class="report-clause-body" style="padding: 14px; background: #FFFFFF; border: 1px solid #CBD5E1; border-top: none; border-radius: 0 0 6px 6px;">
+                                <p style="font-size: 0.82rem; color: #475569; margin-bottom: 8px;">Quantitative details of principal items of raw materials and finished goods manufactured/traded pursuant to Clause 35(a) & 35(b):</p>
+                                <div class="table-responsive" style="margin-bottom: 10px;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
                                         <thead>
                                             <tr style="background: #1B365D; color: #FFFFFF;">
-                                                <th>Category of Expenditure</th>
-                                                <th style="text-align: right;">Expenditure in respect of entities registered under GST</th>
-                                                <th style="text-align: right;">Expenditure in respect of entities NOT registered under GST</th>
-                                                <th style="text-align: right;">Total Expenditure (Rs)</th>
+                                                <th style="padding: 6px 8px; text-align: left;">Principal Item / Classification</th>
+                                                <th style="padding: 6px 8px; text-align: center; width: 60px;">UOM</th>
+                                                <th style="padding: 6px 8px; text-align: right;">Opening Qty</th>
+                                                <th style="padding: 6px 8px; text-align: right;">Purchases / Prod Qty</th>
+                                                <th style="padding: 6px 8px; text-align: right;">Sales / Consumption</th>
+                                                <th style="padding: 6px 8px; text-align: right; width: 140px;">Wastage / Shortage</th>
+                                                <th style="padding: 6px 8px; text-align: right;">Closing Qty</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><strong>Procurement of Raw Materials & Goods</strong></td>
-                                                <td style="text-align: right;">Rs 7,85,42,10,000</td>
-                                                <td style="text-align: right;">Rs 12,45,00,000</td>
-                                                <td style="text-align: right; font-weight: 700;">Rs 7,97,87,10,000</td>
+                                            <tr style="background: #F1F5F9; font-weight: 700; color: #1E3A8A;">
+                                                <td colspan="7" style="padding: 5px 8px;">A. FINISHED GOODS MANUFACTURED (CLAUSE 35(b)):</td>
                                             </tr>
-                                            <tr style="background: #F8FAFC;">
-                                                <td><strong>Freight, Logistics & Warehousing</strong></td>
-                                                <td style="text-align: right;">Rs 2,45,18,50,000</td>
-                                                <td style="text-align: right;">Rs 8,25,00,000</td>
-                                                <td style="text-align: right; font-weight: 700;">Rs 2,53,43,50,000</td>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 8px; font-weight: 600;">1. Mattresses (Orthopedic, Dual Comfort, Latex)</td>
+                                                <td style="padding: 6px 8px; text-align: center;">Nos</td>
+                                                <td style="padding: 6px 8px; text-align: right;">42,850</td>
+                                                <td style="padding: 6px 8px; text-align: right;">3,85,420</td>
+                                                <td style="padding: 6px 8px; text-align: right;">3,76,190</td>
+                                                <td style="padding: 6px 8px; text-align: right; color: #B45309; font-weight: 600;">1,140 (0.28%)</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #0F172A;">50,940</td>
                                             </tr>
-                                            <tr>
-                                                <td><strong>Marketing, Advertising & Retail Ops</strong></td>
-                                                <td style="text-align: right;">Rs 2,12,65,40,000</td>
-                                                <td style="text-align: right;">Rs 4,10,00,000</td>
-                                                <td style="text-align: right; font-weight: 700;">Rs 2,16,75,40,000</td>
+                                            <tr style="border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                                                <td style="padding: 6px 8px; font-weight: 600;">2. Wooden Beds, Sofas & Engineered Furniture</td>
+                                                <td style="padding: 6px 8px; text-align: center;">Nos</td>
+                                                <td style="padding: 6px 8px; text-align: right;">18,240</td>
+                                                <td style="padding: 6px 8px; text-align: right;">1,42,800</td>
+                                                <td style="padding: 6px 8px; text-align: right;">1,39,150</td>
+                                                <td style="padding: 6px 8px; text-align: right; color: #B45309; font-weight: 600;">410 (0.26%)</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #0F172A;">21,480</td>
                                             </tr>
-                                            <tr style="background: #F8FAFC;">
-                                                <td><strong>Other Operating & Administrative Expenses</strong></td>
-                                                <td style="text-align: right;">Rs 1,65,40,00,000</td>
-                                                <td style="text-align: right;">Rs 13,39,00,000</td>
-                                                <td style="text-align: right; font-weight: 700;">Rs 1,78,79,00,000</td>
+                                            <tr style="background: #F1F5F9; font-weight: 700; color: #1E3A8A;">
+                                                <td colspan="7" style="padding: 5px 8px;">B. RAW MATERIALS & COMPONENTS (CLAUSE 35(a)):</td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 8px; font-weight: 600;">1. Polyurethane Foam, TDI & Polyol Chemicals</td>
+                                                <td style="padding: 6px 8px; text-align: center;">Kgs</td>
+                                                <td style="padding: 6px 8px; text-align: right;">1,85,400</td>
+                                                <td style="padding: 6px 8px; text-align: right;">24,18,500</td>
+                                                <td style="padding: 6px 8px; text-align: right;">23,90,100</td>
+                                                <td style="padding: 6px 8px; text-align: right; color: #B45309; font-weight: 600;">21,450 (0.83%)</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #0F172A;">1,92,350</td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                                                <td style="padding: 6px 8px; font-weight: 600;">2. Fabric, Jacquard Weave & Zipper Covers</td>
+                                                <td style="padding: 6px 8px; text-align: center;">Meters</td>
+                                                <td style="padding: 6px 8px; text-align: right;">3,12,000</td>
+                                                <td style="padding: 6px 8px; text-align: right;">32,50,000</td>
+                                                <td style="padding: 6px 8px; text-align: right;">32,10,000</td>
+                                                <td style="padding: 6px 8px; text-align: right; color: #B45309; font-weight: 600;">34,800 (0.98%)</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #0F172A;">3,17,200</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 4px; padding: 8px 12px; font-size: 0.78rem; color: #475569;">
+                                    <strong>Auditor Physical Verification Note:</strong> Physical inventory verification conducted at corporate warehouse hubs across Bengaluru, Jodhpur, and regional fulfillment centers as on 31st March 2026. Process wastage and transit shortages are within industry benchmarks (< 1.0%).
+                                </div>
+                            </div>
+                        </div>`;
+                    } else if(c.id === '23') {
+                        htmlContent += `<div class="report-clause-box" id="rep-cl-23">
+                            <div class="report-clause-header" style="background: #1B365D; color: #FFFFFF; padding: 10px 14px; border-radius: 6px 6px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                                <strong style="font-size: 0.95rem;">Clause 23: Payments to Specified Persons u/s 40A(2)(b) (Related Parties)</strong>
+                                <div style="display:flex; gap:8px; align-items:center;">
+                                    <button class="btn btn-sm btn-outline" style="padding:3px 10px; font-size:0.75rem; background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF; font-weight:700; cursor:pointer;" onclick="openClauseDataFeederModal('23')">✏️ Edit Clause 23</button>
+                                    <span class="report-auto-badge" style="background: #10B981; color: #FFF; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">Note 39 Reconciled</span>
+                                </div>
+                            </div>
+                            <div class="report-clause-body" style="padding: 14px; background: #FFFFFF; border: 1px solid #CBD5E1; border-top: none; border-radius: 0 0 6px 6px;">
+                                <p style="font-size: 0.82rem; color: #475569; margin-bottom: 8px;">Details of payments made to persons specified under Section 40A(2)(b) during FY 2025-26:</p>
+                                <div class="table-responsive" style="margin-bottom: 10px;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                                        <thead>
+                                            <tr style="background: #1B365D; color: #FFFFFF;">
+                                                <th style="padding: 6px 8px; text-align: left;">Name of Related Party / KMP</th>
+                                                <th style="padding: 6px 8px; text-align: left;">Relationship u/s 40A(2)(b)</th>
+                                                <th style="padding: 6px 8px; text-align: left;">Nature of Payment / Consideration</th>
+                                                <th style="padding: 6px 8px; text-align: right; width: 150px;">Amount Paid (INR)</th>
+                                                <th style="padding: 6px 8px; text-align: center; width: 140px;">Arm's Length / Excess</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 8px; font-weight: 700;">Ankit Garg</td>
+                                                <td style="padding: 6px 8px;">Chairperson, CEO & Executive Director</td>
+                                                <td style="padding: 6px 8px;">Managerial Remuneration & Performance Bonus</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #1B365D;">₹ 3,25,00,000</td>
+                                                <td style="padding: 6px 8px; text-align: center;"><span class="badge badge-green">ARM'S LENGTH (NIL EXCESS)</span></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                                                <td style="padding: 6px 8px; font-weight: 700;">Chaitanya Ramalingegowda</td>
+                                                <td style="padding: 6px 8px;">Executive Director</td>
+                                                <td style="padding: 6px 8px;">Managerial Remuneration & Benefits</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #1B365D;">₹ 3,25,00,000</td>
+                                                <td style="padding: 6px 8px; text-align: center;"><span class="badge badge-green">ARM'S LENGTH (NIL EXCESS)</span></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 8px; font-weight: 700;">Parul Gupta</td>
+                                                <td style="padding: 6px 8px;">Chief Financial Officer (CFO)</td>
+                                                <td style="padding: 6px 8px;">Professional Salary & Allowances</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #1B365D;">₹ 48,50,000</td>
+                                                <td style="padding: 6px 8px; text-align: center;"><span class="badge badge-green">COMMENSURATE (NIL EXCESS)</span></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                                                <td style="padding: 6px 8px; font-weight: 700;">Sakshi Vijay Chopra</td>
+                                                <td style="padding: 6px 8px;">Non-Executive Nominee Director</td>
+                                                <td style="padding: 6px 8px;">Sitting Fees for Board Meetings</td>
+                                                <td style="padding: 6px 8px; text-align: right; font-weight: 700; color: #1B365D;">₹ 3,50,000</td>
+                                                <td style="padding: 6px 8px; text-align: center;"><span class="badge badge-green">STATUTORY (NIL EXCESS)</span></td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
-                                            <tr style="font-weight: 800; background: #F1F5F9;">
-                                                <td>TOTAL P&L EXPENDITURE (CLAUSE 44):</td>
-                                                <td style="text-align: right; color: var(--primary);">Rs 14,08,66,00,000</td>
-                                                <td style="text-align: right; color: var(--primary);">Rs 38,19,00,000</td>
-                                                <td style="text-align: right; color: var(--primary); font-size: 1rem;">Rs 14,46,85,00,000</td>
+                                            <tr style="background: #E2E8F0; font-weight: 800;">
+                                                <td colspan="3" style="padding: 8px;">TOTAL RELATED PARTY PAYMENTS U/S 40A(2)(b):</td>
+                                                <td style="padding: 8px; text-align: right; color: #1B365D; font-size: 0.9rem;">₹ 7,02,00,000</td>
+                                                <td style="padding: 8px; text-align: center; color: #166534;">DISALLOWANCE = NIL</td>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
+                                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 4px; padding: 8px 12px; font-size: 0.78rem; color: #475569;">
+                                    <strong>Auditor Opinion:</strong> Remuneration approved by Nomination & Remuneration Committee (NRC) and shareholders pursuant to Sections 196/197 of Companies Act, 2013 and commensurate with market value of services rendered. No disallowance warranted u/s 40A(2)(b).
+                                </div>
                             </div>
-                        </div>
-                    `;
-                } else {
+                        </div>`;
+                    } else if(c.id === '44') {
+                        htmlContent += `<div class="report-clause-box" id="rep-cl-44">
+                            <div class="report-clause-header" style="background: #1B365D; color: #FFFFFF; padding: 10px 14px; border-radius: 6px 6px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                                <strong style="font-size: 0.95rem; letter-spacing: 0.3px;">Clause 44: Break-up of Total Expenditure in respect of Entities Registered/Not Registered under GST</strong>
+                                <div style="display:flex; gap:8px; align-items:center;">
+                                    <button class="btn btn-sm btn-outline" style="padding:3px 10px; font-size:0.75rem; background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF; font-weight:700; cursor:pointer;" onclick="openClauseDataFeederModal('44')">✏️ Edit Clause 44</button>
+                                    <span class="report-auto-badge" style="background: #10B981; color: #FFF; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">FS & GSTR-2B Reconciled</span>
+                                </div>
+                            </div>
+                            <div class="report-clause-body" style="padding: 14px; background: #FFFFFF; border: 1px solid #CBD5E1; border-top: none; border-radius: 0 0 6px 6px;">
+                                <h4 style="font-size: 0.88rem; font-weight: 800; color: #1B365D; margin-bottom: 8px;">PART A: RECONCILIATION OF TOTAL EXPENDITURE AS PER FINANCIAL STATEMENTS TO CLAUSE 44 SCOPE</h4>
+                                <div class="table-responsive" style="margin-bottom: 14px;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                                        <thead>
+                                            <tr style="background: #F1F5F9; border-bottom: 2px solid #CBD5E1; color: #1E293B;">
+                                                <th style="padding: 6px 10px; text-align: left;">Particulars</th>
+                                                <th style="padding: 6px 10px; text-align: right; width: 190px;">Amount (INR)</th>
+                                                <th style="padding: 6px 10px; text-align: left; width: 280px;">Remarks / Audit Working Reference</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; font-weight: 700;">Total Expenditure as per FS:</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #0F172A;">₹ 14,43,28,69,425</td>
+                                                <td style="padding: 6px 10px; color: #64748B;">Audited Statement of Profit and Loss (FY 2025-26)</td>
+                                            </tr>
+                                            <tr style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; color: #166534; font-weight: 700;">Add: Total value capital expenditure not included in P&L:</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #166534;">₹ 26,91,44,936</td>
+                                                <td style="padding: 6px 10px; color: #64748B;">Additions to PPE & Intangibles / FAR</td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; color: #991B1B; font-weight: 700;">Less: Total value of non-cash charges considered as expenditure:</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #991B1B;">-₹ 1,45,68,90,911</td>
+                                                <td style="padding: 6px 10px; color: #64748B;">Refer below Note 1 (Depreciation, Lease Int, Non-cash)</td>
+                                            </tr>
+                                            <tr style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; color: #991B1B; font-weight: 700;">Less: Transactions in securities and transactions in money:</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #991B1B;">-</td>
+                                                <td style="padding: 6px 10px; color: #64748B;">Excluded from definition of Goods & Services</td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; color: #991B1B; font-weight: 700;">Less: Expenditure excluded by virtue of Schedule III to CGST Act:</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #991B1B;">-₹ 1,64,69,58,538</td>
+                                                <td style="padding: 6px 10px; color: #64748B;">Refer below Note 2 (Employee Benefit Expenses - Exempt)</td>
+                                            </tr>
+                                            <tr style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; color: #1E40AF; font-weight: 700;">COGS to be excluded and Actual purchases to be included:</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #1E40AF;">₹ 33,92,37,705</td>
+                                                <td style="padding: 6px 10px; color: #64748B;">Linked to TB and note below (RM & Traded Purchases)</td>
+                                            </tr>
+                                            <tr style="background: #E2E8F0; font-weight: 800;">
+                                                <td style="padding: 8px 10px; font-size: 0.85rem; color: #1B365D;">BALANCE BEING VALUE OF EXPENDITURE FOR CLAUSE 44:</td>
+                                                <td style="padding: 8px 10px; text-align: right; font-size: 0.92rem; color: #1B365D;">₹ 11,93,74,02,616</td>
+                                                <td style="padding: 8px 10px; color: #166534;">✓ Reconciled with Statutory Disclosure Table</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 style="font-size: 0.88rem; font-weight: 800; color: #1B365D; margin-bottom: 8px;">PART B: STATUTORY DISCLOSURE (GST REGISTRATION PROFILE BREAKDOWN)</h4>
+                                <div class="table-responsive" style="margin-bottom: 14px;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                                        <thead>
+                                            <tr style="background: #1B365D; color: #FFFFFF;">
+                                                <th style="padding: 6px 10px; text-align: left;">Particulars</th>
+                                                <th style="padding: 6px 10px; text-align: right;">Total Amount (INR)</th>
+                                                <th style="padding: 6px 10px; text-align: right; background: #6B21A8;">Expense: Reg - Exempt</th>
+                                                <th style="padding: 6px 10px; text-align: right; background: #1E3A8A;">Expense: Reg Vendors</th>
+                                                <th style="padding: 6px 10px; text-align: right; background: #9A3412;">Expense: Unregistered</th>
+                                                <th style="padding: 6px 10px; text-align: right; background: #15803D;">Difference</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; font-weight: 700;">Purchases</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700;">₹ 6,92,69,97,273</td>
+                                                <td style="padding: 6px 10px; text-align: right; color: #64748B;">-</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #1E3A8A;">₹ 4,25,27,78,830</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #9A3412;">₹ 2,66,91,76,272</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #B45309;">₹ 50,42,172</td>
+                                            </tr>
+                                            <tr style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; font-weight: 700;">Capex</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700;">₹ 26,91,44,936</td>
+                                                <td style="padding: 6px 10px; text-align: right; color: #64748B;">-</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #1E3A8A;">₹ 24,83,67,115</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #9A3412;">₹ 2,07,77,821</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #166534;">₹ 0</td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 6px 10px; font-weight: 700;">Other expense</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700;">₹ 4,74,12,60,407</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #6B21A8;">₹ 17,23,15,649</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #1E3A8A;">₹ 4,22,74,19,150</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #9A3412;">₹ 34,15,37,746</td>
+                                                <td style="padding: 6px 10px; text-align: right; font-weight: 700; color: #B45309;">-₹ 12,138</td>
+                                            </tr>
+                                            <tr style="background: #E2E8F0; font-weight: 800;">
+                                                <td style="padding: 8px 10px; font-size: 0.85rem; color: #1B365D;">TOTAL:</td>
+                                                <td style="padding: 8px 10px; text-align: right; font-size: 0.92rem; color: #1B365D;">₹ 11,93,74,02,616</td>
+                                                <td style="padding: 8px 10px; text-align: right; font-size: 0.85rem; color: #6B21A8;">₹ 17,23,15,649 (1.4%)</td>
+                                                <td style="padding: 8px 10px; text-align: right; font-size: 0.85rem; color: #1E3A8A;">₹ 8,72,85,65,094 (73.1%)</td>
+                                                <td style="padding: 8px 10px; text-align: right; font-size: 0.85rem; color: #9A3412;">₹ 3,03,14,91,839 (25.4%)</td>
+                                                <td style="padding: 8px 10px; text-align: right; font-size: 0.85rem; color: #B45309;">₹ 50,30,034</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 style="font-size: 0.88rem; font-weight: 800; color: #1B365D; margin-bottom: 8px;">PART C: AUDIT NOTINGS & SCHEDULE BREAKDOWNS</h4>
+                                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 12px; font-size: 0.8rem; line-height: 1.6; color: #334155;">
+                                    <div style="margin-bottom: 8px;">
+                                        <strong style="color: #1B365D;">Note 1: Breakdown of Non-Cash Charges Excluded (₹ 1,45,68,90,911):</strong><br>
+                                        • Depreciation & Amortization: ₹ 104,45,37,134.33 (Audited P&L Note 28)<br>
+                                        • Interest on Lease Liabilities (Ind AS 116): ₹ 27,09,11,853.66 (Audited P&L Note 29)<br>
+                                        • Other Non-cash expenses: ₹ 14,14,41,923.37
+                                    </div>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong style="color: #1B365D;">Purchases as per FS (Notes 26 & 27):</strong><br>
+                                        • Raw Material Purchases (Purchases = COGS + Closing Stock - Opening Stock): ₹ 6,86,10,61,276.43<br>
+                                        • Purchases of Stock-in-Trade: ₹ 6,59,35,996.90 | <strong>Total Purchases: ₹ 6,92,69,97,273.33</strong>
+                                    </div>
+                                    <div>
+                                        <strong style="color: #1B365D;">Note 2: Schedule III to the CGST Act Exclusions (₹ 1,64,69,58,538):</strong><br>
+                                        • Employee Benefit Expenses (Salaries, wages, bonus, PF/ESI contributions): ₹ 1,64,69,58,538.12 (Audited P&L Note 27). Services by an employee to employer in course of employment are excluded from GST under Schedule III, Clause 1.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else {
                     // DEDICATED GENERAL CLAUSE BOX FOR EVERY OTHER CLAUSE (NO CLAUSE SKIPPED!)
                     const dispStatus = custom.status || (['21(a)','21(g)','23','27(a)','31(a)','31(c)','32(a)','34(a)','35(a)','40','41'].includes(c.id) ? "Applicable & Reported" : "Not Applicable / NIL");
                     const dispAmt = custom.amount !== undefined ? Number(custom.amount) : 0;
@@ -3720,7 +3930,7 @@
         
         // ==================== MASTER 44-CLAUSE FEEDER & FORM 3CA/3CD ENGINE ====================
         let activeReportDoc = '3cd';
-        let currentFeederClauseId = '1';
+        currentFeederClauseId = '1';
 
         function toggleReportDoc(docType) {
             activeReportDoc = docType;
@@ -3744,6 +3954,9 @@
             }
         }
 
+        // ==================== DYNAMIC CLAUSE-SPECIFIC DATA FEEDER ENGINE ====================
+        currentFeederClauseId = '1';
+
         function openClauseDataFeederModal(clauseId) {
             currentFeederClauseId = String(clauseId || '1');
             const sel = document.getElementById('feederClauseSelectDropdown');
@@ -3762,8 +3975,8 @@
         }
 
         function loadClauseDataIntoFeeder(clauseId) {
-            currentFeederClauseId = clauseId;
-            const cInfo = masterClauseCatalog.find(c => c.id === clauseId) || masterClauseCatalog[0];
+            currentFeederClauseId = String(clauseId);
+            const cInfo = masterClauseCatalog.find(c => String(c.id) === String(clauseId)) || masterClauseCatalog[0];
             const client = getActiveClient();
             if(!client.data.clauseCustomData) client.data.clauseCustomData = {};
 
@@ -3776,59 +3989,505 @@
             if(title) title.innerText = `✏️ Feed: ${cInfo.title}`;
             if(scopeBox) {
                 scopeBox.innerHTML = `
-                    <strong>Statutory Scope & Legal Provision:</strong> ${cInfo.scope}<br>
-                    <strong>Applicable Income Tax Law / ICAI Reference:</strong> Section ${cInfo.sec || '44AB'} | Form 3CD Clause ${cInfo.id}
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                        <div>
+                            <strong>Statutory Scope & Legal Provision:</strong> ${cInfo.scope}<br>
+                            <strong>Applicable Income Tax Law / ICAI Reference:</strong> Section ${cInfo.sec || '44AB'} | Form 3CD Clause ${cInfo.id}
+                        </div>
+                        <span class="badge" style="background: #1E3A8A; color: #FFF; font-size: 0.78rem; white-space: nowrap; padding: 4px 8px;">Bespoke Working Available</span>
+                    </div>
                 `;
             }
 
             const customVal = client.data.clauseCustomData[clauseId] || {};
+            const status = customVal.status || 'Applicable & Reported';
+            const amount = customVal.amount !== undefined ? customVal.amount : '';
+            const source = customVal.source || cInfo.source || '';
+            const remarks = customVal.remarks || '';
 
-            container.innerHTML = `
-                <div style="margin-bottom: 12px;">
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Compliance / Reporting Status:</label>
-                    <select id="feederFieldStatus" class="form-select" style="font-size: 0.82rem;">
-                        <option value="Applicable & Reported" ${customVal.status === 'Applicable & Reported' ? 'selected' : ''}>✓ Applicable & Details Reported</option>
-                        <option value="Not Applicable" ${customVal.status === 'Not Applicable' ? 'selected' : ''}>⚪ Not Applicable (NIL / None)</option>
-                        <option value="Information Under Compilation" ${customVal.status === 'Information Under Compilation' ? 'selected' : ''}>⏳ Information Under Compilation</option>
-                    </select>
-                </div>
-
-                <div class="grid-12" style="margin-bottom: 12px;">
-                    <div class="col-6">
-                        <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Quantified Tax Amount / Disallowance (Rs):</label>
-                        <input type="number" id="feederFieldAmount" class="form-control" value="${customVal.amount !== undefined ? customVal.amount : ''}" placeholder="e.g. 150000 (leave blank if NIL)">
+            // Header Status & Standard Header Controls for All Clauses
+            let html = `
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+                    <div class="grid-12" style="gap: 10px;">
+                        <div class="col-6">
+                            <label style="font-size: 0.8rem; font-weight: 700; color: #1E293B; display: block; margin-bottom: 4px;">Statutory Reporting Status:</label>
+                            <select id="feederFieldStatus" class="form-select" style="font-size: 0.82rem;">
+                                <option value="Applicable & Reported" ${status === 'Applicable & Reported' ? 'selected' : ''}>✓ Applicable & Details Reported</option>
+                                <option value="Not Applicable" ${status === 'Not Applicable' ? 'selected' : ''}>⚪ Not Applicable (NIL / None)</option>
+                                <option value="Information Under Compilation" ${status === 'Information Under Compilation' ? 'selected' : ''}>⏳ Information Under Compilation</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label style="font-size: 0.8rem; font-weight: 700; color: #1E293B; display: block; margin-bottom: 4px;">Source of Information / Working Paper Ref:</label>
+                            <input type="text" id="feederFieldSource" class="form-control" value="${source}" placeholder="e.g. Audited P&L Note 25 / WP-CL-${clauseId}">
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Exact Source of Information / Working Paper Ref:</label>
-                        <input type="text" id="feederFieldSource" class="form-control" value="${customVal.source || ''}" placeholder="e.g. Audited P&L Note 25 / WP-CL-${clauseId}">
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 12px;">
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Detailed Particulars / Disclosure Text / Schedule Table:</label>
-                    <textarea id="feederFieldDetails" class="form-control" rows="6" style="font-size: 0.82rem; font-family: inherit;" placeholder="Enter specific particulars, party details, or schedule break-up for this clause...">${customVal.details || ''}</textarea>
-                </div>
-
-                <div style="margin-bottom: 12px;">
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Auditor Observations & Qualification Notes (if any):</label>
-                    <input type="text" id="feederFieldRemarks" class="form-control" value="${customVal.remarks || ''}" placeholder="e.g. Verified against general ledgers and statutory returns with nil default.">
                 </div>
             `;
+
+            // ==================== BESPOKE CLAUSE-SPECIFIC SECTIONS ====================
+            if(clauseId === '44') {
+                // CLAUSE 44: BREAK-UP OF TOTAL EXPENDITURE UNDER GST
+                html += `
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1B365D; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;">
+                            <span>PART A: RECONCILIATION TO FINANCIAL STATEMENTS</span>
+                            <span class="badge" style="background: #10B981; color: #FFF;">Audited P&L Reconciled</span>
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem;">
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 6px;">
+                                <thead>
+                                    <tr style="background: #F1F5F9; border-bottom: 1px solid #CBD5E1;">
+                                        <th style="padding: 6px; text-align: left;">Particulars</th>
+                                        <th style="padding: 6px; text-align: right; width: 170px;">Amount (INR)</th>
+                                        <th style="padding: 6px; text-align: left; width: 220px;">Remarks / Audit Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0;"><strong>Total Expenditure as per FS:</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_fsExp" class="form-control" style="text-align: right; font-size: 0.8rem;" value="14432869425" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #64748B;">Audited Statement of P&L</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #166534;"><strong>Add: Capex not included in P&L:</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_capexAdd" class="form-control" style="text-align: right; font-size: 0.8rem; color: #166534;" value="269144936" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #64748B;">Additions to PPE / FAR</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #991B1B;"><strong>Less: Non-cash charges (Dep/Lease):</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_nonCash" class="form-control" style="text-align: right; font-size: 0.8rem; color: #991B1B;" value="-1456890911" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #64748B;">Refer Note 1 (Dep Rs 104.45Cr + Lease Int Rs 27.09Cr)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #991B1B;"><strong>Less: Transactions in securities/money:</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_secMoney" class="form-control" style="text-align: right; font-size: 0.8rem;" value="0" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #64748B;">Excluded from Goods/Services</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #991B1B;"><strong>Less: Schedule III CGST Act (Salaries):</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_sch3" class="form-control" style="text-align: right; font-size: 0.8rem; color: #991B1B;" value="-1646958538" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #64748B;">Refer Note 2 (Employee benefit expenses)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #1E40AF;"><strong>COGS to Actual Purchases adjustment:</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_cogsAdj" class="form-control" style="text-align: right; font-size: 0.8rem; color: #1E40AF;" value="339237705" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0; color: #64748B;">Linked to TB (RM Purchases + Traded Goods)</td>
+                                    </tr>
+                                    <tr style="background: #E2E8F0; font-weight: 700;">
+                                        <td style="padding: 6px;">BALANCE VALUE OF EXPENDITURE (CLAUSE 44):</td>
+                                        <td style="padding: 6px; text-align: right; font-size: 0.85rem; color: #1B365D;" id="cl44_recoBalance">₹ 11,93,74,02,616</td>
+                                        <td style="padding: 6px; color: #166534;">✓ Matches Statutory Disclosure</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1E3A8A; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700;">
+                            PART B: STATUTORY DISCLOSURE SCHEDULE (GST VENDOR BREAKDOWN)
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem; overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #F1F5F9; border-bottom: 2px solid #CBD5E1;">
+                                        <th style="padding: 6px; text-align: left;">Particulars</th>
+                                        <th style="padding: 6px; text-align: right;">Total Amount</th>
+                                        <th style="padding: 6px; text-align: right;">Registered - Exempt</th>
+                                        <th style="padding: 6px; text-align: right;">Registered Vendors</th>
+                                        <th style="padding: 6px; text-align: right;">Unregistered Vendors</th>
+                                        <th style="padding: 6px; text-align: right;">Difference</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0;"><strong>Purchases:</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_p_tot" class="form-control" style="text-align: right; font-size: 0.8rem;" value="6926997273" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_p_ex" class="form-control" style="text-align: right; font-size: 0.8rem;" value="0" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_p_reg" class="form-control" style="text-align: right; font-size: 0.8rem;" value="4252778830" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_p_unreg" class="form-control" style="text-align: right; font-size: 0.8rem;" value="2669176272" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0; font-weight: 700; color: #B45309;" id="cl44_p_diff">₹ 50,42,172</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0;"><strong>Capex:</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_c_tot" class="form-control" style="text-align: right; font-size: 0.8rem;" value="269144936" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_c_ex" class="form-control" style="text-align: right; font-size: 0.8rem;" value="0" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_c_reg" class="form-control" style="text-align: right; font-size: 0.8rem;" value="248367115" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_c_unreg" class="form-control" style="text-align: right; font-size: 0.8rem;" value="20777821" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0; font-weight: 700; color: #166534;" id="cl44_c_diff">₹ 0</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; border-bottom: 1px solid #E2E8F0;"><strong>Other Expenses:</strong></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_o_tot" class="form-control" style="text-align: right; font-size: 0.8rem;" value="4741260407" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_o_ex" class="form-control" style="text-align: right; font-size: 0.8rem;" value="172315649" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_o_reg" class="form-control" style="text-align: right; font-size: 0.8rem;" value="4227419150" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0;"><input type="number" id="cl44_o_unreg" class="form-control" style="text-align: right; font-size: 0.8rem;" value="341537746" oninput="recalcClause44Modal()"></td>
+                                        <td style="padding: 6px; text-align: right; border-bottom: 1px solid #E2E8F0; font-weight: 700; color: #B45309;" id="cl44_o_diff">-₹ 12,138</td>
+                                    </tr>
+                                    <tr style="background: #E2E8F0; font-weight: 700;">
+                                        <td style="padding: 6px;">TOTAL CLAUSE 44:</td>
+                                        <td style="padding: 6px; text-align: right; color: #1B365D;" id="cl44_t_tot">₹ 11,93,74,02,616</td>
+                                        <td style="padding: 6px; text-align: right; color: #166534;" id="cl44_t_ex">₹ 17,23,15,649 (1.4%)</td>
+                                        <td style="padding: 6px; text-align: right; color: #1E40AF;" id="cl44_t_reg">₹ 8,72,85,65,094 (73.1%)</td>
+                                        <td style="padding: 6px; text-align: right; color: #991B1B;" id="cl44_t_unreg">₹ 3,03,14,91,839 (25.4%)</td>
+                                        <td style="padding: 6px; text-align: right; color: #B45309;" id="cl44_t_diff">₹ 50,30,034</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            } else if(clauseId === '4') {
+                // CLAUSE 4: 22-STATE INDIRECT TAX REGISTRATIONS
+                html += `
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1B365D; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;">
+                            <span>ACTIVE 22-STATE GSTIN SCHEDULE & CUSTOMS IEC</span>
+                            <span class="badge" style="background: #10B981; color: #FFF;">22 Active Registrations</span>
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem; max-height: 280px; overflow-y: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #F1F5F9; border-bottom: 1px solid #CBD5E1;">
+                                        <th style="padding: 5px; text-align: center; width: 40px;">State</th>
+                                        <th style="padding: 5px; text-align: left;">State / Jurisdiction</th>
+                                        <th style="padding: 5px; text-align: left;">15-Digit GSTIN Number</th>
+                                        <th style="padding: 5px; text-align: center;">Filing Status</th>
+                                        <th style="padding: 5px; text-align: center;">Registration Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feederGstinTableBody">
+                                    ${gstinSchedule22.map((g, idx) => `
+                                        <tr style="border-bottom: 1px solid #F1F5F9;">
+                                            <td style="padding: 5px; text-align: center; font-weight: 700;">${g.code}</td>
+                                            <td style="padding: 5px;">${g.state}</td>
+                                            <td style="padding: 5px; font-family: monospace; font-weight: 700; color: #1E40AF;">
+                                                <input type="text" class="form-control" style="font-size: 0.78rem; padding: 2px 6px; font-family: monospace;" value="${g.gstin}" onchange="updateGstinScheduleModal(${idx}, this.value)">
+                                            </td>
+                                            <td style="padding: 5px; text-align: center;"><span class="badge badge-green">GSTR 1/3B FILED</span></td>
+                                            <td style="padding: 5px; text-align: center;">Regular Taxpayer</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="background: #F8FAFC; padding: 8px 12px; border-top: 1px solid #E2E8F0; font-size: 0.8rem;">
+                            <strong>Customs Importer-Exporter Code (IEC):</strong> <span style="font-family: monospace; font-weight: 700; color: #1B365D;">0716900654</span> (Directorate General of Foreign Trade / ICEGATE)
+                        </div>
+                    </div>
+                `;
+            } else if(clauseId === '26') {
+                // CLAUSE 26: SECTION 43B STATUTORY DUES & CHALLANS
+                const secRows = client.data.sec43b || [];
+                html += `
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1B365D; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;">
+                            <span>SECTION 43B STATUTORY DUES & 30-SEP-2026 CHALLAN VERIFICATION</span>
+                            <button class="btn btn-sm" style="background: #10B981; color: #FFF; padding: 2px 8px; font-size: 0.75rem;" onclick="addSec43bCleanRow(); loadClauseDataIntoFeeder('26');">+ Add Liability</button>
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem; overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #F1F5F9; border-bottom: 1px solid #CBD5E1;">
+                                        <th style="padding: 6px; text-align: left;">Liability Head</th>
+                                        <th style="padding: 6px; text-align: left;">Sec 43B Category</th>
+                                        <th style="padding: 6px; text-align: right;">Incurred (Rs)</th>
+                                        <th style="padding: 6px; text-align: center;">Payment Date</th>
+                                        <th style="padding: 6px; text-align: center;">Challan / UTR No.</th>
+                                        <th style="padding: 6px; text-align: right;">Paid (Rs)</th>
+                                        <th style="padding: 6px; text-align: center;">Paid <= 30-Sep?</th>
+                                        <th style="padding: 6px; text-align: right;">Disallowance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${secRows.map((r, idx) => {
+                                        const res = calculateSec43bRowValues(r);
+                                        return `
+                                            <tr style="border-bottom: 1px solid #E2E8F0;">
+                                                <td style="padding: 5px;"><input type="text" class="form-control" style="font-size: 0.78rem;" value="${r.nature || ''}" onchange="updateSec43bField(${idx}, 'nature', this.value)"></td>
+                                                <td style="padding: 5px;">
+                                                    <select class="form-select" style="font-size: 0.78rem;" onchange="updateSec43bField(${idx}, 'head', this.value)">
+                                                        <option value="Bonus / Commission" ${r.head === 'Bonus / Commission' ? 'selected' : ''}>Bonus u/s 43B(c)</option>
+                                                        <option value="Welfare Fund" ${r.head === 'Welfare Fund' ? 'selected' : ''}>Welfare u/s 43B(b)</option>
+                                                        <option value="Taxes / Duty" ${r.head === 'Taxes / Duty' ? 'selected' : ''}>Taxes u/s 43B(a)</option>
+                                                        <option value="Leave Encashment" ${r.head === 'Leave Encashment' ? 'selected' : ''}>Leave u/s 43B(f)</option>
+                                                        <option value="Interest Payable" ${r.head === 'Interest Payable' ? 'selected' : ''}>Interest u/s 43B(d/e)</option>
+                                                    </select>
+                                                </td>
+                                                <td style="padding: 5px;"><input type="number" class="form-control" style="text-align: right; font-size: 0.78rem;" value="${r.incurred || 0}" onchange="updateSec43bField(${idx}, 'incurred', this.value)"></td>
+                                                <td style="padding: 5px;"><input type="date" class="form-control" style="font-size: 0.78rem;" value="${r.payDate || ''}" onchange="updateSec43bField(${idx}, 'payDate', this.value); loadClauseDataIntoFeeder('26');"></td>
+                                                <td style="padding: 5px;"><input type="text" class="form-control" style="font-size: 0.78rem;" value="${r.challanNo || r.ref || ''}" placeholder="Challan/UTR" onchange="updateSec43bField(${idx}, 'challanNo', this.value); updateSec43bField(${idx}, 'ref', this.value);"></td>
+                                                <td style="padding: 5px;"><input type="number" class="form-control" style="text-align: right; font-size: 0.78rem;" value="${r.paid || 0}" onchange="updateSec43bField(${idx}, 'paid', this.value); loadClauseDataIntoFeeder('26');"></td>
+                                                <td style="padding: 5px; text-align: center;">${res.statusBadge}</td>
+                                                <td style="padding: 5px; text-align: right; font-weight: 700; color: ${res.dis > 0 ? '#991B1B' : '#166534'};">₹ ${res.dis.toLocaleString('en-IN')}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            } else if(clauseId === '22') {
+                // CLAUSE 22: MSME SECTION 43B(h) & INTEREST
+                html += `
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1B365D; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;">
+                            <span>MSME SECTION 43B(h) OVERDUE > 45 DAYS & SECTION 16/23 INTEREST</span>
+                            <span class="badge" style="background: #DC2626; color: #FFF;">Sec 23 Disallowance: ₹ 92.85 L</span>
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem;">
+                            <div class="grid-12" style="gap: 10px; margin-bottom: 10px;">
+                                <div class="col-4" style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 8px; border-radius: 6px;">
+                                    <div style="font-size: 0.75rem; color: #64748B;">Total Outstanding Micro/Small Dues:</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #1E3A8A;">₹ 32,19,24,005</div>
+                                </div>
+                                <div class="col-4" style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 8px; border-radius: 6px;">
+                                    <div style="font-size: 0.75rem; color: #64748B;">Calculated MSMED Interest @ 16.5%:</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #DC2626;">₹ 92,85,034</div>
+                                </div>
+                                <div class="col-4" style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 8px; border-radius: 6px;">
+                                    <div style="font-size: 0.75rem; color: #64748B;">Interest Disallowance u/s 23 MSMED:</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #DC2626;">₹ 92,85,034 (100% Inadmissible)</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.78rem; color: #475569; line-height: 1.5;">
+                                <strong>Statutory Reporting Note:</strong> Under Section 43B(h) inserted by Finance Act 2023, any sum payable to Micro or Small enterprises beyond time limit specified in Section 15 of MSMED Act (15 days or maximum 45 days under written agreement) is deductible only in the year of actual payment. Further, interest payable u/s 16 is explicitly non-deductible under Section 23 of MSMED Act read with Section 37(1).
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if(clauseId === '35') {
+                // CLAUSE 35: STOCK REGISTER & QUANTITATIVE DETAILS
+                html += `
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1B365D; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;">
+                            <span>CLAUSE 35: QUANTITATIVE INVENTORY RECONCILIATION (STOCK REGISTER)</span>
+                            <span class="badge" style="background: #10B981; color: #FFF;">Stock Register Verified</span>
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem; overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #F1F5F9; border-bottom: 1px solid #CBD5E1;">
+                                        <th style="padding: 6px; text-align: left;">Principal Item / Category</th>
+                                        <th style="padding: 6px; text-align: center;">UOM</th>
+                                        <th style="padding: 6px; text-align: right;">Opening Qty</th>
+                                        <th style="padding: 6px; text-align: right;">Purchases / Prod Qty</th>
+                                        <th style="padding: 6px; text-align: right;">Sales / Issued Qty</th>
+                                        <th style="padding: 6px; text-align: right;">Wastage / Shortage</th>
+                                        <th style="padding: 6px; text-align: right;">Closing Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #E2E8F0;">
+                                        <td style="padding: 5px;"><strong>Finished Mattresses (Orthopedic / Dual)</strong></td>
+                                        <td style="padding: 5px; text-align: center;">Units</td>
+                                        <td style="padding: 5px; text-align: right;">42,850</td>
+                                        <td style="padding: 5px; text-align: right;">3,85,420</td>
+                                        <td style="padding: 5px; text-align: right;">3,76,190</td>
+                                        <td style="padding: 5px; text-align: right; color: #B45309;">1,140 (0.28%)</td>
+                                        <td style="padding: 5px; text-align: right; font-weight: 700;">50,940</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #E2E8F0;">
+                                        <td style="padding: 5px;"><strong>Wooden Beds & Engineered Furniture</strong></td>
+                                        <td style="padding: 5px; text-align: center;">Units</td>
+                                        <td style="padding: 5px; text-align: right;">18,240</td>
+                                        <td style="padding: 5px; text-align: right;">1,42,800</td>
+                                        <td style="padding: 5px; text-align: right;">1,39,150</td>
+                                        <td style="padding: 5px; text-align: right; color: #B45309;">410 (0.26%)</td>
+                                        <td style="padding: 5px; text-align: right; font-weight: 700;">21,480</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #E2E8F0;">
+                                        <td style="padding: 5px;"><strong>Raw Material - Polyurethane Foam & Chemicals</strong></td>
+                                        <td style="padding: 5px; text-align: center;">Kgs</td>
+                                        <td style="padding: 5px; text-align: right;">1,85,400</td>
+                                        <td style="padding: 5px; text-align: right;">24,18,500</td>
+                                        <td style="padding: 5px; text-align: right;">23,90,100</td>
+                                        <td style="padding: 5px; text-align: right; color: #B45309;">21,450 (0.83%)</td>
+                                        <td style="padding: 5px; text-align: right; font-weight: 700;">1,92,350</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #E2E8F0;">
+                                        <td style="padding: 5px;"><strong>Raw Material - Fabric & Jacquard Covers</strong></td>
+                                        <td style="padding: 5px; text-align: center;">Meters</td>
+                                        <td style="padding: 5px; text-align: right;">3,12,000</td>
+                                        <td style="padding: 5px; text-align: right;">32,50,000</td>
+                                        <td style="padding: 5px; text-align: right;">32,10,000</td>
+                                        <td style="padding: 5px; text-align: right; color: #B45309;">34,800 (0.98%)</td>
+                                        <td style="padding: 5px; text-align: right; font-weight: 700;">3,17,200</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            } else if(clauseId === '18') {
+                // CLAUSE 18: DEPRECIATION U/S 32 & FAR
+                html += `
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1B365D; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;">
+                            <span>INCOME-TAX DEPRECIATION SCHEDULE U/S 32 & FAR DISCREPANCIES</span>
+                            <span class="badge" style="background: #1E3A8A; color: #FFF;">FAR Gross Block: ₹ 275.35 Cr</span>
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem;">
+                            <div style="margin-bottom: 8px; padding: 8px; background: #EFF6FF; border-left: 3px solid #1E40AF; font-size: 0.78rem;">
+                                <strong>Audit Discrepancy Note:</strong> Gross Block discrepancy of Rs 1.15 Cr between FAR (Rs 275.35 Cr) vs Trial Balance (Rs 276.50 Cr) on Leasehold Improvements; verified and reconciled for tax depreciation u/s 32. Fixed asset write-off loss in P&L (Rs 1.84 Cr) added back in tax computation and deducted from block WDV.
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if(clauseId === '23') {
+                // CLAUSE 23: RELATED PARTY TRANSACTIONS U/S 40A(2)(b)
+                html += `
+                    <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #1B365D; color: #FFF; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;">
+                            <span>RELATED PARTY TRANSACTIONS U/S 40A(2)(b) (NOTE 39 DISCLOSURE)</span>
+                            <span class="badge" style="background: #10B981; color: #FFF;">Arm's Length Verified</span>
+                        </div>
+                        <div style="padding: 10px; background: #FFFFFF; font-size: 0.8rem;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #F1F5F9; border-bottom: 1px solid #CBD5E1;">
+                                        <th style="padding: 5px; text-align: left;">Related Party / KMP</th>
+                                        <th style="padding: 5px; text-align: left;">Relationship</th>
+                                        <th style="padding: 5px; text-align: left;">Nature of Payment</th>
+                                        <th style="padding: 5px; text-align: right;">Amount (INR)</th>
+                                        <th style="padding: 5px; text-align: center;">Sec 40A(2)(b) Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #E2E8F0;">
+                                        <td style="padding: 5px;"><strong>Ankit Garg</strong></td>
+                                        <td style="padding: 5px;">Chairperson, CEO & ED</td>
+                                        <td style="padding: 5px;">Managerial Remuneration & Benefits</td>
+                                        <td style="padding: 5px; text-align: right; font-weight: 700;">₹ 3,25,00,000</td>
+                                        <td style="padding: 5px; text-align: center;"><span class="badge badge-green">ARM'S LENGTH ✓</span></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #E2E8F0;">
+                                        <td style="padding: 5px;"><strong>Chaitanya Ramalingegowda</strong></td>
+                                        <td style="padding: 5px;">Executive Director</td>
+                                        <td style="padding: 5px;">Managerial Remuneration & Benefits</td>
+                                        <td style="padding: 5px; text-align: right; font-weight: 700;">₹ 3,25,00,000</td>
+                                        <td style="padding: 5px; text-align: center;"><span class="badge badge-green">ARM'S LENGTH ✓</span></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #E2E8F0;">
+                                        <td style="padding: 5px;"><strong>Parul Gupta</strong></td>
+                                        <td style="padding: 5px;">Chief Financial Officer (CFO)</td>
+                                        <td style="padding: 5px;">Salary & Allowances</td>
+                                        <td style="padding: 5px; text-align: right; font-weight: 700;">₹ 48,50,000</td>
+                                        <td style="padding: 5px; text-align: center;"><span class="badge badge-green">COMMENSURATE ✓</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Standard Notes & Particulars Footer for All Clauses
+            html += `
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #1E293B; display: block; margin-bottom: 4px;">Detailed Particulars / Schedule Table / Statutory Disclosure Text:</label>
+                    <textarea id="feederFieldDetails" class="form-control" rows="5" style="font-size: 0.82rem; font-family: inherit;" placeholder="Enter specific particulars, party details, or schedule break-up for this clause...">${customVal.details || cInfo.particulars || ''}</textarea>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #1E293B; display: block; margin-bottom: 4px;">Auditor Observations & Qualification Notes (if any):</label>
+                    <input type="text" id="feederFieldRemarks" class="form-control" value="${remarks}" placeholder="e.g. Verified against general ledgers and statutory returns with nil default.">
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function recalcClause44Modal() {
+            const fsExp = parseFloat(document.getElementById('cl44_fsExp')?.value || 0);
+            const capexAdd = parseFloat(document.getElementById('cl44_capexAdd')?.value || 0);
+            const nonCash = parseFloat(document.getElementById('cl44_nonCash')?.value || 0);
+            const secMoney = parseFloat(document.getElementById('cl44_secMoney')?.value || 0);
+            const sch3 = parseFloat(document.getElementById('cl44_sch3')?.value || 0);
+            const cogsAdj = parseFloat(document.getElementById('cl44_cogsAdj')?.value || 0);
+
+            const bal = fsExp + capexAdd + nonCash + secMoney + sch3 + cogsAdj;
+            const balEl = document.getElementById('cl44_recoBalance');
+            if(balEl) balEl.innerText = `₹ ${Math.round(bal).toLocaleString('en-IN')}`;
+
+            // Purchases
+            const p_tot = parseFloat(document.getElementById('cl44_p_tot')?.value || 0);
+            const p_ex = parseFloat(document.getElementById('cl44_p_ex')?.value || 0);
+            const p_reg = parseFloat(document.getElementById('cl44_p_reg')?.value || 0);
+            const p_unreg = parseFloat(document.getElementById('cl44_p_unreg')?.value || 0);
+            const p_diff = p_tot - (p_ex + p_reg + p_unreg);
+            const p_diffEl = document.getElementById('cl44_p_diff');
+            if(p_diffEl) {
+                p_diffEl.innerText = `₹ ${Math.round(p_diff).toLocaleString('en-IN')}`;
+                p_diffEl.style.color = Math.abs(p_diff) > 10 ? '#B45309' : '#166534';
+            }
+
+            // Capex
+            const c_tot = parseFloat(document.getElementById('cl44_c_tot')?.value || 0);
+            const c_ex = parseFloat(document.getElementById('cl44_c_ex')?.value || 0);
+            const c_reg = parseFloat(document.getElementById('cl44_c_reg')?.value || 0);
+            const c_unreg = parseFloat(document.getElementById('cl44_c_unreg')?.value || 0);
+            const c_diff = c_tot - (c_ex + c_reg + c_unreg);
+            const c_diffEl = document.getElementById('cl44_c_diff');
+            if(c_diffEl) {
+                c_diffEl.innerText = `₹ ${Math.round(c_diff).toLocaleString('en-IN')}`;
+                c_diffEl.style.color = Math.abs(c_diff) > 10 ? '#B45309' : '#166534';
+            }
+
+            // Other
+            const o_tot = parseFloat(document.getElementById('cl44_o_tot')?.value || 0);
+            const o_ex = parseFloat(document.getElementById('cl44_o_ex')?.value || 0);
+            const o_reg = parseFloat(document.getElementById('cl44_o_reg')?.value || 0);
+            const o_unreg = parseFloat(document.getElementById('cl44_o_unreg')?.value || 0);
+            const o_diff = o_tot - (o_ex + o_reg + o_unreg);
+            const o_diffEl = document.getElementById('cl44_o_diff');
+            if(o_diffEl) {
+                o_diffEl.innerText = `₹ ${Math.round(o_diff).toLocaleString('en-IN')}`;
+                o_diffEl.style.color = Math.abs(o_diff) > 10 ? '#B45309' : '#166534';
+            }
+
+            // Totals
+            const t_tot = p_tot + c_tot + o_tot;
+            const t_ex = p_ex + c_ex + o_ex;
+            const t_reg = p_reg + c_reg + o_reg;
+            const t_unreg = p_unreg + c_unreg + o_unreg;
+            const t_diff = p_diff + c_diff + o_diff;
+
+            const t_totEl = document.getElementById('cl44_t_tot');
+            const t_exEl = document.getElementById('cl44_t_ex');
+            const t_regEl = document.getElementById('cl44_t_reg');
+            const t_unregEl = document.getElementById('cl44_t_unreg');
+            const t_diffEl = document.getElementById('cl44_t_diff');
+
+            if(t_totEl) t_totEl.innerText = `₹ ${Math.round(t_tot).toLocaleString('en-IN')}`;
+            if(t_exEl) t_exEl.innerText = `₹ ${Math.round(t_ex).toLocaleString('en-IN')} (${((t_ex/t_tot)*100).toFixed(1)}%)`;
+            if(t_regEl) t_regEl.innerText = `₹ ${Math.round(t_reg).toLocaleString('en-IN')} (${((t_reg/t_tot)*100).toFixed(1)}%)`;
+            if(t_unregEl) t_unregEl.innerText = `₹ ${Math.round(t_unreg).toLocaleString('en-IN')} (${((t_unreg/t_tot)*100).toFixed(1)}%)`;
+            if(t_diffEl) {
+                t_diffEl.innerText = `₹ ${Math.round(t_diff).toLocaleString('en-IN')}`;
+                t_diffEl.style.color = Math.abs(t_diff) > 10 ? '#B45309' : '#166534';
+            }
+        }
+
+        function updateGstinScheduleModal(idx, val) {
+            if(gstinSchedule22[idx]) {
+                gstinSchedule22[idx].gstin = val.trim();
+            }
         }
 
         function saveFeederClauseData() {
             const client = getActiveClient();
             if(!client.data.clauseCustomData) client.data.clauseCustomData = {};
 
-            const status = document.getElementById('feederFieldStatus').value;
-            const amountStr = document.getElementById('feederFieldAmount').value;
-            const source = document.getElementById('feederFieldSource').value.trim();
-            const details = document.getElementById('feederFieldDetails').value.trim();
-            const remarks = document.getElementById('feederFieldRemarks').value.trim();
+            const status = document.getElementById('feederFieldStatus')?.value || 'Applicable & Reported';
+            const source = document.getElementById('feederFieldSource')?.value.trim() || '';
+            const details = document.getElementById('feederFieldDetails')?.value.trim() || '';
+            const remarks = document.getElementById('feederFieldRemarks')?.value.trim() || '';
 
             client.data.clauseCustomData[currentFeederClauseId] = {
                 status: status,
-                amount: amountStr !== "" ? parseFloat(amountStr) : 0,
                 source: source,
                 details: details,
                 remarks: remarks,
@@ -3838,18 +4497,17 @@
             if(!client.data.clauseSignOffs) client.data.clauseSignOffs = {};
             if(!client.data.clauseSignOffs[currentFeederClauseId]) {
                 client.data.clauseSignOffs[currentFeederClauseId] = {
-                    clientStatus: "Provided with Schedules ✓",
-                    auditorStatus: "Auditor Verified & Signed Off ✓",
-                    notes: remarks || `Verified WP-CL-${currentFeederClauseId}`
+                    clientProvided: true,
+                    auditorVerified: true,
+                    comments: remarks || 'Verified and updated via Master Clause Feeder'
                 };
-            } else {
-                if(remarks) client.data.clauseSignOffs[currentFeederClauseId].notes = remarks;
             }
 
             saveClientsToStorage();
             closeModal('modalClauseDataFeeder');
-            generateProspectiveReport();
-            alert(`✓ Clause ${currentFeederClauseId} details saved successfully! Report refreshed.`);
+            renderTaxReport();
+            renderClauseReadinessRows();
+            alert(`✓ Clause ${currentFeederClauseId} details and specialized working papers saved successfully!`);
         }
 
         function resetClauseToDefault() {
